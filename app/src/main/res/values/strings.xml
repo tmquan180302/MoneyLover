@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">MoneyLover</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+    <string name="title_screen_input">Nhập vào</string>
+    <string name="title_screen_calender">Lịch</string>
+    <string name="title_screen_report">Báo cáo</string>
+    <string name="title_screen_other">Khác</string>
+
+</resources>
