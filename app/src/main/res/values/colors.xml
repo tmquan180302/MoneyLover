@@ -6,4 +6,22 @@
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+    <color name="orange">#FF8106</color>
+    <color name="green">#1BAC5F</color>
+    <color name="green1">#7ED0A2</color>
+    <color name="green2">#81e0d6</color>
+    <color name="orange2">#ffbb8e</color>
+    <color name="pink">#EC84B9</color>
+    <color name="yellow">#E4D726</color>
+    <color name="yellow1">#EFC65D</color>
+    <color name="blue_sky">#58B5BD</color>
+    <color name="brown">#88664B</color>
+    <color name="red">#FF3F5A</color>
+    <color name="grey">#ECECEC</color>
+    <color name="orange_1">#fdf7e7</color>
+    <color name="color_text_1">#58564A</color>
+    <color name="color_text_2">#919191</color>
+    <color name="border">#A19E9E</color>
 </resources>

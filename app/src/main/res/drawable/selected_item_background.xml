@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- res/drawable/selected_item_background.xml -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@android:color/transparent" />
+    <stroke android:color="@color/border" android:width="2dp" />
+    <corners android:radius="4dp"/>
+    <padding
+        android:top="8dp"
+        android:bottom="8sp"/>
+</shape>
