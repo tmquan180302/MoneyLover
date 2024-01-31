@@ -1,7 +1,17 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Base.Theme.MoneyLover" parent="Theme.Material3.DayNight.NoActionBar"></style>
+    <style name="Base.Theme.MoneyLover" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@color/grey</item>
+        <item name="android:windowLightStatusBar">true</item>
+    </style>
 
     <style name="Theme.MoneyLover" parent="Base.Theme.MoneyLover" />
+    <style name="DialogTheme" parent="Theme.Material3.DayNight.Dialog">
+        <item name="colorAccent">@color/orange</item>
+        <item  name="android:buttonBarButtonStyle">@style/ButtonBarButtonStyle</item>
+    </style>
 
+    <style name="ButtonBarButtonStyle" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textColor">@color/orange</item>
+    </style>
 </resources>

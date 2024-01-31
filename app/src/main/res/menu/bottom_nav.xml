@@ -5,12 +5,12 @@
         android:id="@+id/input"
         android:icon="@drawable/input_icon"
         android:title="@string/title_screen_input"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/calendar"
         android:icon="@drawable/calendar_icon"
         android:title="@string/title_screen_calender"
-        app:showAsAction="always"/>
+        app:showAsAction="ifRoom"/>
     <item
         android:id="@+id/report"
         android:icon="@drawable/report_icon"

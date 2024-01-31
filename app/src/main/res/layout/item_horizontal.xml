@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="72dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <RelativeLayout
+        android:background="@color/red"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/imv_bin"
+            android:text="Xóa"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+        <ImageView
+            android:id="@+id/imv_bin"
+            android:layout_alignParentEnd="true"
+            android:background="@android:color/transparent"
+            android:src="@drawable/icon_bin"
+            app:tint="@color/white"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/todo" />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:background="@color/white"
+        android:id="@+id/ln_foreground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="16dp">
+
+
+        <ImageView
+            android:id="@+id/imv_icon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/plate_and_utensils"
+            android:tint="@color/orange"
+            tools:ignore="UseAppTint" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:lines="1"
+            android:text="Ăn uống"
+            android:textColor="@color/color_text_1"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/imv_menu"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/icon_menu"
+            android:tint="@color/color_text_1"
+            tools:ignore="UseAppTint" />
+    </LinearLayout>
+
+
+
+</FrameLayout>
