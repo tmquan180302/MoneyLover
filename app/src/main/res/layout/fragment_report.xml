@@ -1,14 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.ReportFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:id="@+id/liner_content"
+       android:orientation="vertical">
 
-</FrameLayout>
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:padding="10dp">
+
+           <ImageButton
+               android:id="@+id/ic_back"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_centerVertical="true"
+               android:background="@android:color/transparent"
+               android:src="@drawable/back_report"/>
+
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_toEndOf="@id/ic_back"
+               android:orientation="horizontal"
+               android:gravity="center"
+               android:padding="16dp"
+               android:background="@color/orange_1"
+               android:layout_toStartOf="@id/ic_next"
+               android:layout_centerInParent="true">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="02/2024"
+                   android:textColor="@color/black"
+                   android:textStyle="bold"
+                   android:textSize="20sp"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="(01/02 - 20/02)"
+                   android:textColor="@color/black"
+                   android:textStyle="normal"
+                   android:textSize="16sp"/>
+
+
+
+
+           </LinearLayout>
+
+           <ImageButton
+
+               android:id="@+id/ic_next"
+               android:layout_centerVertical="true"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:background="@android:color/transparent"
+               android:layout_alignParentEnd="true"
+               android:src="@drawable/forward_report"/>
+
+       </RelativeLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:weightSum="2"
+           >
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:padding="10dp"
+               android:background="@drawable/background_report"
+               android:layout_margin="10dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Chi tiêu"
+                   android:textSize="14sp"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="-62,652"
+                   android:textStyle="bold"
+                   android:textColor="@color/orange"
+                   android:layout_alignParentEnd="true"
+                   android:textSize="18sp"/>
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:padding="10dp"
+               android:background="@drawable/background_report"
+               android:layout_margin="10dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Thu nhập"
+                   android:textSize="14sp"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="+500.000"
+                   android:textStyle="bold"
+                   android:textColor="@color/blue"
+                   android:layout_alignParentEnd="true"
+                   android:textSize="18sp"/>
+           </RelativeLayout>
+       </LinearLayout>
+
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@drawable/background_report"
+           android:layout_marginHorizontal="10dp"
+           android:padding="10dp">
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Thu chi"
+               android:textSize="14sp"/>
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="-62,652"
+               android:textStyle="bold"
+               android:textColor="@color/black"
+               android:layout_alignParentEnd="true"
+               android:textSize="20sp"/>
+
+       </RelativeLayout>
+
+
+
+
+
+   </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_below="@id/liner_content"
+android:orientation="vertical"
+        android:layout_height="wrap_content">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tabGravity="fill"
+                android:layout_marginTop="10dp"
+                app:tabIndicatorAnimationMode="elastic"
+                app:tabIndicatorGravity="stretch"
+                app:tabIndicatorColor="@null"
+                app:tabMode="fixed" />
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/viewpageInput"
+                android:layout_width="match_parent"
+                android:layout_height="500dp"
+                android:layout_below="@+id/tabLayout"
+                android:layout_marginTop="50dp" />
+        </FrameLayout>
+    </LinearLayout>
+
+</RelativeLayout>
