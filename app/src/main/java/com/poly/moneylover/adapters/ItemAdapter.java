@@ -16,6 +16,7 @@ import com.poly.moneylover.EditActivity;
 import com.poly.moneylover.R;
 import com.poly.moneylover.interfaces.ItemOnclick;
 import com.poly.moneylover.models.Item;
+import com.poly.moneylover.utils.DetailitemlichActivity;
 
 import java.util.List;
 
@@ -29,6 +30,8 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public ItemAdapter(ItemOnclick onclick) {
         this.onclick = onclick;
     }
+
+
 
 
     @SuppressLint("NotifyDataSetChanged")

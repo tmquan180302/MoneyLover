@@ -52,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
         } else if (id == R.id.calendar) {
             replaceFragment(new CalendarFragment(), 2);
         } else if (id == R.id.report) {
+
             replaceFragment(new ReportFragment(), 3);
         } else if (id == R.id.other) {
             replaceFragment(new OtherFragment(), 4);
