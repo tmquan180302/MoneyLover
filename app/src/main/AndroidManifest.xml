@@ -13,10 +13,7 @@
         android:theme="@style/Theme.MoneyLover"
         tools:targetApi="31">
         <activity
-            android:name=".ui.fragment.InActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.fragment.OutActivity"
+            android:name=".utils.DetailitemlichActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

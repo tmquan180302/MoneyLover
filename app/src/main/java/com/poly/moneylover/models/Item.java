@@ -16,6 +16,7 @@ public class Item implements Serializable {
 
 
 
+
     public Item(int id, String text, int icon, int color) {
         this.id = id;
         this.text = text;
@@ -28,6 +29,7 @@ public class Item implements Serializable {
     public Item(String text) {
         this.text = text;
     }
+
 
     public int getId() {
         return id;
