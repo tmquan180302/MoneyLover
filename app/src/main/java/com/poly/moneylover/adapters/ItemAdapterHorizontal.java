@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.poly.moneylover.NewItemActivity;
+import com.poly.moneylover.ui.category.NewItemActivity;
 import com.poly.moneylover.R;
 import com.poly.moneylover.models.Item;
 

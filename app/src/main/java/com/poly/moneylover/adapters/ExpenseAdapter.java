@@ -1,4 +1,4 @@
-package com.poly.moneylover.ui.fragment.adapter;
+package com.poly.moneylover.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.poly.moneylover.R;
-import com.poly.moneylover.ui.fragment.models.ExpenseItem;
+import com.poly.moneylover.models.ExpenseItem;
 
 import java.util.List;
 

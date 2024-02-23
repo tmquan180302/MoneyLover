@@ -1,4 +1,4 @@
-package com.poly.moneylover.ui.fragment;
+package com.poly.moneylover.ui.transaction;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,8 +17,8 @@ import com.github.mikephil.charting.data.BarEntry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
 import com.poly.moneylover.R;
 import com.poly.moneylover.databinding.ActivityInBinding;
-import com.poly.moneylover.ui.fragment.adapter.ExpenseAdapter;
-import com.poly.moneylover.ui.fragment.models.ExpenseItem;
+import com.poly.moneylover.adapters.ExpenseAdapter;
+import com.poly.moneylover.models.ExpenseItem;
 
 import java.util.ArrayList;
 import java.util.List;

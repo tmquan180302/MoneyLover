@@ -1,4 +1,4 @@
-package com.poly.moneylover;
+package com.poly.moneylover.ui.category;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.ColorAdapter;
 import com.poly.moneylover.adapters.IconAdapter;
 import com.poly.moneylover.interfaces.ColorOnClick;

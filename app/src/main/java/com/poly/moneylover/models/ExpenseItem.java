@@ -1,4 +1,4 @@
-package com.poly.moneylover.ui.fragment.models;
+package com.poly.moneylover.models;
 
 public class ExpenseItem {
     private int imageResourceId;

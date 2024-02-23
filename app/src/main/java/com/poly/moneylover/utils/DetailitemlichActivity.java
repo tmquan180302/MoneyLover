@@ -1,9 +1,6 @@
 package com.poly.moneylover.utils;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -14,14 +11,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
-import com.poly.moneylover.EditActivity;
 import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.ItemAdapter;
 import com.poly.moneylover.interfaces.ItemOnclick;
 import com.poly.moneylover.models.Dto_item;
 import com.poly.moneylover.models.Item;
-import com.poly.moneylover.ui.CalendarFragment;
-import com.poly.moneylover.ui.InputFragment;
 
 public class DetailitemlichActivity extends AppCompatActivity implements ItemOnclick {
     private ImageButton back;
@@ -35,23 +29,25 @@ public class DetailitemlichActivity extends AppCompatActivity implements ItemOnc
     private Button btnInput;
     private int INDEX = 0;
     private ItemAdapter itemAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detailitemlich);
-anhxa();
-getdata();
+        anhxa();
+        getdata();
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            finish();
+                finish();
 
 
             }
         });
 
     }
-    private void anhxa(){
+
+    private void anhxa() {
         back = (ImageButton) findViewById(R.id.back);
         edit = (ImageButton) findViewById(R.id.edit);
         imbReduceDay = (ImageButton) findViewById(R.id.imb_reduce_day);
@@ -67,7 +63,8 @@ getdata();
         rcvItem.setAdapter(itemAdapter);
         itemAdapter.setList(Item.getListItemTienChi());
     }
-    private  void getdata(){
+
+    private void getdata() {
         Intent intent = getIntent();
         Bundle bundle = intent.getExtras();
         if (bundle != null) {
@@ -77,7 +74,6 @@ getdata();
             edtNote.setText(selectedItem.getGhichu());
             edtMoney.setText(selectedItem.getTien());
             itemAdapter.setPositionSelected(selectedItem.getDanhmuc());
-
 
 
         }

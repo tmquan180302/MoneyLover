@@ -25,10 +25,10 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".EditActivity"
+            android:name=".ui.category.EditActivity"
             android:exported="false" />
         <activity
-            android:name=".NewItemActivity"
+            android:name=".ui.category.NewItemActivity"
             android:exported="false" />
     </application>
 

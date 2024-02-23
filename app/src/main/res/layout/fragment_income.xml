@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    tools:context=".ui.fragment.IncomeFragment">
+    tools:context=".ui.transaction.fragment.IncomeFragment">
 
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pieChart"

@@ -25,7 +25,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.poly.moneylover.EditActivity;
+import com.poly.moneylover.ui.category.EditActivity;
 import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.ItemAdapter;
 import com.poly.moneylover.interfaces.ItemOnclick;

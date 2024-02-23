@@ -1,10 +1,7 @@
 package com.poly.moneylover.ui;
 
-import android.graphics.Color;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -12,11 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.google.android.material.tabs.TabLayoutMediator;
-import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.TabPagerAdapter;
 import com.poly.moneylover.databinding.FragmentReportBinding;
-import com.poly.moneylover.ui.fragment.IncomeFragment;
-import com.poly.moneylover.ui.fragment.OutcomeFragment;
 
 public class ReportFragment extends Fragment {
 
