@@ -47,11 +47,15 @@ public class OtherFragment extends Fragment {
     private List<OtherItem> genarateOtherItem(){
 
         List<OtherItem> otherItems = new ArrayList<>();
-        otherItems.add(new OtherItem(R.drawable.icon_pen,"Cài đặt cơ bản"));
-        otherItems.add(new OtherItem(R.drawable.icon_arrow_left,"Báo cáo trong năm"));
-        otherItems.add(new OtherItem(R.drawable.icon_arrow_right,"Báo cáo danh mục trong năm"));
-        otherItems.add(new OtherItem(R.drawable.icon_back,"Báo cáo toàn kỳ"));
-        otherItems.add(new OtherItem(R.drawable.icon_back,"Báo cáo danh mục toàn kỳ"));
+        otherItems.add(new OtherItem(R.drawable.settings,"Cài đặt cơ bản"));
+        otherItems.add(new OtherItem(R.drawable.chart_line,"Báo cáo trong năm"));
+        otherItems.add(new OtherItem(R.drawable.chart_pie,"Báo cáo danh mục trong năm"));
+        otherItems.add(new OtherItem(R.drawable.chart_line,"Báo cáo toàn kỳ"));
+        otherItems.add(new OtherItem(R.drawable.chart_pie,"Báo cáo danh mục toàn kỳ"));
+        otherItems.add(new OtherItem(R.drawable.chart_pie,"Không cho hiển thị quảng cáo"));
+        otherItems.add(new OtherItem(R.drawable.chart_pie,"Đầu ra dữ liệu"));
+        otherItems.add(new OtherItem(R.drawable.chart_pie,"Sao lưu dữ  liệu"));
+        otherItems.add(new OtherItem(R.drawable.chart_pie,"Thông tin ứng dụng"));
 
         return otherItems;
     }
