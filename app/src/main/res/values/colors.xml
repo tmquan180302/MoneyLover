@@ -5,13 +5,14 @@
     <color name="blue">#0000FF</color>
 
     <color name="black">#FF000000</color>
-    <color name="white">#FFFFFFFF</color>
+    <color name="white">#FFFFFF</color>
 
 
     <color name="orange">#FF8106</color>
     <color name="green">#1BAC5F</color>
     <color name="green1">#7ED0A2</color>
     <color name="green2">#81e0d6</color>
+    <color name="green3">#25AC1B</color>
     <color name="orange2">#ffbb8e</color>
     <color name="pink">#EC84B9</color>
     <color name="yellow">#E4D726</color>
