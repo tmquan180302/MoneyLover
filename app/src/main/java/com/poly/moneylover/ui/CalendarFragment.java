@@ -20,12 +20,19 @@ import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.Adapter_list;
 import com.poly.moneylover.adapters.CalendarAdapter;
 import com.poly.moneylover.models.Dto_item;
+import com.poly.moneylover.models.Transaction;
+import com.poly.moneylover.network.TransactionApi;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+
+import retrofit2.HttpException;
+import retrofit2.Response;
 
 public class CalendarFragment extends Fragment {
     private TextView search;
@@ -48,7 +55,6 @@ public class CalendarFragment extends Fragment {
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
 
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -62,22 +68,21 @@ public class CalendarFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         calendarGrid = view.findViewById(R.id.calendarGrid);
         btnPrev = view.findViewById(R.id.btnPrev);
-        btnNext =view. findViewById(R.id.btnNext);
+        btnNext = view.findViewById(R.id.btnNext);
 
-        title= view.findViewById(R.id.title);
+        title = view.findViewById(R.id.title);
 
         search = (TextView) view.findViewById(R.id.search);
         thunhap = (TextView) view.findViewById(R.id.thunhap);
         chitieu = (TextView) view.findViewById(R.id.chitieu);
-        tong = (TextView)view. findViewById(R.id.tong);
-        sodudauki = (TextView)view. findViewById(R.id.sodudauki);
-        soduhientai = (TextView)view. findViewById(R.id.soduhientai);
+        tong = (TextView) view.findViewById(R.id.tong);
+        sodudauki = (TextView) view.findViewById(R.id.sodudauki);
+        soduhientai = (TextView) view.findViewById(R.id.soduhientai);
         recList = (RecyclerView) view.findViewById(R.id.rec_list);
 
-        adapter = new Adapter_list(getActivity());
-        ArrayList<Dto_item> sampleData = generateSampleData();
-        adapter.setData(sampleData);
-        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getActivity(),LinearLayoutManager.VERTICAL,false);
+        adapter = new Adapter_list();
+        //   ArrayList<Dto_item> sampleData = generateSampleData();
+        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recList.setLayoutManager(linearLayoutManager2);
         recList.setAdapter(adapter);
         updateCalendar();
@@ -112,6 +117,31 @@ public class CalendarFragment extends Fragment {
         });
     }
 
+    private void getListTransaction() {
+        Thread thread = new Thread(() -> {
+            try {
+                Response<List<Transaction>> response = TransactionApi.api.getListTransaction().execute();
+                if (response.isSuccessful()) {
+                    requireActivity().runOnUiThread(() -> {
+                        adapter.setData(response.body());
+                    });
+                }
+            } catch (HttpException e) {
+                e.printStackTrace();
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(requireContext(), e.message(), Toast.LENGTH_SHORT).show();
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(requireContext(), "Lỗi kết nối mạng", Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+
+        thread.start();
+    }
+
     private void updateCalendar() {
         ArrayList<Date> cells = new ArrayList<>();
         Calendar calendar = (Calendar) currentDate.clone();
@@ -135,6 +165,7 @@ public class CalendarFragment extends Fragment {
         CalendarAdapter calendarAdapter = new CalendarAdapter(getContext(), cells, currentDate);
         calendarGrid.setAdapter(calendarAdapter);
     }
+
     private ArrayList<Dto_item> generateSampleData() {
         ArrayList<Dto_item> data = new ArrayList<>();
 
@@ -163,4 +194,9 @@ public class CalendarFragment extends Fragment {
         return data;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getListTransaction();
+    }
 }

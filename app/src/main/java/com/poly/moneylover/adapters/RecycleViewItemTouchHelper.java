@@ -19,12 +19,6 @@ public class RecycleViewItemTouchHelper extends ItemTouchHelper.SimpleCallback {
     }
 
     @Override
-    public int getSwipeDirs(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder) {
-        if (viewHolder instanceof ItemAdapterHorizontal.ItemViewHolder && viewHolder.getAdapterPosition() == 0) return 0;
-        return super.getSwipeDirs(recyclerView, viewHolder);
-    }
-
-    @Override
     public boolean onMove(@NonNull RecyclerView recyclerView, @NonNull RecyclerView.ViewHolder viewHolder, @NonNull RecyclerView.ViewHolder viewHolder1) {
         return true;
     }

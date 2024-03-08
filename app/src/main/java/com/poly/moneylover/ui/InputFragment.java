@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,22 +26,29 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.poly.moneylover.models.Category;
+import com.poly.moneylover.models.Transaction;
+import com.poly.moneylover.network.CategoryApi;
+import com.poly.moneylover.network.TransactionApi;
 import com.poly.moneylover.ui.category.EditActivity;
 import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.ItemAdapter;
 import com.poly.moneylover.interfaces.ItemOnclick;
-import com.poly.moneylover.models.Item;
 import com.poly.moneylover.utils.Convert;
 import com.poly.moneylover.utils.Device;
 import com.poly.moneylover.utils.EditTextUtils;
 
+import java.io.IOException;
 import java.util.Calendar;
+import java.util.List;
+
+import retrofit2.HttpException;
+import retrofit2.Response;
 
 public class InputFragment extends Fragment implements ItemOnclick {
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_input, container, false);
     }
 
@@ -52,10 +60,11 @@ public class InputFragment extends Fragment implements ItemOnclick {
     private TextView tvSelectedDate;
     private ImageButton imbIncreaseDay, imbReduceDay, imbPen;
 
-    public static int TYPE = 0;
-
+    private int TYPE = 0;
 
     private Calendar calendar;
+
+    private Category category;
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -69,19 +78,104 @@ public class InputFragment extends Fragment implements ItemOnclick {
         save();
     }
 
+    private void getListExpense() {
+        @SuppressLint("NotifyDataSetChanged") Thread thread = new Thread(() -> {
+            try {
+                Response<List<Category>> data = CategoryApi.api.getListExpense().execute();
+                if (data.isSuccessful()) {
+                    if (data.body() != null) requireActivity().runOnUiThread(() -> {
+                        itemAdapter.setList(data.body());
+                        if (!data.body().isEmpty()) itemAdapter.setPositionSelected(0);
+                    });
+                }
+            } catch (HttpException e) {
+                e.printStackTrace();
+                requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show());
+            } catch (IOException e) {
+                e.printStackTrace();
+                requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "Không có kết nối mạng", Toast.LENGTH_SHORT).show());
+            }
+        });
+        thread.start();
+    }
+
+    private void getListRevenue() {
+        Thread thread = new Thread(() -> {
+            try {
+                Response<List<Category>> data = CategoryApi.api.getListRevenue().execute();
+                if (data.isSuccessful()) {
+                    if (data.body() != null) requireActivity().runOnUiThread(() -> {
+                        itemAdapter.setList(data.body());
+                        if (!data.body().isEmpty()) itemAdapter.setPositionSelected(0);
+                    });
+                }
+            } catch (HttpException e) {
+                e.printStackTrace();
+                requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show());
+            } catch (IOException e) {
+                e.printStackTrace();
+                requireActivity().runOnUiThread(() -> Toast.makeText(requireContext(), "Không có kết nối mạng", Toast.LENGTH_SHORT).show());
+
+            }
+        });
+        thread.start();
+
+    }
+
+
     private void save() {
         imbPen.setOnClickListener(v -> saveRecord());
         btnInput.setOnClickListener(v -> saveRecord());
     }
 
     private void saveRecord() {
-        String money = edtMoney.getText().toString();
-        if (money.equals("0")) {
-            showAlertDialog();
-        } else {
-            Toast.makeText(requireContext(), "Đã nhập dữ liệu!", Toast.LENGTH_SHORT).show();
-            clearData();
+        try {
+            String money = edtMoney.getText().toString().trim().replaceAll(",", "");
+            if (money.equals("")) money = "0";
+            Long price = Long.parseLong(money);
+            Long time = calendar.getTimeInMillis();
+            String note = edtNote.getText().toString().trim();
+            Transaction transaction = new Transaction(category, time, note, price);
+            Log.e("saveRecord: ", transaction.toString());
+            if (money.equals("0")) {
+                showAlertDialog(transaction);
+            } else {
+                createTransaction(transaction);
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
         }
+    }
+
+    private void createTransaction(Transaction transaction) {
+        Thread thread = new Thread(() -> {
+            try {
+                Response<Void> call = TransactionApi.api.create(transaction).execute();
+                Log.e("call",call.toString());
+                if (call.isSuccessful() && call.code() == 200) {
+                    showMessage("Thêm thành công");
+                } else {
+                    showMessage("Thêm thất bại");
+                }
+            } catch (HttpException e) {
+                e.printStackTrace();
+                showMessage("Đã xảy ra lỗi");
+            } catch (IOException e) {
+                e.printStackTrace();
+                showMessage("Không có kết nối mạng");
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+                showMessage("api toang rồi");
+            }
+        });
+        thread.start();
+    }
+
+    private void showMessage(String msg) {
+        requireActivity().runOnUiThread(() -> {
+            Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+            clearData();
+        });
     }
 
     private void clearData() {
@@ -92,21 +186,20 @@ public class InputFragment extends Fragment implements ItemOnclick {
         edtNote.clearFocus();
     }
 
-    private void showAlertDialog() {
+    private void showAlertDialog(Transaction transaction) {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setMessage("Số tiền vẫn là 0, bạn có muốn tiếp tục?");
         builder.setPositiveButton("OK", (dialog, which) -> {
-            Toast.makeText(requireContext(), "Đã nhập dữ liệu!", Toast.LENGTH_SHORT).show();
-            clearData();
+            createTransaction(transaction);
         });
-        builder.setNegativeButton("Bỏ qua",null);
+        builder.setNegativeButton("Bỏ qua", null);
         Dialog dialog = builder.create();
         dialog.setOnShowListener(dialogInterface -> {
             Button buttonPositive = ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_POSITIVE);
-            buttonPositive.setTextColor(ContextCompat.getColor(requireContext(),R.color.orange));
+            buttonPositive.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange));
             buttonPositive.setAllCaps(false);
             Button buttonNegative = ((AlertDialog) dialogInterface).getButton(AlertDialog.BUTTON_NEGATIVE);
-            buttonNegative.setTextColor(ContextCompat.getColor(requireContext(),R.color.orange));
+            buttonNegative.setTextColor(ContextCompat.getColor(requireContext(), R.color.orange));
             buttonNegative.setAllCaps(false);
             TextView messageTextView = ((AlertDialog) dialogInterface).findViewById(android.R.id.message);
             if (messageTextView != null) {
@@ -196,7 +289,6 @@ public class InputFragment extends Fragment implements ItemOnclick {
     private void initRecycleView() {
         itemAdapter = new ItemAdapter(this);
         recyclerView.setAdapter(itemAdapter);
-        itemAdapter.setList(Item.getListItemTienChi());
     }
 
     @SuppressLint("SetTextI18n")
@@ -207,7 +299,7 @@ public class InputFragment extends Fragment implements ItemOnclick {
         btnTab1.setOnClickListener(v -> {
             btnTab1.setSelected(true);
             btnTab2.setSelected(false);
-            itemAdapter.setList(Item.getListItemTienChi());
+            getListExpense();
             itemAdapter.setPositionSelected(0);
             TYPE = 0;
             btnInput.setText("Nhập khoản Tiền chi");
@@ -215,7 +307,7 @@ public class InputFragment extends Fragment implements ItemOnclick {
         btnTab2.setOnClickListener(v -> {
             btnTab1.setSelected(false);
             btnTab2.setSelected(true);
-            itemAdapter.setList(Item.getListItemTienThu());
+            getListRevenue();
             itemAdapter.setPositionSelected(0);
             TYPE = 1;
             btnInput.setText("Nhập khoản Tiền thu");
@@ -235,8 +327,6 @@ public class InputFragment extends Fragment implements ItemOnclick {
     }
 
 
-
-
     private void openDialog() {
 
         int day = calendar.get(Calendar.DAY_OF_MONTH);
@@ -251,16 +341,27 @@ public class InputFragment extends Fragment implements ItemOnclick {
         dialog.show();
     }
 
-    @Override
-    public void getIdItemSelected(int itemId) {
 
+    @Override
+    public void onSelectedCategory(Category category) {
+        this.category = category;
     }
 
     @Override
     public void editItem() {
         Intent intent = new Intent(requireContext(), EditActivity.class);
-        intent.putExtra("type",TYPE);
+        intent.putExtra("type", TYPE);
         requireActivity().startActivity(intent);
     }
 
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (TYPE == 0) {
+            getListExpense();
+        } else {
+            getListRevenue();
+        }
+    }
 }

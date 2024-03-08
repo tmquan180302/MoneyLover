@@ -13,27 +13,41 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.poly.moneylover.interfaces.DeleteCategory;
+import com.poly.moneylover.models.Category;
 import com.poly.moneylover.ui.category.NewItemActivity;
 import com.poly.moneylover.R;
-import com.poly.moneylover.models.Item;
 
 import java.util.List;
 
 public class ItemAdapterHorizontal extends RecyclerView.Adapter<ItemAdapterHorizontal.ItemViewHolder> {
 
-    private List<Item> list;
+    private List<Category> list;
+
+    private DeleteCategory deleteCategory;
+
+    public ItemAdapterHorizontal(DeleteCategory deleteCategory) {
+        this.deleteCategory = deleteCategory;
+    }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setList(List<Item> data) {
+    public void setList(List<Category> data) {
         list = data;
-        list.add(0, new Item("Thêm danh mục"));
         notifyDataSetChanged();
     }
 
     public void removeItem(int position) {
+        Category category = list.get(position);
         list.remove(position);
         notifyItemRemoved(position);
+        deleteCategory.delete(position, category);
     }
+
+    public void insertCategory(int position, Category category) {
+        list.add(position, category);
+        notifyItemInserted(position);
+    }
+
 
     public void refreshItem(int position) {
         notifyItemChanged(position);
@@ -48,21 +62,15 @@ public class ItemAdapterHorizontal extends RecyclerView.Adapter<ItemAdapterHoriz
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int i) {
-        Item item = list.get(i);
-        if (item.getIcon() != 0) {
-            itemViewHolder.imvIcon.setVisibility(View.VISIBLE);
-            itemViewHolder.imvMenu.setVisibility(View.VISIBLE);
-            itemViewHolder.imvIcon.setImageResource(item.getIcon());
-            itemViewHolder.imvIcon.setColorFilter(ContextCompat.getColor(itemViewHolder.imvIcon.getContext(), item.getColor()));
-        } else {
-            itemViewHolder.imvIcon.setVisibility(View.GONE);
-            itemViewHolder.imvMenu.setVisibility(View.GONE);
-        }
-        itemViewHolder.tvName.setText(item.getText());
-
+        Category item = list.get(i);
+        itemViewHolder.imvIcon.setVisibility(View.VISIBLE);
+        itemViewHolder.imvMenu.setVisibility(View.VISIBLE);
+        itemViewHolder.imvIcon.setImageResource(item.getIcon());
+        itemViewHolder.imvIcon.setColorFilter(ContextCompat.getColor(itemViewHolder.imvIcon.getContext(), item.getColor()));
+        itemViewHolder.tvName.setText(item.getName());
         itemViewHolder.itemView.setOnClickListener(v -> {
             Intent intent = new Intent(v.getContext(), NewItemActivity.class);
-            if (i != 0) intent.putExtra("item", item);
+            intent.putExtra("item", item);
             v.getContext().startActivity(intent);
         });
     }
@@ -72,7 +80,7 @@ public class ItemAdapterHorizontal extends RecyclerView.Adapter<ItemAdapterHoriz
         return list != null ? list.size() : 0;
     }
 
-    public static class ItemViewHolder extends RecyclerView.ViewHolder {
+    public class ItemViewHolder extends RecyclerView.ViewHolder {
         private final ImageView imvIcon;
         private final ImageView imvMenu;
         private final TextView tvName;

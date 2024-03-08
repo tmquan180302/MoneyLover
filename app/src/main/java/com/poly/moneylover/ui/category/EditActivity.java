@@ -9,6 +9,7 @@ import android.util.TypedValue;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -20,55 +21,125 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.ItemAdapterHorizontal;
 import com.poly.moneylover.adapters.RecycleViewItemTouchHelper;
+import com.poly.moneylover.interfaces.DeleteCategory;
 import com.poly.moneylover.interfaces.ItemHorizontalTouchHelper;
-import com.poly.moneylover.models.Item;
+import com.poly.moneylover.models.Category;
+import com.poly.moneylover.network.CategoryApi;
 
+import java.io.IOException;
 import java.util.List;
 
-public class EditActivity extends AppCompatActivity implements ItemHorizontalTouchHelper {
+import retrofit2.HttpException;
+import retrofit2.Response;
+
+public class EditActivity extends AppCompatActivity implements ItemHorizontalTouchHelper, DeleteCategory {
     private ImageButton imbBack, imbAdd;
     private Button btnTab1, btnTab2;
     private RecyclerView recyclerView;
     private ItemAdapterHorizontal adapter;
+    private TextView tvAdd;
 
-    private List<Item> list;
+    private int tabIndex = 0;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_edit);
+        tabIndex = getIntent().getIntExtra("type", 0);
         initView();
         back();
         selectedTab();
         initRecycleview();
         addNew();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
         setTab();
     }
 
     private void setTab() {
-        if(getIntent().getIntExtra("type",0) == 0){
-            list = Item.getListItemTienChi();
+        if (tabIndex == 0) {
+            getListExpense();
             btnTab1.setSelected(true);
             btnTab2.setSelected(false);
-        }else {
+        } else {
             btnTab1.setSelected(false);
-            list = Item.getListItemTienThu();
+            getListRevenue();
             btnTab2.setSelected(true);
         }
-        adapter.setList(list);
+    }
+
+    private void getListExpense() {
+        @SuppressLint("NotifyDataSetChanged") Thread thread = new Thread(() -> {
+            try {
+                Response<List<Category>> data = CategoryApi.api.getListExpense().execute();
+                if (data.isSuccessful()) {
+                    if (data.body() != null)
+                        runOnUiThread(() -> {
+                            adapter.setList(data.body());
+                        });
+                }
+            } catch (HttpException e) {
+                e.printStackTrace();
+                runOnUiThread(() ->
+                        Toast.makeText(this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show()
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() ->
+                        Toast.makeText(this, "Không có kết nối mạng", Toast.LENGTH_SHORT).show()
+                );
+            }
+        });
+        thread.start();
+    }
+
+    private void getListRevenue() {
+        Thread thread = new Thread(() -> {
+            try {
+                Response<List<Category>> data = CategoryApi.api.getListRevenue().execute();
+                if (data.isSuccessful()) {
+                    if (data.body() != null)
+                        runOnUiThread(() ->
+                                adapter.setList(data.body())
+                        );
+                }
+            } catch (HttpException e) {
+                e.printStackTrace();
+                runOnUiThread(() ->
+                        Toast.makeText(this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT).show()
+                );
+            } catch (IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() ->
+                        Toast.makeText(this, "Không có kết nối mạng", Toast.LENGTH_SHORT).show()
+                );
+
+            }
+        });
+        thread.start();
+
     }
 
     private void addNew() {
-        imbAdd.setOnClickListener(v -> startActivity(new Intent(this, NewItemActivity.class)));
+        imbAdd.setOnClickListener(v -> gotoActivity());
+        tvAdd.setOnClickListener(v -> gotoActivity());
+    }
+
+    private void gotoActivity() {
+        Intent intent = new Intent(this, NewItemActivity.class);
+        intent.putExtra("tabIndex", tabIndex);
+        startActivity(intent);
     }
 
     private void initRecycleview() {
-        adapter = new ItemAdapterHorizontal();
+        adapter = new ItemAdapterHorizontal(this);
         DividerItemDecoration decoration = new DividerItemDecoration(this, RecyclerView.VERTICAL);
         recyclerView.addItemDecoration(decoration);
         recyclerView.setAdapter(adapter);
-        list = Item.getListItemTienChi();
-        adapter.setList(list);
         ItemTouchHelper.SimpleCallback simpleCallback = new RecycleViewItemTouchHelper(0, ItemTouchHelper.LEFT, this);
         new ItemTouchHelper(simpleCallback).attachToRecyclerView(recyclerView);
     }
@@ -77,14 +148,14 @@ public class EditActivity extends AppCompatActivity implements ItemHorizontalTou
         btnTab1.setOnClickListener(v -> {
             btnTab1.setSelected(true);
             btnTab2.setSelected(false);
-            list = Item.getListItemTienChi();
-            adapter.setList(list);
+            getListExpense();
+            tabIndex = 0;
         });
         btnTab2.setOnClickListener(v -> {
             btnTab1.setSelected(false);
             btnTab2.setSelected(true);
-            list = Item.getListItemTienThu();
-            adapter.setList(list);
+            getListRevenue();
+            tabIndex = 1;
         });
     }
 
@@ -98,7 +169,7 @@ public class EditActivity extends AppCompatActivity implements ItemHorizontalTou
         btnTab1 = findViewById(R.id.btn_tab1);
         btnTab2 = findViewById(R.id.btn_tab2);
         recyclerView = findViewById(R.id.rcv_item_horizontal);
-        
+        tvAdd = findViewById(R.id.tv_add);
 
     }
 
@@ -140,4 +211,29 @@ public class EditActivity extends AppCompatActivity implements ItemHorizontalTou
     }
 
 
+    private void undoCategory(String msg, int position, Category category) {
+        runOnUiThread(() -> {
+            adapter.insertCategory(position, category);
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    @Override
+    public void delete(int position, Category category) {
+        Thread thread = new Thread(() -> {
+            try {
+                Response<Boolean> call = CategoryApi.api.delete(category.getId()).execute();
+                if (!call.isSuccessful() || Boolean.FALSE.equals(call.body())) {
+                    undoCategory("Xóa thất bại", position, category);
+                }
+            } catch (HttpException e) {
+                e.printStackTrace();
+                undoCategory("Đã xảy ra lỗi khi xóa", position, category);
+            } catch (IOException e) {
+                e.printStackTrace();
+                undoCategory("Không có kết nối mạng", position, category);
+            }
+        });
+        thread.start();
+    }
 }

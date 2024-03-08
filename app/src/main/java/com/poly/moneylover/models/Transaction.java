@@ -6,12 +6,19 @@ public class Transaction {
 
     @SerializedName("_id")
     private String transactionId;
-    private User user;
-    private Category item;
-    private int type;
-    private String day;
+    private String userId;
+    private Category category;
+    private Long day;
     private String note;
-    private int price;
+    private Long price;
+
+
+    public Transaction(Category category, Long day, String note, Long price) {
+        this.category = category;
+        this.day = day;
+        this.note = note;
+        this.price = price;
+    }
 
     public String getTransactionId() {
         return transactionId;
@@ -21,35 +28,29 @@ public class Transaction {
         this.transactionId = transactionId;
     }
 
-    public User getUser() {
-        return user;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public Category getItem() {
-        return item;
+
+    public Category getCategory() {
+        return category;
     }
 
-    public void setItem(Category item) {
-        this.item = item;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public int getType() {
-        return type;
-    }
 
-    public void setType(int type) {
-        this.type = type;
-    }
-
-    public String getDay() {
+    public Long getDay() {
         return day;
     }
 
-    public void setDay(String day) {
+    public void setDay(Long day) {
         this.day = day;
     }
 
@@ -61,11 +62,23 @@ public class Transaction {
         this.note = note;
     }
 
-    public int getPrice() {
+    public Long getPrice() {
         return price;
     }
 
-    public void setPrice(int price) {
+    public void setPrice(Long price) {
         this.price = price;
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "transactionId='" + transactionId + '\'' +
+                ", userId='" + userId + '\'' +
+                ", category=" + category +
+                ", day=" + day +
+                ", note='" + note + '\'' +
+                ", price=" + price +
+                '}';
     }
 }

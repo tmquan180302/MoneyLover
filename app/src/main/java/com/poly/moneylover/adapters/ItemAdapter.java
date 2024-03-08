@@ -13,13 +13,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.poly.moneylover.R;
 import com.poly.moneylover.interfaces.ItemOnclick;
-import com.poly.moneylover.models.Item;
+import com.poly.moneylover.models.Category;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
-    private List<Item> list;
+    private List<Category> list = new ArrayList<>();
     private int positionSelected = 0;
 
     private final ItemOnclick onclick;
@@ -29,20 +30,21 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     }
 
 
-
-
     @SuppressLint("NotifyDataSetChanged")
-    public void setPositionSelected(int index){
+    public void setPositionSelected(int index) {
         notifyItemChanged(positionSelected);
         notifyItemChanged(index);
-        onclick.getIdItemSelected(list.get(index).getId());
         notifyDataSetChanged();
         positionSelected = index;
+        Category category = list.get(index);
+        onclick.onSelectedCategory(category);
     }
+
     @SuppressLint("NotifyDataSetChanged")
-    public void setList(List<Item> data) {
-        list = data;
-        list.add(new Item("Chỉnh sửa"));
+    public void setList(List<Category> data) {
+        list.clear();
+        list.addAll(data);
+        list.add(new Category("Chỉnh sửa"));
         notifyDataSetChanged();
     }
 
@@ -56,25 +58,25 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int i) {
-        Item item = list.get(i);
+        Category item = list.get(i);
         if (item.getIcon() != 0) {
             itemViewHolder.imvIcon.setVisibility(View.VISIBLE);
             itemViewHolder.imvIcon.setImageResource(item.getIcon());
             itemViewHolder.imvIcon.setColorFilter(ContextCompat.getColor(itemViewHolder.imvIcon.getContext(), item.getColor()));
-        }else {
+        } else {
             itemViewHolder.imvIcon.setVisibility(View.GONE);
         }
-        itemViewHolder.tvName.setText(item.getText());
+        itemViewHolder.tvName.setText(item.getName());
         itemViewHolder.itemView.setSelected(positionSelected == i);
         itemViewHolder.itemView.setOnClickListener(v -> {
-            if(i == list.size()-1){
+            if (i == list.size() - 1) {
                 onclick.editItem();
                 setPositionSelected(0);
                 return;
             }
-           if(positionSelected != i){
-               setPositionSelected(i);
-           }
+            if (positionSelected != i) {
+                setPositionSelected(i);
+            }
         });
     }
 

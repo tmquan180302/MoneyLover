@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 
 import com.poly.moneylover.R;
+import com.poly.moneylover.interfaces.IconOnClick;
 
 import java.util.List;
 
@@ -22,7 +23,13 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.IconViewHolder
 
     private int colorSelectd;
 
-    public void changeColor(int newColor){
+    private IconOnClick iconOnClick;
+
+    public IconAdapter(IconOnClick iconOnClick) {
+        this.iconOnClick = iconOnClick;
+    }
+
+    public void changeColor(int newColor) {
         colorSelectd = newColor;
         notifyItemChanged(positionSelected);
     }
@@ -52,12 +59,15 @@ public class IconAdapter extends RecyclerView.Adapter<IconAdapter.IconViewHolder
     public void onBindViewHolder(@NonNull IconViewHolder iconViewHolder, int i) {
         int iconId = list.get(i);
         iconViewHolder.imvIcon.setImageResource(iconId);
-        if(positionSelected == i && colorSelectd != 0)
+        if (positionSelected == i && colorSelectd != 0)
             iconViewHolder.imvIcon.setColorFilter(ContextCompat.getColor(iconViewHolder.imvIcon.getContext(), colorSelectd));
         else
             iconViewHolder.imvIcon.setColorFilter(ContextCompat.getColor(iconViewHolder.imvIcon.getContext(), R.color.color_text_1));
         iconViewHolder.itemView.setSelected(positionSelected == i);
-        iconViewHolder.itemView.setOnClickListener(v -> setPositionSelected(i));
+        iconViewHolder.itemView.setOnClickListener(v -> {
+            setPositionSelected(i);
+            iconOnClick.iconSelected(iconId);
+        });
     }
 
     @Override
