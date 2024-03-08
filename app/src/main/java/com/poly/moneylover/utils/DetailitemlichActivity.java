@@ -14,8 +14,8 @@ import android.widget.TextView;
 import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.ItemAdapter;
 import com.poly.moneylover.interfaces.ItemOnclick;
+import com.poly.moneylover.models.Category;
 import com.poly.moneylover.models.Dto_item;
-import com.poly.moneylover.models.Item;
 
 public class DetailitemlichActivity extends AppCompatActivity implements ItemOnclick {
     private ImageButton back;
@@ -59,9 +59,9 @@ public class DetailitemlichActivity extends AppCompatActivity implements ItemOnc
         btnInput = (Button) findViewById(R.id.btn_input);
 
 
-        itemAdapter = new ItemAdapter(this);
-        rcvItem.setAdapter(itemAdapter);
-        itemAdapter.setList(Item.getListItemTienChi());
+//        itemAdapter = new ItemAdapter(this);
+//        rcvItem.setAdapter(itemAdapter);
+//        itemAdapter.setList(Item.getListItemTienChi());
     }
 
     private void getdata() {
@@ -73,7 +73,7 @@ public class DetailitemlichActivity extends AppCompatActivity implements ItemOnc
             tvSelectedDate.setText(selectedItem.getNgay());
             edtNote.setText(selectedItem.getGhichu());
             edtMoney.setText(selectedItem.getTien());
-            itemAdapter.setPositionSelected(selectedItem.getDanhmuc());
+           // itemAdapter.setPositionSelected(selectedItem.getDanhmuc());
 
 
         }
@@ -81,7 +81,7 @@ public class DetailitemlichActivity extends AppCompatActivity implements ItemOnc
 
 
     @Override
-    public void getIdItemSelected(int itemId) {
+    public void onSelectedCategory(Category category) {
 
     }
 

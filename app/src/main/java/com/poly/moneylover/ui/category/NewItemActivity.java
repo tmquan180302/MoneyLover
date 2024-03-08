@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.widget.Button;
@@ -21,13 +22,19 @@ import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.ColorAdapter;
 import com.poly.moneylover.adapters.IconAdapter;
 import com.poly.moneylover.interfaces.ColorOnClick;
-import com.poly.moneylover.models.Item;
+import com.poly.moneylover.interfaces.IconOnClick;
+import com.poly.moneylover.models.Category;
+import com.poly.moneylover.network.CategoryApi;
 import com.poly.moneylover.utils.EditTextUtils;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NewItemActivity extends AppCompatActivity implements ColorOnClick {
+import retrofit2.HttpException;
+import retrofit2.Response;
+
+public class NewItemActivity extends AppCompatActivity implements ColorOnClick, IconOnClick {
     private RecyclerView rcvIcon, rcvColor;
     private IconAdapter iconAdapter;
     private ColorAdapter colorAdapter;
@@ -35,6 +42,8 @@ public class NewItemActivity extends AppCompatActivity implements ColorOnClick {
     private ImageButton imbBack, imbDelete;
     private TextView tvTitle;
     private Button btnSave;
+
+    private Category category;
 
 
     @Override
@@ -90,24 +99,67 @@ public class NewItemActivity extends AppCompatActivity implements ColorOnClick {
                 edtName.setText("");
                 edtName.requestFocus();
             } else {
-                Toast.makeText(this, "Đã lưu", Toast.LENGTH_SHORT).show();
-                finish();
+                createNew();
             }
         });
     }
 
+    private void createNew() {
+        Thread thread = new Thread(() -> {
+            try {
+                String newName = edtName.getText().toString().trim();
+                category.setName(newName);
+                Log.e("createNew: ", category.toString());
+                if (category.getId() != null) {
+                    Response<String> call = CategoryApi.api.update(category.getId(), category).execute();
+                    if (call.isSuccessful() && call.code() == 200) {
+                        showMessage(call.body(), true);
+                    } else {
+                        showMessage("Cập nhật thất bại", false);
+                    }
+                } else {
+                    Response<String> call = CategoryApi.api.create(category).execute();
+                    if (call.isSuccessful() && call.code() == 201) {
+                        showMessage(call.body(), true);
+                    } else {
+                        showMessage("Thêm thất bại", false);
+                    }
+                }
+
+            } catch (HttpException e) {
+                e.printStackTrace();
+                showMessage("Đã xảy ra lỗi", false);
+            } catch (IOException e) {
+                e.printStackTrace();
+                showMessage("Không có kết nối mạng", false);
+            }
+        });
+        thread.start();
+    }
+
+    private void showMessage(String msg, Boolean isFinish) {
+        runOnUiThread(() -> {
+            Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+            if (isFinish) finish();
+        });
+    }
+
     private void initData() {
-        Item item = (Item) getIntent().getSerializableExtra("item");
+        Category item = (Category) getIntent().getSerializableExtra("item");
         if (item != null) {
+            category = item;
             imbDelete.setVisibility(View.VISIBLE);
-            tvTitle.setText(item.getText());
-            edtName.setText(item.getText());
+            tvTitle.setText(item.getName());
+            edtName.setText(item.getName());
             int iconPosition = getListIcon().indexOf(item.getIcon());
             rcvIcon.scrollToPosition(iconPosition);
             iconAdapter.setPositionSelected(iconPosition);
             int colorPosition = getListColor().indexOf(item.getColor());
             rcvColor.scrollToPosition(colorPosition);
             colorAdapter.setPositionSelected(colorPosition);
+        } else {
+            int categoryType = getIntent().getIntExtra("tabIndex", 0);
+            category = new Category(categoryType, getListIcon().get(0), getListColor().get(0));
         }
     }
 
@@ -122,7 +174,7 @@ public class NewItemActivity extends AppCompatActivity implements ColorOnClick {
     }
 
     private void initRecycleViewIcon() {
-        iconAdapter = new IconAdapter();
+        iconAdapter = new IconAdapter(this);
         rcvIcon.setAdapter(iconAdapter);
         iconAdapter.setList(getListIcon());
         iconAdapter.changeColor(getListColor().get(0));
@@ -180,16 +232,17 @@ public class NewItemActivity extends AppCompatActivity implements ColorOnClick {
         list.add(R.drawable.icon_smartphone);
         list.add(R.drawable.icon_tap_faucet);
         list.add(R.drawable.icon_wallet);
-
-        //tránh lặp icon đã thêm, hãy kiểm tra và loại bỏ icon đã tồn tại
-
-        //.......
-
         return list;
     }
 
     @Override
     public void ColorSelected(int colorResourceId) {
         iconAdapter.changeColor(colorResourceId);
+        category.setColor(colorResourceId);
+    }
+
+    @Override
+    public void iconSelected(int iconResourceId) {
+        category.setIcon(iconResourceId);
     }
 }

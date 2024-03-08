@@ -14,8 +14,8 @@
         android:background="@color/grey"
         android:gravity="center"
         android:orientation="horizontal"
-        android:paddingVertical="8dp"
-        android:paddingHorizontal="16dp">
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="8dp">
 
         <ImageButton
             android:id="@+id/imb_back"
@@ -60,10 +60,29 @@
             android:src="@drawable/icon_add" />
     </LinearLayout>
 
+    <TextView
+        android:id="@+id/tv_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="52dp"
+        android:ellipsize="marquee"
+        android:lines="1"
+        android:padding="16dp"
+        android:text="Thêm danh mục"
+        android:textColor="@color/color_text_1"
+        android:textSize="17sp" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/border" />
+
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rcv_item_horizontal"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
 </LinearLayout>

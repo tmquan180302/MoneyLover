@@ -26,6 +26,7 @@ import com.poly.moneylover.models.Request.ServerReqLoginGoogle;
 import com.poly.moneylover.models.Response.ServerResToken;
 import com.poly.moneylover.models.User;
 import com.poly.moneylover.network.ApiService;
+import com.poly.moneylover.network.RetrofitClient;
 import com.poly.moneylover.utils.StringUtils;
 
 import retrofit2.Call;
@@ -81,8 +82,9 @@ public class LoginActivity extends AppCompatActivity {
         ApiService.apiService.login(serverReqLogin).enqueue(new Callback<ServerResToken>() {
             @Override
             public void onResponse(Call<ServerResToken> call, Response<ServerResToken> response) {
-                if (response.isSuccessful()) {
-
+                if (response.isSuccessful() && response.body() != null) {
+                    Log.e("mylog: ", response.body().getToken());
+                    RetrofitClient.setAuthToken(response.body().getToken());
                     SharedPreferences sharedPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
 

@@ -57,6 +57,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtEmail"
+            android:text="kuanche"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato_regular"
@@ -77,6 +78,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtPass"
+            android:text="123"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato_regular"
