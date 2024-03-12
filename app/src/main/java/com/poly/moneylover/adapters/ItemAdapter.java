@@ -27,6 +27,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     public ItemAdapter(ItemOnclick onclick) {
         this.onclick = onclick;
+        list.add(new Category("Chỉnh sửa"));
     }
 
 
