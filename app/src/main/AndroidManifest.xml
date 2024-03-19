@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:usesCleartextTraffic="true"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -15,7 +14,38 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MoneyLover"
-        tools:targetApi="31" >
+        android:usesCleartextTraffic="true"
+        tools:targetApi="31">
+        <activity
+            android:name=".ui.OtherCategories.Add_Or_Edit_Activity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.OtherCategories.ListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.SoDuBanDau.SoDuBanDauActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ThuChiCoDinh.ThemSuaActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.ThuChiCoDinh.ListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Setting.ListFullTermActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Setting.FullTermActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Setting.ListInYearActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Setting.InYearActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.Setting.BasicActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.user.SignUpActivity"
             android:exported="false" />
@@ -30,7 +60,7 @@
             android:exported="false" />
         <activity
             android:name=".ui.user.WelcomeActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
