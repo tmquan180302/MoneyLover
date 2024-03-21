@@ -27,6 +27,7 @@ import com.poly.moneylover.models.Response.ServerResToken;
 import com.poly.moneylover.models.User;
 import com.poly.moneylover.network.ApiService;
 import com.poly.moneylover.network.RetrofitClient;
+import com.poly.moneylover.network.SharedPrefsManager;
 import com.poly.moneylover.utils.StringUtils;
 
 import retrofit2.Call;
@@ -51,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         initView();
         setUpFunction();
+
     }
 
     private void setUpFunction() {
@@ -105,7 +107,16 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+    private void saveUserToSharedPreferences( String userId, String email, String password) {
+        // Tạo đối tượng User từ thông tin nhận được
+        User user = new User();
+        user.setUserId(userId);
+        user.setEmail(email);
+        user.setUserId(password);
 
+        // Lưu đối tượng User vào SharedPreferences
+        SharedPrefsManager.saveUser(this, user);
+    }
     private void loginByGoogle() {
         try {
             Intent intent = mGoogleSignInClient.getSignInIntent();
@@ -195,4 +206,5 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin = findViewById(R.id.btn_login);
         tvForgotPass = findViewById(R.id.tvForgotPass);
     }
+
 }

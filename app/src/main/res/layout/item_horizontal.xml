@@ -68,8 +68,8 @@
             android:layout_width="28dp"
             android:layout_height="28dp"
             android:contentDescription="@string/todo"
-            android:src="@drawable/icon_menu"
-            android:tint="@color/color_text_1"
+            android:src="@drawable/back_report"
+            android:rotation="180"
             tools:ignore="UseAppTint" />
     </LinearLayout>
 
