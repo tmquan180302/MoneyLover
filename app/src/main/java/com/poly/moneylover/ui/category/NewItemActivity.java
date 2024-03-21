@@ -210,6 +210,18 @@ public class NewItemActivity extends AppCompatActivity implements ColorOnClick, 
         list.add(R.color.red);
         list.add(R.color.grey);
         list.add(R.color.orange_1);
+        list.add(R.color.red2);
+        list.add(R.color.red3);
+        list.add(R.color.xam);
+        list.add(R.color.hong);
+        list.add(R.color.hong1);
+        list.add(R.color.hong2);
+        list.add(R.color.hong3);
+        list.add(R.color.tim);
+        list.add(R.color.nau);
+        list.add(R.color.nau2);
+        list.add(R.color.vang);
+        list.add(R.color.luc);
         return list;
     }
 
@@ -232,6 +244,22 @@ public class NewItemActivity extends AppCompatActivity implements ColorOnClick, 
         list.add(R.drawable.icon_smartphone);
         list.add(R.drawable.icon_tap_faucet);
         list.add(R.drawable.icon_wallet);
+        list.add(R.drawable.coin);
+        list.add(R.drawable.icon1);
+        list.add(R.drawable.icon2);
+        list.add(R.drawable.icon3);
+        list.add(R.drawable.icon5);
+        list.add(R.drawable.icon6);
+        list.add(R.drawable.icon7);
+        list.add(R.drawable.icon8);
+        list.add(R.drawable.icon9);
+        list.add(R.drawable.icon10);
+        list.add(R.drawable.icon11);
+        list.add(R.drawable.icon12);
+        list.add(R.drawable.icon13);
+        list.add(R.drawable.icon14);
+        list.add(R.drawable.icon16);
+        list.add(R.drawable.icon17);
         return list;
     }
 
