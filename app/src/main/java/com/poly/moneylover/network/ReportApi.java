@@ -4,9 +4,12 @@ import com.poly.moneylover.models.Response.Report;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
+import retrofit2.http.Headers;
 
 public interface ReportApi {
     ReportApi api = RetrofitClient.getInstance().create(ReportApi.class);
-    @GET("/budget/getAllTimeReport")
+    @Headers("Content-Type: application/json")
+    @GET("/budget/allTimeReport")
     Call<Report> getAllTimeReport();
+
 }

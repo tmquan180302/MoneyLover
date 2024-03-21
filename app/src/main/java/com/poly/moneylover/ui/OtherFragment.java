@@ -65,6 +65,7 @@ public class OtherFragment extends Fragment implements OtherAdapter.OnItemClickL
         otherItems.add(new OtherItem(R.drawable.chart_pie,"Đầu ra dữ liệu"));
         otherItems.add(new OtherItem(R.drawable.chart_pie,"Sao lưu dữ  liệu"));
         otherItems.add(new OtherItem(R.drawable.chart_pie,"Thông tin ứng dụng"));
+        otherItems.add(new OtherItem(R.drawable.icon_logout,"Thoát"));
 
         return otherItems;
     }

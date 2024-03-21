@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,11 +38,25 @@ public class SoDuBanDauActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_so_du_ban_dau);
         RelativeLayout khac0 = findViewById(R.id.khac0);
-        TextView sodubandau = findViewById(R.id.sodubandau);
+
         khac0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showInputDialog();
+            }
+        });
+        ImageView back_khac = findViewById(R.id.back_khac);
+        TextView back0 = findViewById(R.id.back0);
+        back_khac.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        back0.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
             }
         });
         //fetchBalanceData();

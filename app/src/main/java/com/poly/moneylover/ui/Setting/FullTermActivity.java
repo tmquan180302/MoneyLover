@@ -47,15 +47,16 @@ public class FullTermActivity extends AppCompatActivity {
                     double balance = (int) report.getBalance();
                     double cumulation = report.getCumulation();
 
-                    Log.d("data","data " +report);
-                    double initialBalance = InitialBalanceSingleton.getInstance().getInitialBalance();
-                    txtbalance.setText(String.valueOf(initialBalance)); //so du ban dau
+//                    Log.d("data","data " +report);
+//                    double initialBalance = InitialBalanceSingleton.getInstance().getInitialBalance();
+//                    txtbalance.setText(String.valueOf(initialBalance)); //so du ban dau
 
                     txtrevenue.setText(String.valueOf(revenue));
                     txtexpense.setText(String.valueOf(expense));
                     txttotal.setText(String.valueOf(total));
+                    txtbalance.setText(String.valueOf(balance));
 
-                    txtcumulation.setText(String.valueOf(total + initialBalance));
+                    txtcumulation.setText(String.valueOf(total + balance));
 
                 } else {
                     Toast.makeText(FullTermActivity.this, "Chưa có data", Toast.LENGTH_SHORT).show();
