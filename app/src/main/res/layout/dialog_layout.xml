@@ -1,0 +1,20 @@
+<!-- dialog_layout.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <!-- Ô nhập -->
+    <EditText
+        android:background="@drawable/backgroundtron"
+        android:id="@+id/editTextAmount"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:hint="Nhập số dư"
+        android:inputType="numberDecimal"
+        android:padding="8dp" />
+
+
+</LinearLayout>
