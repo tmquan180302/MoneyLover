@@ -18,8 +18,6 @@ public class TabPagerAdapter extends FragmentStateAdapter {
     @Override
     public Fragment createFragment(int position) {
         switch (position){
-            case 0:
-                return new OutcomeFragment();
             case 1:
                 return new IncomeFragment();
             default:

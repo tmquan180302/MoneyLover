@@ -4,12 +4,12 @@ plugins {
 
 android {
     namespace 'com.poly.moneylover'
-    compileSdk 34
+    compileSdk 33
 
     defaultConfig {
         applicationId "com.poly.moneylover"
         minSdk 24
-        targetSdk 34
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -55,8 +55,7 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-auth:20.7.0'
 
-    // biểu đồ cột
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+    implementation "org.greenrobot:eventbus:3.3.1"
 
-
+    implementation 'com.github.AnyChart:AnyChart-Android:1.1.5'
 }

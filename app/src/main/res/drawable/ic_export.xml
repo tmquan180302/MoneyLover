@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+    <path
+        android:fillColor="#FF000000"
+        android:fillType="evenOdd"
+        android:pathData="M35 34v4c0 3.31-2.7 6-6 6H11c-3.31 0-6-2.69-6-6V10c0-3.31 2.69-6 6-6h18c3.3 0 6 2.69 6 6v4c0 1.1-0.9 2-2 2-1.11 0-2-0.9-2-2v-4c0-1.1-0.9-2-2-2H11c-1.1 0-2 0.9-2 2v28c0 1.1 0.9 2 2 2h18c1.1 0 2-0.9 2-2v-4c0-1.1 0.89-2 2-2 1.1 0 2 0.9 2 2Zm3.41-15.42c-0.78-0.78-2.06-0.78-2.84 0-0.78 0.78-0.78 2.06 0 2.84l0.6 0.58H22.99c-1.1 0-2 0.9-2 2s0.9 2 2 2h13.18l-0.6 0.58c-0.38 0.38-0.6 0.89-0.6 1.42 0 0.53 0.22 1.04 0.6 1.42 0.38 0.38 0.89 0.6 1.42 0.6 0.53 0 1.04-0.22 1.42-0.6l4-4C42.79 25.04 43 24.53 43 24c0-0.53-0.21-1.04-0.6-1.42l-3.99-4Z"/>
+</vector>

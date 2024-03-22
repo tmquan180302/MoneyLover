@@ -17,34 +17,7 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name=".ui.OtherCategories.Add_Or_Edit_Activity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.OtherCategories.ListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.SoDuBanDau.SoDuBanDauActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.ThuChiCoDinh.ThemSuaActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.ThuChiCoDinh.ListActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.Setting.ListFullTermActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.Setting.FullTermActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.Setting.ListInYearActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.Setting.InYearActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.Setting.BasicActivity"
+            android:name=".ui.transaction.SearchActivity"
             android:exported="false" />
         <activity
             android:name=".ui.user.SignUpActivity"
@@ -57,6 +30,15 @@
             android:exported="false" />
         <activity
             android:name=".utils.DetailitemlichActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.transaction.InActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.transaction.OutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.transaction.UpdateActivity"
             android:exported="false" />
         <activity
             android:name=".ui.user.WelcomeActivity"

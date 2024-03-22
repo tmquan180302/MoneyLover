@@ -5,29 +5,25 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.poly.moneylover.R;
-import com.poly.moneylover.models.ExpenseItem;
+import com.poly.moneylover.models.ExpenseItem2;
+import com.poly.moneylover.utils.Convert;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
-public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHolder> {
-    private List<ExpenseItem> expenseItemList;
+public class ExpenseAdapter2 extends RecyclerView.Adapter<ExpenseAdapter2.ViewHolder> {
+    private List<ExpenseItem2> expenseItemList;
     private Context context;
-    private SimpleDateFormat numberFormatFullDate = new SimpleDateFormat("dd/MM/yyyy");
-    private DateFormat df = new SimpleDateFormat("dd/MM");
-
 
     public interface OnItemClickListener {
-        void onItemClick(ExpenseItem expenseItem);
+        void onItemClick(ExpenseItem2 expenseItem);
     }
 
     private OnItemClickListener onItemClickListener;
@@ -36,7 +32,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         this.onItemClickListener = listener;
     }
 
-    public ExpenseAdapter(List<ExpenseItem> expenseItemList, Context context) {
+    public ExpenseAdapter2(List<ExpenseItem2> expenseItemList, Context context) {
         this.expenseItemList = expenseItemList;
         this.context = context;
     }
@@ -50,42 +46,33 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        ExpenseItem expenseItem = expenseItemList.get(position);
+        ExpenseItem2 expenseItem = expenseItemList.get(position);
 
-        holder.imageView.setImageResource(expenseItem.getImageResourceId());
-        holder.titleTextView.setText(expenseItem.getTitle());
-        holder.priceTextView.setText(expenseItem.getPrice() + "₫");
-        if (!Objects.equals(expenseItem.getNote(), "")){
-            holder.tvNote.setText("("+ expenseItem.getNote() + ")");
+        if (expenseItem.getExpenseItem().getId() != null){
+            holder.tvDateGroup.setVisibility(View.GONE);
+            holder.rl.setVisibility(View.VISIBLE);
+
+            holder.imageView.setImageResource(expenseItem.getExpenseItem().getImageResourceId());
+            holder.titleTextView.setText(expenseItem.getExpenseItem().getTitle());
+            holder.priceTextView.setText(Convert.convertNumber(Long.parseLong(expenseItem.getExpenseItem().getPrice())) + "₫");
+            if (!Objects.equals(expenseItem.getExpenseItem().getNote(), "")){
+                holder.tvNote.setText("("+ expenseItem.getExpenseItem().getNote() + ")");
+            }
+
+            holder.dateTextView.setText(expenseItem.getExpenseItem().getDate());
+
+            holder.itemView.setOnClickListener(view -> {
+                if (onItemClickListener != null) {
+                    onItemClickListener.onItemClick(expenseItem);
+                }
+            });
+
+        }else {
+            holder.tvDateGroup.setVisibility(View.VISIBLE);
+            holder.rl.setVisibility(View.GONE);
+//            holder.tvDateGroup.setText(expenseItem.getDate() + "(" + expenseItem.getExpenseItem().getTotal() + "₫)");
+            holder.tvDateGroup.setText(expenseItem.getDate());
         }
-
-        try {
-            Date date2 = numberFormatFullDate.parse(expenseItem.getDate());
-            holder.dateTextView.setText(df.format(date2));
-
-            if (position == 0){
-                holder.tvDateGroup.setText(df.format(date2.getTime()));
-                holder.tvDateGroup.setVisibility(View.VISIBLE);
-
-                return;
-            }
-
-            Date date1 = numberFormatFullDate.parse(expenseItemList.get(position - 1).getDate());
-            holder.tvDateGroup.setText(df.format(date1));
-
-            if (df.format(date1).equals(df.format(date2))){
-                holder.tvDateGroup.setVisibility(View.VISIBLE);
-            }
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        holder.itemView.setOnClickListener(view -> {
-            if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(expenseItem);
-            }
-        });
     }
 
     @Override
@@ -99,6 +86,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
         TextView dateTextView;
         TextView priceTextView;
         TextView tvDateGroup, tvNote;
+        RelativeLayout rl;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -108,6 +96,7 @@ public class ExpenseAdapter extends RecyclerView.Adapter<ExpenseAdapter.ViewHold
             priceTextView = itemView.findViewById(R.id.tv_price);
             tvDateGroup = itemView.findViewById(R.id.tv_date_group);
             tvNote = itemView.findViewById(R.id.tv_note);
+            rl = itemView.findViewById(R.id.rl_content);
         }
     }
 }
