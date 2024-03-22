@@ -80,7 +80,7 @@ public class CalendarFragment extends Fragment {
         soduhientai = (TextView) view.findViewById(R.id.soduhientai);
         recList = (RecyclerView) view.findViewById(R.id.rec_list);
 
-        adapter = new Adapter_list();
+        adapter = new Adapter_list(getContext());
         //   ArrayList<Dto_item> sampleData = generateSampleData();
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
         recList.setLayoutManager(linearLayoutManager2);

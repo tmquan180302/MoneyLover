@@ -10,17 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
-        <TextView
 
-            android:textColor="@color/black"
-            android:id="@+id/day"
-      android:background="@color/color_text_2"
-            android:textSize="16dp"
-            android:text="day"
-android:padding="5dp"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
         <TextView
 
             android:textColor="@color/black"
@@ -43,7 +33,7 @@ android:weightSum="10"
         <ImageView
             android:id="@+id/itemimage"
 
-
+            android:padding="@dimen/_10sdp"
 
             android:textAlignment="center"
 
@@ -63,6 +53,14 @@ android:weightSum="10"
             android:layout_height="match_parent"
             />
 
+        <TextView
+            android:id="@+id/tv_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:text="1.000.000"
+            android:textColor="@color/color_text_2"
+            android:textSize="14sp" />
 
         <TextView
            android:gravity="center"

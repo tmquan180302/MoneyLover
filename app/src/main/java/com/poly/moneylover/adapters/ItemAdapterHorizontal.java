@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.poly.moneylover.interfaces.DeleteCategory;
 import com.poly.moneylover.models.Category;
+import com.poly.moneylover.models.Transaction;
 import com.poly.moneylover.ui.category.NewItemActivity;
 import com.poly.moneylover.R;
 
@@ -47,7 +48,10 @@ public class ItemAdapterHorizontal extends RecyclerView.Adapter<ItemAdapterHoriz
         list.add(position, category);
         notifyItemInserted(position);
     }
-
+    public void insertTransaction(int position, Transaction transaction) {
+        list.add(position, transaction.getCategory());
+        notifyItemInserted(position);
+    }
 
     public void refreshItem(int position) {
         notifyItemChanged(position);

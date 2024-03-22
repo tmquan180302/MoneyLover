@@ -2,7 +2,12 @@ package com.poly.moneylover.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Transaction {
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+public class Transaction  implements Serializable {
 
     @SerializedName("_id")
     private String transactionId;
@@ -18,6 +23,9 @@ public class Transaction {
         this.day = day;
         this.note = note;
         this.price = price;
+    }
+
+    public Transaction() {
     }
 
     public String getTransactionId() {
@@ -80,5 +88,13 @@ public class Transaction {
                 ", note='" + note + '\'' +
                 ", price=" + price +
                 '}';
+    }
+
+    public String convertDayToDateString() {
+        // Định dạng ngày tháng năm
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+        // Chuyển đổi millis sang ngày tháng năm
+        return sdf.format(new Date(day));
     }
 }
