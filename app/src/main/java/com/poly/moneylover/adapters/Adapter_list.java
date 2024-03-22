@@ -29,8 +29,11 @@ import com.poly.moneylover.models.Transaction;
 import com.poly.moneylover.utils.Convert;
 import com.poly.moneylover.utils.DetailitemlichActivity;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -42,6 +45,7 @@ Context context;
 
     public Adapter_list(List<Transaction> arrayList) {
         this.arrayList = arrayList;
+
     }
 
     public Adapter_list(Context context) {
@@ -53,6 +57,7 @@ Context context;
         this.arrayList = arrayList;
         notifyDataSetChanged();
     }
+
 
 
     @NonNull
@@ -70,6 +75,7 @@ Context context;
             holder.itemimage.setImageResource(transaction.getCategory().getIcon());
             holder.itemimage.setColorFilter(ContextCompat.getColor(holder.itemimage.getContext(), transaction.getCategory().getColor()));
             holder.itemtien.setText(Convert.FormatNumber(transaction.getPrice())+"đ");
+
             if (transaction.getCategory().getType() != 0){
                 holder.itemtien.setTextColor(ContextCompat.getColor(holder.itemtien.getContext(), R.color.blue_sky));
             }
@@ -81,7 +87,35 @@ Context context;
 
             // Chuyển đổi millis sang ngày tháng năm bằng phương thức convertDayToDateString()
             String dateString = yourData.convertDayToDateString();
-        holder.day.setText(dateString);
+
+
+            // Định dạng ngày tháng năm
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+            String currentDate = sdf.format(new Date(transaction.getDay()));
+
+            // Kiểm tra nếu ngày giống với ngày trước đó, hiển thị ngày
+            if (position == 0 || !currentDate.equals(sdf.format(new Date(arrayList.get(position - 1).getDay())))) {
+                holder.day.setVisibility(View.VISIBLE);
+                holder.day.setText(currentDate);
+            } else {
+                holder.day.setVisibility(View.GONE);
+            }
+
+
+            //  holder.day.setText(dateString);
+
+            // Sắp xếp các ngày từ gần đến xa
+
+
+            // In danh sách các ngày đã được sắp xếp
+      // sortTransactionsByDate();
+//            for (Transaction date : arrayList) {
+//                System.out.println(date);
+//                holder.day.setText(dateString);
+//            }
+
+            // Hiển thị thông tin của đối tượng
+            holder.day.setText(dateString);
 
         holder.itemdetail1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,6 +134,19 @@ Context context;
         });
 
         }
+    }
+
+    // Sắp xếp danh sách các giao dịch theo ngày từ gần đến xa
+    public void sortTransactionsByDate() {
+        Collections.sort(arrayList, new Comparator<Transaction>() {
+            @Override
+            public int compare(Transaction t1, Transaction t2) {
+                long date1 = t1.getDay();
+                long date2 = t2.getDay();
+                return Long.compare(date1, date2);
+            }
+        });
+        notifyDataSetChanged();
     }
 
     @Override

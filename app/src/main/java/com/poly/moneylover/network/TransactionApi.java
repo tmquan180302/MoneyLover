@@ -1,5 +1,6 @@
 package com.poly.moneylover.network;
 
+import com.poly.moneylover.models.Category;
 import com.poly.moneylover.models.Transaction;
 
 import java.util.List;
@@ -21,5 +22,9 @@ public interface TransactionApi {
     @GET("transaction/")
     Call<List<Transaction>> getListTransaction();
     @DELETE("transaction/{transactionId}")
-    Call<Boolean> delete1(@Path("transactionId") String transactionId);
+    Call<Boolean> delete(@Path("transactionId") String transactionId);
+
+
+    @POST("transaction/{transactionId}/update")
+    Call<String> update(@Path("transactionId") String transactionId, @Body Transaction transaction);
 }

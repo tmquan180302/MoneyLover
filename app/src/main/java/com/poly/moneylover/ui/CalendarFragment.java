@@ -1,5 +1,6 @@
 package com.poly.moneylover.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.poly.moneylover.adapters.CalendarAdapter;
 import com.poly.moneylover.models.Dto_item;
 import com.poly.moneylover.models.Transaction;
 import com.poly.moneylover.network.TransactionApi;
+import com.poly.moneylover.ui.transaction.SearchActivity;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -79,7 +81,12 @@ public class CalendarFragment extends Fragment {
         sodudauki = (TextView) view.findViewById(R.id.sodudauki);
         soduhientai = (TextView) view.findViewById(R.id.soduhientai);
         recList = (RecyclerView) view.findViewById(R.id.rec_list);
-
+search.setOnClickListener(new View.OnClickListener() {
+    @Override
+    public void onClick(View v) {
+        startActivity(new Intent(getContext(), SearchActivity.class));
+    }
+});
         adapter = new Adapter_list(getContext());
         //   ArrayList<Dto_item> sampleData = generateSampleData();
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -166,33 +173,7 @@ public class CalendarFragment extends Fragment {
         calendarGrid.setAdapter(calendarAdapter);
     }
 
-    private ArrayList<Dto_item> generateSampleData() {
-        ArrayList<Dto_item> data = new ArrayList<>();
 
-        // Thêm một số dữ liệu mẫu
-        data.add(new Dto_item(1, 1, "khong co", "1.000.000", "01/02/2024"));
-        data.add(new Dto_item(2, 2, "", "200.000", "06/02/2024"));
-        data.add(new Dto_item(3, 3, "", "99.000", "09/02/2024"));
-        data.add(new Dto_item(4, 4, "", "20.000", "1/2/2024"));
-        // Thêm một số dữ liệu mẫu
-        data.add(new Dto_item(5, 5, "khong co", "1.000.000", "10/02/2024"));
-        data.add(new Dto_item(6, 6, "", "200.000", "17/02/2024"));
-        data.add(new Dto_item(7, 7, "", "99.000", "16/02/2024"));
-        data.add(new Dto_item(8, 8, "", "20.000", "15/02/2024"));
-
-        // Thêm một số dữ liệu mẫu
-        data.add(new Dto_item(9, 4, "khong co", "1.000.000", "21/02/2024"));
-        data.add(new Dto_item(10, 2, "", "200.000", "22/02/2024"));
-        data.add(new Dto_item(11, 1, "", "99.000", "11/02/2024"));
-        data.add(new Dto_item(12, 0, "", "20.000", "11/02/2024"));
-
-        // ...
-
-        // Khởi tạo CalendarAdapter với dữ liệu và trả về adapter
-
-
-        return data;
-    }
 
     @Override
     public void onResume() {

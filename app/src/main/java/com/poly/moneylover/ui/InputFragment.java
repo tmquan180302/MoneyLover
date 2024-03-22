@@ -344,6 +344,7 @@ public class InputFragment extends Fragment implements ItemOnclick {
 
     @Override
     public void onSelectedCategory(Category category) {
+
         this.category = category;
     }
 

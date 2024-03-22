@@ -48,10 +48,7 @@ public class ItemAdapterHorizontal extends RecyclerView.Adapter<ItemAdapterHoriz
         list.add(position, category);
         notifyItemInserted(position);
     }
-    public void insertTransaction(int position, Transaction transaction) {
-        list.add(position, transaction.getCategory());
-        notifyItemInserted(position);
-    }
+
 
     public void refreshItem(int position) {
         notifyItemChanged(position);

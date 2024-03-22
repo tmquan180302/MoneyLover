@@ -20,6 +20,9 @@
             android:name=".ui.user.SignUpActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.transaction.SearchActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.user.LoginActivity"
             android:exported="false" />
         <activity

@@ -23,7 +23,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     private List<Category> list = new ArrayList<>();
     private int positionSelected = 0;
 
-    private final ItemOnclick onclick;
+      ItemOnclick onclick;
 
     public ItemAdapter(ItemOnclick onclick) {
         this.onclick = onclick;
