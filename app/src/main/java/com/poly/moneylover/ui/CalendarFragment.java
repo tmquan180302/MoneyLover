@@ -24,6 +24,7 @@ import com.poly.moneylover.models.Dto_item;
 import com.poly.moneylover.models.Transaction;
 import com.poly.moneylover.network.TransactionApi;
 import com.poly.moneylover.ui.transaction.SearchActivity;
+import com.poly.moneylover.utils.Convert;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -38,6 +39,8 @@ import retrofit2.Response;
 
 public class CalendarFragment extends Fragment {
     private TextView search;
+    int sumType0 = 0; // Biến để tính tổng các giao dịch có type = 0
+    int sumType1 = 0; // Biến để tính tổng các giao dịch có type = 1
     private ImageButton btnPrev;
     private TextView title;
     private ImageButton btnNext;
@@ -129,8 +132,39 @@ search.setOnClickListener(new View.OnClickListener() {
             try {
                 Response<List<Transaction>> response = TransactionApi.api.getListTransaction().execute();
                 if (response.isSuccessful()) {
+
                     requireActivity().runOnUiThread(() -> {
-                        adapter.setData(response.body());
+
+                        List<Transaction> allTransactions = response.body();
+                        List<Transaction> filteredTransactions = new ArrayList<>();
+
+
+                        // Lọc danh sách giao dịch để chỉ chứa các giao dịch có userId tương tự với userId mà người dùng đã nhập
+                        for (Transaction transaction : allTransactions) {
+                            if (transaction.getUserId().equals(transaction.getUserId())) {
+                                filteredTransactions.add(transaction);
+                                // Kiểm tra nếu type = 0 thì cộng vào tổng của type 0, ngược lại thì cộng vào tổng của type 1
+                                if (transaction.getCategory().getType() == 0) {
+                                    sumType0 += transaction.getPrice();
+                                    chitieu.setText(Convert.FormatNumber(sumType0)+"đ");
+                                } else if (transaction.getCategory().getType() == 1) {
+                                    sumType1 += transaction.getPrice();
+                                    thunhap.setText(Convert.FormatNumber(sumType1)+"đ");
+                                }
+                            }
+                        }
+                        int difference = sumType1 - sumType0;
+                        tong.setText(Convert.FormatNumber(difference)+"đ");
+                        System.out.println("Hiệu giữa tổng các giao dịch có type = 0 và type = 1: " + difference);
+
+                        // In tổng các giao dịch có type = 0 và type = 1
+                        System.out.println("Tổng các giao dịch có type = 0: " + sumType0);
+                        System.out.println("Tổng các giao dịch có type = 1: " + sumType1);
+
+                        requireActivity().runOnUiThread(() -> {
+                            adapter.setData(filteredTransactions);
+                        });
+
                     });
                 }
             } catch (HttpException e) {
@@ -148,6 +182,7 @@ search.setOnClickListener(new View.OnClickListener() {
 
         thread.start();
     }
+
 
     private void updateCalendar() {
         ArrayList<Date> cells = new ArrayList<>();

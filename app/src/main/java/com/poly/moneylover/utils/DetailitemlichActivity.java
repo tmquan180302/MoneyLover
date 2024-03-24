@@ -25,7 +25,7 @@ import android.widget.Toast;
 import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.ItemAdapter;
 import com.poly.moneylover.adapters.ItemAdapterHorizontal;
-import com.poly.moneylover.interfaces.DeleteTransaction;
+
 import com.poly.moneylover.interfaces.ItemOnclick;
 import com.poly.moneylover.models.Category;
 import com.poly.moneylover.models.Dto_item;

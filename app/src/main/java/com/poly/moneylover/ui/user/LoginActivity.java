@@ -83,13 +83,14 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<ServerResToken> call, Response<ServerResToken> response) {
                 if (response.isSuccessful() && response.body() != null) {
+
                     Log.e("mylog: ", response.body().getToken());
                     RetrofitClient.setAuthToken(response.body().getToken());
                     SharedPreferences sharedPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
-
                     editor.remove("token");
                     editor.putString("token", response.body().getToken());
+
                     editor.apply();
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     startActivity(intent);
