@@ -23,6 +23,7 @@ import com.poly.moneylover.ui.Setting.FullTermActivity;
 import com.poly.moneylover.ui.Setting.InYearActivity;
 import com.poly.moneylover.ui.Setting.ListFullTermActivity;
 import com.poly.moneylover.ui.Setting.ListInYearActivity;
+import com.poly.moneylover.ui.user.LoginActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class OtherFragment extends Fragment implements OtherAdapter.OnItemClickL
         otherItems.add(new OtherItem(R.drawable.chart_pie,"Đầu ra dữ liệu"));
         otherItems.add(new OtherItem(R.drawable.chart_pie,"Sao lưu dữ  liệu"));
         otherItems.add(new OtherItem(R.drawable.chart_pie,"Thông tin ứng dụng"));
-        otherItems.add(new OtherItem(R.drawable.icon_logout,"Thoát"));
+        otherItems.add(new OtherItem(R.drawable.icon_logout,"Thoát ứng dụng"));
 
         return otherItems;
     }
@@ -90,6 +91,9 @@ public class OtherFragment extends Fragment implements OtherAdapter.OnItemClickL
         }
         else if (position == 4) {
             Intent intent = new Intent(requireContext(), ListFullTermActivity.class);
+            startActivity(intent);
+        }else if(position == 9){
+            Intent intent = new Intent(requireContext(), LoginActivity.class);
             startActivity(intent);
         }
     }

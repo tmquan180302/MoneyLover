@@ -38,25 +38,14 @@ public class SoDuBanDauActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_so_du_ban_dau);
         RelativeLayout khac0 = findViewById(R.id.khac0);
-
+        ImageView imgBack = findViewById(R.id.imgBack);
+        imgBack.setOnClickListener(v ->{
+            finish();
+        });
         khac0.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showInputDialog();
-            }
-        });
-        ImageView back_khac = findViewById(R.id.back_khac);
-        TextView back0 = findViewById(R.id.back0);
-        back_khac.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-        back0.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
             }
         });
         //fetchBalanceData();
@@ -134,12 +123,11 @@ public class SoDuBanDauActivity extends AppCompatActivity {
                     List<Balance> balances = data.body();
                     if (balances != null && !balances.isEmpty()) {
                         Balance balance = balances.get(0);
-                        double price = balance.getPrice(); // Giả sử getPrice() trả về giá tiền
+                        int price = balance.getPrice();
 
                         runOnUiThread(() -> {
                             TextView textViewPrice = findViewById(R.id.sodubandau);
                             textViewPrice.setText(String.valueOf(price));
-                            // Lưu số dư ban đầu vào Singleton
                             InitialBalanceSingleton.getInstance().setInitialBalance(price);
                         });
                     } else {

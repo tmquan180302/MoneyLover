@@ -39,10 +39,11 @@
                     android:text="Tổng"
                     />
                 <TextView
+                    android:id="@+id/tvSum"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
 
             </LinearLayout>
             <View
@@ -63,10 +64,11 @@
                     android:text="Trung bình"
                     />
                 <TextView
+                    android:id="@+id/tvAverage"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
 
             </LinearLayout>
             <View
@@ -92,10 +94,11 @@
                     android:text="Tháng 1"
                     />
                 <TextView
+                    android:id="@+id/tvThang1"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
 
             </LinearLayout>
             <View
@@ -116,10 +119,11 @@
                     android:text="Tháng 2"
                     />
                 <TextView
+                    android:id="@+id/tvThang2"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -139,10 +143,11 @@
                     android:text="Tháng 3"
                     />
                 <TextView
+                    android:id="@+id/tvThang3"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -162,10 +167,11 @@
                     android:text="Tháng 4"
                     />
                 <TextView
+                    android:id="@+id/tvThang4"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -185,10 +191,11 @@
                     android:text="Tháng 5"
                     />
                 <TextView
+                    android:id="@+id/tvThang5"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -208,10 +215,11 @@
                     android:text="Tháng 6"
                     />
                 <TextView
+                    android:id="@+id/tvThang6"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -231,10 +239,11 @@
                     android:text="Tháng 7"
                     />
                 <TextView
+                    android:id="@+id/tvThang7"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -254,10 +263,11 @@
                     android:text="Tháng 8"
                     />
                 <TextView
+                    android:id="@+id/tvThang8"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -277,10 +287,11 @@
                     android:text="Tháng 9"
                     />
                 <TextView
+                    android:id="@+id/tvThang9"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -300,10 +311,11 @@
                     android:text="Tháng 10"
                     />
                 <TextView
+                    android:id="@+id/tvThang10"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -323,10 +335,11 @@
                     android:text="Tháng 11"
                     />
                 <TextView
+                    android:id="@+id/tvThang11"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"
@@ -346,10 +359,11 @@
                     android:text="Tháng 12"
                     />
                 <TextView
+                    android:id="@+id/tvThang12"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
             </LinearLayout>
             <View
                 android:layout_marginBottom="40dp"

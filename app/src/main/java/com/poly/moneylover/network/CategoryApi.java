@@ -18,7 +18,8 @@ import retrofit2.http.Path;
 public interface CategoryApi {
 
     CategoryApi api = RetrofitClient.getInstance().create(CategoryApi.class);
-
+    @GET("category/getAll")
+    Call<List<Category>> getListCategory();
     @GET("category/expense")
     Call<List<Category>> getListExpense();
 
