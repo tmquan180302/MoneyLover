@@ -9,11 +9,15 @@
     <com.github.mikephil.charting.charts.PieChart
         android:id="@+id/pieChart"
         android:layout_width="match_parent"
-        android:layout_height="200dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
     <ScrollView
         android:layout_marginTop="40dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -27,7 +31,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/listview"/>
+                android:id="@+id/rcvCategory"/>
 
         </LinearLayout>
     </ScrollView>

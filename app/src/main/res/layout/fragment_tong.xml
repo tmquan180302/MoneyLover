@@ -39,10 +39,11 @@
                     android:text="Tổng"
                     />
                 <TextView
+                    android:id="@+id/tvSum"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
 
             </LinearLayout>
             <View
@@ -63,10 +64,11 @@
                     android:text="Trung bình"
                     />
                 <TextView
+                    android:id="@+id/tvAverage"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
 
             </LinearLayout>
             <View
@@ -92,10 +94,11 @@
                     android:text="Thu nhập"
                     />
                 <TextView
+                    android:id="@+id/tvThu"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
 
             </LinearLayout>
             <View
@@ -116,10 +119,11 @@
                     android:text="Chi tiêu"
                     />
                 <TextView
+                    android:id="@+id/tvChi"
                     android:layout_gravity="center"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="400đ"/>
+                    android:text="0đ"/>
             </LinearLayout>
             <View
                 android:layout_width="match_parent"

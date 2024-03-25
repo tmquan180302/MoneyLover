@@ -1,53 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/bg_item_chi_tieu">
+    >
 
-    <RelativeLayout
-        android:padding="10dp"
+
+    <LinearLayout
+        android:background="@drawable/item_background"
+        android:id="@+id/ln_foreground"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+
         <ImageView
-            android:id="@+id/img_view"
-            android:layout_width="32dp"
-            android:layout_height="32dp" />
+            android:id="@+id/imgIcon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/plate_and_utensils"
+            android:tint="@color/orange"
+            tools:ignore="UseAppTint" />
 
         <TextView
-            android:id="@+id/tv_title"
-            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:id="@+id/tvName"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="@dimen/_20sdp"
-            android:layout_toStartOf="@id/tv_price"
-            android:layout_toEndOf="@id/img_view"
+            android:layout_marginHorizontal="16dp"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:lines="1"
             android:text="Ăn uống"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+            android:textColor="@color/color_text_1"
+            />
 
         <TextView
-            android:id="@+id/tv_price"
-            android:layout_width="wrap_content"
+            android:textStyle="bold"
+            android:id="@+id/tvTotal"
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:gravity="end"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:text="100%"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toStartOf="@+id/tv_percent"
-            android:layout_marginEnd="@dimen/_10sdp"
-            android:text="Ăn uống"
-            android:textColor="@color/black"
-            android:textSize="16dp"
-            android:textStyle="bold" />
+            android:contentDescription="@string/todo"
+            android:src="@drawable/back_report"
+            tools:ignore="UseAppTint" />
 
         <TextView
-            android:id="@+id/tv_percent"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvPercent"
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:gravity="end"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:text="100%"
+            android:textSize="@dimen/_9sdp"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:text="Ăn uống"
-            android:textColor="@color/border"
-            android:textSize="16dp" />
-    </RelativeLayout>
+            android:contentDescription="@string/todo"
+            android:src="@drawable/back_report"
+            tools:ignore="UseAppTint" />
+    </LinearLayout>
 
+    <View
+        android:layout_marginTop="@dimen/_1ssp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_text_2"
+        />
 
-</RelativeLayout>
+</LinearLayout>

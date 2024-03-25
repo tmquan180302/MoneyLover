@@ -16,55 +16,39 @@
         android:orientation="horizontal"
         android:padding="8dp">
 
-        <ImageView
-            android:id="@+id/imv_back"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:visibility="gone"
-            android:padding="@dimen/_6sdp"
-            android:src="@drawable/icon_arrow_left" />
-
-
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_marginHorizontal="8dp"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="horizontal">
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_tab1"
-                android:layout_width="0dp"
+                android:layout_width="156dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/button_background_left"
                 android:text="Tiền chi"
                 android:textAllCaps="false"
                 android:textColor="@color/text_color"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@id/btn_tab2"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:textSize="14sp" />
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/btn_tab2"
-                android:layout_width="0dp"
+                android:layout_width="156dp"
                 android:layout_height="match_parent"
                 android:background="@drawable/button_background_right"
                 android:text="Tiền thu"
                 android:textAllCaps="false"
                 android:textColor="@color/text_color"
-                android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toEndOf="@id/btn_tab1"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:textSize="14sp" />
+        </LinearLayout>
 
         <ImageButton
             android:id="@+id/imb_pen"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="24dp"
             android:background="@android:color/transparent"
             android:src="@drawable/icon_pen" />
     </LinearLayout>

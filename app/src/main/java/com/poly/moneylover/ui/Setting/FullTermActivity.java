@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,10 @@ public class FullTermActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_term);
+        ImageView imgBack = findViewById(R.id.imgBack);
+        imgBack.setOnClickListener(v -> {
+            finish();
+        });
         getReportData();
     }
 
@@ -35,11 +40,11 @@ public class FullTermActivity extends AppCompatActivity {
                 if (response.isSuccessful()) {
                     Report report = response.body();
                     // Xử lý dữ liệu report ở đây
-                     TextView txtrevenue = findViewById(R.id.revenue);
-                     TextView txtexpense = findViewById(R.id.expense);
-                     TextView txttotal = findViewById(R.id.total);
-                     TextView txtbalance = findViewById(R.id.balance);
-                     TextView txtcumulation = findViewById(R.id.cumulation);
+                    TextView txtrevenue = findViewById(R.id.revenue);
+                    TextView txtexpense = findViewById(R.id.expense);
+                    TextView txttotal = findViewById(R.id.total);
+                    TextView txtbalance = findViewById(R.id.balance);
+                    TextView txtcumulation = findViewById(R.id.cumulation);
 
                     double revenue = report.getRevenue();
                     double expense = report.getExpense();
@@ -47,16 +52,17 @@ public class FullTermActivity extends AppCompatActivity {
                     double balance = (int) report.getBalance();
                     double cumulation = report.getCumulation();
 
-//                    Log.d("data","data " +report);
-//                    double initialBalance = InitialBalanceSingleton.getInstance().getInitialBalance();
-//                    txtbalance.setText(String.valueOf(initialBalance)); //so du ban dau
+                    Log.d("data","data " +report);
+                    double initialBalance = InitialBalanceSingleton.getInstance().getInitialBalance();
+                    txtbalance.setText(String.valueOf(initialBalance)); //so du ban dau
 
-                    txtrevenue.setText(String.valueOf(revenue));
-                    txtexpense.setText(String.valueOf(expense));
-                    txttotal.setText(String.valueOf(total));
-                    txtbalance.setText(String.valueOf(balance));
+                    txtrevenue.setText(formatMoney(revenue));
+                    txtexpense.setText(formatMoney(expense));
+                    txttotal.setText(formatMoney(total));
+                    txtbalance.setText(formatMoney(balance));
 
-                    txtcumulation.setText(String.valueOf(total + balance));
+                    double totalCumulation = total + balance;
+                    txtcumulation.setText(formatMoney(cumulation));
 
                 } else {
                     Toast.makeText(FullTermActivity.this, "Chưa có data", Toast.LENGTH_SHORT).show();
@@ -69,6 +75,14 @@ public class FullTermActivity extends AppCompatActivity {
                 Toast.makeText(FullTermActivity.this, "Looix", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private String formatMoney(double amount) {
+        if (amount == 0) {
+            return "0";
+        } else {
+            return String.format("%,.0f", amount);
+        }
     }
 
 }

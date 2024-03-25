@@ -22,19 +22,21 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="Tiêu đề"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_gravity="center"/>
                 <EditText
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
                     android:background="@drawable/backgroundtron"
                     android:hint="Chưa nhập"
                     android:textSize="19sp"
-                    android:layout_marginLeft="25dp"/>
+                    />
 
             </LinearLayout>
         </RelativeLayout>
@@ -52,19 +54,29 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="Số tiền"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_gravity="center"/>
                 <EditText
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
                     android:layout_height="match_parent"
                     android:background="@drawable/backgroundtron"
                     android:hint="Chưa nhập"
                     android:textSize="19sp"
-                    android:layout_marginLeft="30dp"/>
+                    />
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:text="đ"
+                    android:textSize="19sp"
+                    android:layout_weight="0.3"
+                    />
             </LinearLayout>
         </RelativeLayout>
         <TextView
@@ -81,32 +93,25 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="Danh mục"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_gravity="center"/>
-                <ImageView
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/bell"
-                    android:layout_gravity="center"
-                    android:layout_marginLeft="8dp"/>
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:text="Ăn uống"
-                    android:layout_gravity="center"
-                    android:textSize="17sp"/>
-                <ImageView
-                    android:rotation="180"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/back_report"
-                    android:layout_gravity="center"/>
+
+                <LinearLayout
+                    android:id="@+id/lnDanhMuc"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <Spinner
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/spnCategory"/>
+                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
     </LinearLayout>
@@ -127,26 +132,18 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="Lặp lại"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_gravity="center"/>
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="30dp"
-                    android:text="Hàng tháng"
-                    android:layout_gravity="center"
-                    android:textSize="17sp"/>
-                <ImageView
-                    android:rotation="180"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/back_report"
-                    android:layout_gravity="center"/>
+                <Spinner
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="match_parent"
+                    android:id="@+id/spnFrequency"/>
 
             </LinearLayout>
         </RelativeLayout>
@@ -164,26 +161,28 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="Bắt đầu"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_gravity="center"/>
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="10/03/2024"
-                    android:layout_gravity="center"
-                    android:textSize="17sp"/>
-                <ImageView
-                    android:rotation="180"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/back_report"
-                    android:layout_gravity="center"/>
+                <LinearLayout
+                    android:id="@+id/lnStartDay"
+                    android:layout_weight="3"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+                    <TextView
+                        android:id="@+id/tvStartDay"
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="10/03/2024"
+                        android:layout_gravity="center"
+                        android:textSize="17sp"/>
+                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
         <TextView
@@ -200,26 +199,33 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal">
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:text="Kết thúc"
                     android:textStyle="bold"
                     android:textSize="18sp"
                     android:layout_gravity="center"/>
-                <TextView
-                    android:layout_weight="1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="16dp"
-                    android:text="Không"
-                    android:layout_gravity="center"
-                    android:textSize="17sp"/>
-                <ImageView
-                    android:rotation="180"
-                    android:layout_width="25dp"
-                    android:layout_height="25dp"
-                    android:background="@drawable/back_report"
-                    android:layout_gravity="center"/>
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_weight="1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Không"
+                        android:layout_gravity="center"
+                        android:textSize="17sp"/>
+                    <ImageView
+                        android:rotation="180"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/back_report"
+                        android:layout_gravity="center"/>
+                </LinearLayout>
             </LinearLayout>
         </RelativeLayout>
         <TextView

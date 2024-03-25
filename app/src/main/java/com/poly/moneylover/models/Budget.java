@@ -2,47 +2,42 @@ package com.poly.moneylover.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Budget {
+import java.io.Serializable;
+
+public class Budget implements Serializable {
 
     @SerializedName("_id")
-    private String budgetId;
-    private User user;
-    private Category item;
-    private String dayStart ;
+    private String _id;
+    private Category category;
+    private Long dayStart;
     private String dayEnd;
     private String note;
     private int price;
     private String frequency;
 
-    public String getBudgetId() {
-        return budgetId;
+
+
+    public String get_id() {
+        return _id;
     }
 
-    public void setBudgetId(String budgetId) {
-        this.budgetId = budgetId;
+    public void set_id(String _id) {
+        this._id = _id;
     }
 
-    public User getUser() {
-        return user;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
-    public Category getItem() {
-        return item;
-    }
-
-    public void setItem(Category item) {
-        this.item = item;
-    }
-
-    public String getDayStart() {
+    public long getDayStart() {
         return dayStart;
     }
 
-    public void setDayStart(String dayStart) {
+    public void setDayStart(Long dayStart) {
         this.dayStart = dayStart;
     }
 

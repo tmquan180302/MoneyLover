@@ -1,230 +1,191 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.ReportFragment">
 
-    <LinearLayout
-        android:id="@+id/liner_content"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:id="@+id/liner_content"
+       android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_margin="10dp"
-            android:weightSum="5"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-            <TextView
-                android:textStyle="bold"
-                android:layout_weight="4"
-                android:textAlignment="center"
-                android:textSize="24dp"
-                android:textColor="@color/black"
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:padding="10dp">
 
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Báo Cáo"/>
-            <TextView
-                android:id="@+id/search"
-                android:layout_weight="1"
-                android:background="@drawable/icon_search"
-                android:textAlignment="center"
-                android:textSize="24dp"
-                android:textColor="@color/black"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                />
-        </LinearLayout>
+           <ImageButton
+               android:id="@+id/ic_back"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:layout_centerVertical="true"
+               android:background="@android:color/transparent"
+               android:src="@drawable/back_report"/>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="10dp">
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_toEndOf="@id/ic_back"
+               android:orientation="horizontal"
+               android:gravity="center"
+               android:padding="16dp"
+               android:background="@color/orange_1"
+               android:layout_toStartOf="@id/ic_next"
+               android:layout_centerInParent="true">
 
-            <ImageButton
-                android:id="@+id/ic_back"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
-                android:src="@drawable/back_report" />
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="02/2024"
+                   android:textColor="@color/black"
+                   android:textStyle="bold"
+                   android:textSize="20sp"/>
 
-            <LinearLayout
-                android:id="@+id/layout_pick_date"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_toStartOf="@id/ic_next"
-                android:layout_toEndOf="@id/ic_back"
-                android:background="@color/orange_1"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="16dp">
-
-                <TextView
-                    android:id="@+id/tv_date_month"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="02/2024"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_date_full"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="(01/02 - 20/02)"
-                    android:textColor="@color/black"
-                    android:textSize="16sp"
-                    android:textStyle="normal" />
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="(01/02 - 20/02)"
+                   android:textColor="@color/black"
+                   android:textStyle="normal"
+                   android:textSize="16sp"/>
 
 
-            </LinearLayout>
-
-            <ImageButton
-
-                android:id="@+id/ic_next"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:background="@android:color/transparent"
-                android:src="@drawable/forward_report" />
-
-        </RelativeLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:weightSum="2">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/background_report"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Chi tiêu"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/tv_chi"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:textColor="@color/orange"
-                    android:inputType="number"
-                    android:digits="0123456789"
-                    android:background="@android:color/transparent"
-                    android:enabled="false"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:layout_weight="1"
-                android:background="@drawable/background_report"
-                android:padding="10dp">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Thu nhập"
-                    android:textSize="14sp" />
-
-                <EditText
-                    android:id="@+id/tv_thu"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:textColor="@color/blue"
-                    android:digits="0123456789"
-                    android:background="@android:color/transparent"
-                    android:inputType="number"
-                    android:enabled="false"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
-            </RelativeLayout>
-        </LinearLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
-            android:background="@drawable/background_report"
-            android:padding="10dp">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Thu chi"
-                android:textSize="14sp" />
-
-            <EditText
-                android:id="@+id/tv_thu_chi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:textColor="@color/black"
-                android:digits="0123456789"
-                android:background="@android:color/transparent"
-                android:inputType="number"
-                android:enabled="false"
-                android:textSize="15sp"
-                android:textStyle="bold" />
-
-        </RelativeLayout>
 
 
-    </LinearLayout>
+           </LinearLayout>
+
+           <ImageButton
+
+               android:id="@+id/ic_next"
+               android:layout_centerVertical="true"
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:background="@android:color/transparent"
+               android:layout_alignParentEnd="true"
+               android:src="@drawable/forward_report"/>
+
+       </RelativeLayout>
+
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:weightSum="2"
+           >
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:padding="10dp"
+               android:background="@drawable/background_report"
+               android:layout_margin="10dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Chi tiêu"
+                   android:textSize="14sp"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="-62,652"
+                   android:textStyle="bold"
+                   android:textColor="@color/orange"
+                   android:layout_alignParentEnd="true"
+                   android:textSize="18sp"/>
+           </RelativeLayout>
+
+           <RelativeLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:layout_weight="1"
+               android:padding="10dp"
+               android:background="@drawable/background_report"
+               android:layout_margin="10dp">
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="Thu nhập"
+                   android:textSize="14sp"/>
+
+               <TextView
+                   android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   android:text="+500.000"
+                   android:textStyle="bold"
+                   android:textColor="@color/blue"
+                   android:layout_alignParentEnd="true"
+                   android:textSize="18sp"/>
+           </RelativeLayout>
+       </LinearLayout>
+
+       <RelativeLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:background="@drawable/background_report"
+           android:layout_marginHorizontal="10dp"
+           android:padding="10dp">
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Thu chi"
+               android:textSize="14sp"/>
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="-62,652"
+               android:textStyle="bold"
+               android:textColor="@color/black"
+               android:layout_alignParentEnd="true"
+               android:textSize="20sp"/>
+
+       </RelativeLayout>
+
+
+
+
+
+   </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_alignParentBottom="true"
         android:layout_below="@id/liner_content"
-        android:orientation="vertical">
+android:orientation="vertical"
+        android:layout_height="wrap_content">
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginStart="10dp"
-                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:tabGravity="fill"
-                app:tabRippleColor="@null"
-                app:tabIndicatorColor="@null"
-                app:tabIndicatorFullWidth="true"
+                android:layout_marginTop="10dp"
                 app:tabIndicatorAnimationMode="elastic"
+                app:tabIndicatorGravity="stretch"
+                app:tabIndicatorColor="@null"
                 app:tabMode="fixed" />
 
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/viewpageInput"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="500dp"
+                android:layout_below="@+id/tabLayout"
                 android:layout_marginTop="50dp" />
         </FrameLayout>
     </LinearLayout>

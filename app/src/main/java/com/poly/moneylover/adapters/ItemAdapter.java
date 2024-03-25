@@ -1,6 +1,8 @@
 package com.poly.moneylover.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +19,6 @@ import com.poly.moneylover.models.Category;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
@@ -25,21 +26,13 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     private int positionSelected = 0;
 
     private final ItemOnclick onclick;
+    private Context context;
 
-    public ItemAdapter(ItemOnclick onclick) {
+    public ItemAdapter(ItemOnclick onclick, Context context) {
         this.onclick = onclick;
-        list.add(new Category("Chỉnh sửa"));
+        this.context = context;
     }
 
-    public void changePositionSelected(String id) {
-        for (int i = 0; i < list.size(); i++) {
-            if (Objects.equals(list.get(i).getId(), id)) {
-                positionSelected = i;
-            }
-        }
-
-        setPositionSelected(positionSelected);
-    }
 
     @SuppressLint("NotifyDataSetChanged")
     public void setPositionSelected(int index) {
@@ -70,13 +63,22 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     @Override
     public void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int i) {
         Category item = list.get(i);
+        Resources resources = context.getResources();
+
         if (item.getIcon() != 0) {
-            try {
-                itemViewHolder.imvIcon.setVisibility(View.VISIBLE);
+            itemViewHolder.imvIcon.setVisibility(View.VISIBLE);
+            if (isValidIconResource(resources, item.getIcon())) {
                 itemViewHolder.imvIcon.setImageResource(item.getIcon());
-                itemViewHolder.imvIcon.setColorFilter(ContextCompat.getColor(itemViewHolder.imvIcon.getContext(), item.getColor()));
-            }catch (Exception e){
-                e.printStackTrace();
+            } else {
+                itemViewHolder.imvIcon.setImageResource(R.drawable.bell);
+            }
+
+            int colorId = list.get(i).getColor();
+            if (isValidColorResource(resources, colorId)) {
+                int color = ContextCompat.getColor(context, colorId);
+                itemViewHolder.imvIcon.setColorFilter(color);
+            } else {
+                itemViewHolder.imvIcon.setColorFilter(item.getColor());
             }
 
         } else {
@@ -95,10 +97,26 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
             }
         });
     }
+    private boolean isValidColorResource(Resources resources, int colorId) {
+        try {
+            resources.getColor(colorId);
+            return true;
+        } catch (Resources.NotFoundException e) {
+            return false;
+        }
+    }
+    private boolean isValidIconResource(Resources resources, int id) {
+        try {
+            resources.getDrawable(id);
+            return true;
+        } catch (Resources.NotFoundException e) {
+            return false;
+        }
+    }
 
     @Override
     public int getItemCount() {
-        return list != null ? list.size() : 0;
+        return list != null ? list.size() : 1;
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {
