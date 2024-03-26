@@ -1,7 +1,10 @@
 package com.poly.moneylover.ui;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,14 +34,20 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import retrofit2.HttpException;
 import retrofit2.Response;
 
 public class CalendarFragment extends Fragment {
     private TextView search;
+
+
+    // Phương thức để ghi dữ liệu
+
     int sumType0 = 0; // Biến để tính tổng các giao dịch có type = 0
     int sumType1 = 0; // Biến để tính tổng các giao dịch có type = 1
     private ImageButton btnPrev;
@@ -53,11 +62,16 @@ public class CalendarFragment extends Fragment {
     private RecyclerView recList;
 
     Adapter_list adapter;
-    CalendarAdapter adapter1;
+
+
     private ArrayList<Dto_item> arrayList = new ArrayList<>();
 
     private Calendar currentDate = Calendar.getInstance();
     private SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+
+    // Phương thức để lưu trữ dữ liệu vào SharedPreferences
+
+    // Sử dụng phương thức saveData() để lưu dữ liệu
 
 
     @Override
@@ -84,12 +98,13 @@ public class CalendarFragment extends Fragment {
         sodudauki = (TextView) view.findViewById(R.id.sodudauki);
         soduhientai = (TextView) view.findViewById(R.id.soduhientai);
         recList = (RecyclerView) view.findViewById(R.id.rec_list);
-search.setOnClickListener(new View.OnClickListener() {
-    @Override
-    public void onClick(View v) {
-        startActivity(new Intent(getContext(), SearchActivity.class));
-    }
-});
+
+        search.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getContext(), SearchActivity.class));
+            }
+        });
         adapter = new Adapter_list(getContext());
         //   ArrayList<Dto_item> sampleData = generateSampleData();
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -132,15 +147,23 @@ search.setOnClickListener(new View.OnClickListener() {
             try {
                 Response<List<Transaction>> response = TransactionApi.api.getListTransaction().execute();
                 if (response.isSuccessful()) {
-
                     requireActivity().runOnUiThread(() -> {
-
                         List<Transaction> allTransactions = response.body();
                         List<Transaction> filteredTransactions = new ArrayList<>();
 
-
+                        // Tạo một Map để lưu trữ tổng price cho mỗi ngày với type = 1
+                        Map<String, Long> sumPriceType1ByDate = new HashMap<>();
+                        // Tạo một Map để lưu trữ tổng price cho mỗi ngày với type = 0
+                        Map<String, Long> sumPriceType0ByDate = new HashMap<>();
                         // Lọc danh sách giao dịch để chỉ chứa các giao dịch có userId tương tự với userId mà người dùng đã nhập
                         for (Transaction transaction : allTransactions) {
+                            // Lấy ngày của giao dịch
+                            Transaction yourData = new Transaction();
+                            yourData.setDay(transaction.getDay()); // Gán giá trị millis cho trường "day"
+                            // Chuyển đổi millis sang ngày tháng năm bằng phương thức convertDayToDateString()
+                            String dateString = yourData.convertDayToDateString();
+                            // Kiểm tra xem giao dịch có type = 0 không
+
                             if (transaction.getUserId().equals(transaction.getUserId())) {
                                 filteredTransactions.add(transaction);
                                 // Kiểm tra nếu type = 0 thì cộng vào tổng của type 0, ngược lại thì cộng vào tổng của type 1
@@ -152,7 +175,7 @@ search.setOnClickListener(new View.OnClickListener() {
                                     thunhap.setText(Convert.FormatNumber(sumType1)+"đ");
                                 }
                             }
-                        }
+
                         int difference = sumType1 - sumType0;
                         tong.setText(Convert.FormatNumber(difference)+"đ");
                         System.out.println("Hiệu giữa tổng các giao dịch có type = 0 và type = 1: " + difference);
@@ -161,10 +184,55 @@ search.setOnClickListener(new View.OnClickListener() {
                         System.out.println("Tổng các giao dịch có type = 0: " + sumType0);
                         System.out.println("Tổng các giao dịch có type = 1: " + sumType1);
 
-                        requireActivity().runOnUiThread(() -> {
-                            adapter.setData(filteredTransactions);
-                        });
+                        // Lặp qua danh sách giao dịch để tính tổng price có type = 1 cho mỗi ngày
 
+                            // Kiểm tra nếu type = 1 thì cộng vào tổng của type 1, ngược lại thì bỏ qua
+                            if (transaction.getCategory().getType() == 1) {
+
+
+                                // Kiểm tra xem ngày đã tồn tại trong Map chưa
+                                if (sumPriceType1ByDate.containsKey(dateString)) {
+                                    // Nếu tồn tại, cộng giá trị price của giao dịch vào tổng của ngày đó
+                                    long currentSumPriceType1 = sumPriceType1ByDate.get(dateString);
+                                    sumPriceType1ByDate.put(dateString, currentSumPriceType1 + transaction.getPrice());
+                                } else {
+                                    // Nếu không tồn tại, thêm một cặp key-value mới vào Map với giá trị giao dịch là tổng của ngày đó
+                                    sumPriceType1ByDate.put(dateString, transaction.getPrice());
+                                }
+                            }
+                            for (String dateKey : sumPriceType0ByDate.keySet()) {
+                                long sumPriceType0 = sumPriceType0ByDate.get(dateKey);
+                                System.out.println("Ngày " + dateKey + ": sumPriceType0 = " + sumPriceType0);
+
+                            }
+                            if (transaction.getCategory().getType() == 0) {
+
+
+                                // Kiểm tra xem ngày đã tồn tại trong Map chưa
+                                if (sumPriceType0ByDate.containsKey(dateString)) {
+                                    // Nếu tồn tại, cộng giá trị price của giao dịch vào tổng của ngày đó
+                                    long currentSumPriceType0 = sumPriceType0ByDate.get(dateString);
+                                    sumPriceType0ByDate.put(dateString, currentSumPriceType0 + transaction.getPrice());
+                                } else {
+                                    // Nếu không tồn tại, thêm một cặp key-value mới vào Map với giá trị giao dịch là tổng của ngày đó
+                                    sumPriceType0ByDate.put(dateString, transaction.getPrice());
+                                }
+                            }
+
+
+
+                            for (String dateKey : sumPriceType1ByDate.keySet()) {
+                                long sumPriceType1 = sumPriceType1ByDate.get(dateKey);
+                                System.out.println("Ngày " + dateKey + ": sumPriceType1 = " + sumPriceType1);
+
+                            }
+
+                        // In tổng các giá trị price có type = 0 cho mỗi ngày ra màn hình
+
+                        }
+
+                        // Cập nhật dữ liệu lên RecyclerView
+                        adapter.setData(filteredTransactions);
                     });
                 }
             } catch (HttpException e) {
@@ -213,6 +281,6 @@ search.setOnClickListener(new View.OnClickListener() {
     @Override
     public void onResume() {
         super.onResume();
-        getListTransaction();
+       getListTransaction();
     }
 }
