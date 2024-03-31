@@ -57,7 +57,7 @@ public class InputFragment extends Fragment implements ItemOnclick {
     private RecyclerView recyclerView;
     private ItemAdapter itemAdapter;
     private EditText edtMoney, edtNote;
-    private TextView tvSelectedDate;
+    private TextView tvSelectedDate,tv1;
     private ImageButton imbIncreaseDay, imbReduceDay, imbPen;
 
     private int TYPE = 0;
@@ -303,6 +303,7 @@ public class InputFragment extends Fragment implements ItemOnclick {
             itemAdapter.setPositionSelected(0);
             TYPE = 0;
             btnInput.setText("Nhập khoản Tiền chi");
+            tv1.setText("Tiền chi");
         });
         btnTab2.setOnClickListener(v -> {
             btnTab1.setSelected(false);
@@ -311,9 +312,11 @@ public class InputFragment extends Fragment implements ItemOnclick {
             itemAdapter.setPositionSelected(0);
             TYPE = 1;
             btnInput.setText("Nhập khoản Tiền thu");
+            tv1.setText("Tiền thu");
         });
         imbPen = view.findViewById(R.id.imb_pen);
         btnInput = view.findViewById(R.id.btn_input);
+        tv1 = view.findViewById(R.id.tv1);
         recyclerView = view.findViewById(R.id.rcv_item);
         edtMoney = view.findViewById(R.id.edt_money);
         edtNote = view.findViewById(R.id.edt_note);
