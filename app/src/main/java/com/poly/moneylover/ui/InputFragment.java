@@ -4,7 +4,9 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -26,6 +28,7 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.poly.moneylover.models.Category;
 import com.poly.moneylover.models.Transaction;
 import com.poly.moneylover.network.CategoryApi;
@@ -34,13 +37,17 @@ import com.poly.moneylover.ui.category.EditActivity;
 import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.ItemAdapter;
 import com.poly.moneylover.interfaces.ItemOnclick;
+import com.poly.moneylover.ui.transaction.SumPriceAndDate;
 import com.poly.moneylover.utils.Convert;
 import com.poly.moneylover.utils.Device;
 import com.poly.moneylover.utils.EditTextUtils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import retrofit2.HttpException;
 import retrofit2.Response;
@@ -59,8 +66,16 @@ public class InputFragment extends Fragment implements ItemOnclick {
     private EditText edtMoney, edtNote;
     private TextView tvSelectedDate;
     private ImageButton imbIncreaseDay, imbReduceDay, imbPen;
-
+    long sumPriceType0;
     private int TYPE = 0;
+    List<SumPriceAndDate> sumPriceAndDateList = new ArrayList<>();
+    int sumType0 = 0; // Biến để tính tổng các giao dịch có type = 0
+
+    SumPriceAndDate sumPriceAndDate;
+    int sumType1 = 0; // Biến để tính tổng các giao dịch có type = 1
+    Map<String, Long> sumPriceType1ByDate = new HashMap<>();
+    // Tạo một Map để lưu trữ tổng price cho mỗi ngày với type = 0
+    Map<String, Long> sumPriceType0ByDate = new HashMap<>();
 
     private Calendar calendar;
 
@@ -76,7 +91,126 @@ public class InputFragment extends Fragment implements ItemOnclick {
         increaseDay();
         reduceDay();
         save();
+        getListTransaction();
     }
+
+    // Ngoài lớp InputFragment
+
+    private void getListTransaction() {
+        Thread thread = new Thread(() -> {
+            try {
+                Response<List<Transaction>> response = TransactionApi.api.getListTransaction().execute();
+                if (response.isSuccessful()) {
+                    requireActivity().runOnUiThread(() -> {
+                        List<Transaction> allTransactions = response.body();
+                        List<Transaction> filteredTransactions = new ArrayList<>();
+
+
+                        // Lọc danh sách giao dịch để chỉ chứa các giao dịch có userId tương tự với userId mà người dùng đã nhập
+                        for (Transaction transaction : allTransactions) {
+                            // Lấy ngày của giao dịch
+                            Transaction yourData = new Transaction();
+                            yourData.setDay(transaction.getDay()); // Gán giá trị millis cho trường "day"
+                            // Chuyển đổi millis sang ngày tháng năm bằng phương thức convertDayToDateString()
+                            String dateString = yourData.convertDayToDateString();
+                            // Kiểm tra xem giao dịch có type = 0 không
+
+                            if (transaction.getUserId().equals(transaction.getUserId())) {
+                                filteredTransactions.add(transaction);
+                                // Kiểm tra nếu type = 0 thì cộng vào tổng của type 0, ngược lại thì cộng vào tổng của type 1
+                                if (transaction.getCategory().getType() == 0) {
+                                    sumType0 += transaction.getPrice();
+
+                                } else if (transaction.getCategory().getType() == 1) {
+                                    sumType1 += transaction.getPrice();
+
+                                }
+                            }
+                            if (transaction.getCategory().getType() == 1) {
+
+
+                                // Kiểm tra xem ngày đã tồn tại trong Map chưa
+                                if (sumPriceType1ByDate.containsKey(dateString)) {
+                                    // Nếu tồn tại, cộng giá trị price của giao dịch vào tổng của ngày đó
+                                    long currentSumPriceType1 = sumPriceType1ByDate.get(dateString);
+                                    sumPriceType1ByDate.put(dateString, currentSumPriceType1 + transaction.getPrice());
+                                } else {
+                                    // Nếu không tồn tại, thêm một cặp key-value mới vào Map với giá trị giao dịch là tổng của ngày đó
+                                    sumPriceType1ByDate.put(dateString, transaction.getPrice());
+                                }
+                            }
+                            if (transaction.getCategory().getType() == 0) {
+                                // Kiểm tra xem ngày đã tồn tại trong Map chưa
+                                if (sumPriceType0ByDate.containsKey(dateString)) {
+                                    // Nếu tồn tại, cộng giá trị price của giao dịch vào tổng của ngày đó
+                                    long currentSumPriceType0 = sumPriceType0ByDate.get(dateString);
+                                    sumPriceType0ByDate.put(dateString, currentSumPriceType0 + transaction.getPrice());
+                                } else {
+                                    // Nếu không tồn tại, thêm một cặp key-value mới vào Map với giá trị giao dịch là tổng của ngày đó
+                                    sumPriceType0ByDate.put(dateString, transaction.getPrice());
+                                }
+                            }
+                            // Khởi tạo danh sách để lưu trữ các cặp giá trị sumPriceType0 và dateKey
+
+
+
+// Đây là danh sách chứa các cặp giá trị sumPriceType0 và dateKey sau mỗi vòng lặp
+
+                        }
+                        for (String dateKey : sumPriceType0ByDate.keySet()) {
+                            sumPriceType0 = sumPriceType0ByDate.get(dateKey);
+                            sumPriceAndDate = new SumPriceAndDate(sumPriceType0, dateKey);
+                            sumPriceAndDateList.add(sumPriceAndDate); // Thêm cặp giá trị sumPriceType0 và dateKey vào danh sách sau mỗi vòng lặp
+
+                        }
+
+                        for (SumPriceAndDate pair : sumPriceAndDateList) {
+                            System.out.println("Date Key: " + pair.dateKey + ", SumPriceType0: " + pair.sumPriceType0);
+                        }
+                        // Tạo đối tượng SharedPreferences
+                            SharedPreferences sharedPreferences = getContext().getSharedPreferences("my_shared_preferences", Context.MODE_PRIVATE);
+
+// Tạo đối tượng SharedPreferences.Editor để sửa đổi SharedPreferences
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+// Sử dụng Gson để chuyển đổi các đối tượng thành chuỗi JSON để lưu trữ
+                            Gson gson = new Gson();
+
+// Duyệt qua danh sách sumPriceAndDateList
+                            for (int i = 0; i < sumPriceAndDateList.size(); i++) {
+                                SumPriceAndDate pair = sumPriceAndDateList.get(i);
+
+                                // Chuyển đối đối tượng thành chuỗi JSON
+                                String json = gson.toJson(pair);
+
+                                // Lưu chuỗi JSON vào SharedPreferences với key là index
+                                editor.putString("pair_" + i, json);
+                            }
+
+// Lưu thay đổi
+                            editor.apply();
+
+
+                    });
+
+                }
+
+            } catch (HttpException e) {
+                e.printStackTrace();
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(requireContext(), e.message(), Toast.LENGTH_SHORT).show();
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+                requireActivity().runOnUiThread(() -> {
+                    Toast.makeText(requireContext(), "Lỗi kết nối mạng", Toast.LENGTH_SHORT).show();
+                });
+            }
+        });
+
+        thread.start();
+    }
+
 
     private void getListExpense() {
         @SuppressLint("NotifyDataSetChanged") Thread thread = new Thread(() -> {

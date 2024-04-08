@@ -62,15 +62,15 @@ android:layout_marginTop="10dp"
 
             <TextView
 
-                android:background="@drawable/custom_item1"
-                android:gravity="center"
-                android:textAlignment="center"
+                android:id="@+id/title"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="center"
 
                 android:layout_weight="8"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:id="@+id/title"/>
+                android:background="@drawable/textview_date"
+                android:gravity="center"
+                android:textAlignment="center" />
 
             <ImageButton
 android:layout_marginTop="5dp"
@@ -225,7 +225,7 @@ android:layout_marginTop="5dp"
                             android:id="@+id/thunhap"
                             android:textAlignment="center"
                             android:textSize="16dp"
-
+android:text="0đ"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -252,7 +252,7 @@ android:layout_marginTop="5dp"
                             android:id="@+id/chitieu"
                             android:textAlignment="center"
                             android:textSize="16dp"
-
+                            android:text="0đ"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -279,7 +279,7 @@ android:layout_marginTop="5dp"
                             android:id="@+id/tong"
                             android:textAlignment="center"
                             android:textSize="16dp"
-
+                            android:text="0đ"
                             android:layout_weight="1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -295,62 +295,31 @@ android:layout_marginTop="5dp"
                     android:background="@color/grey"
                     />
 
-                <LinearLayout
-                    android:layout_marginBottom="10dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-                    <TextView
-                        android:textColor="@color/black"
-
-                        android:textAlignment="center"
-                        android:textSize="16dp"
-                        android:text="Số dư đầu kì"
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
-
-                    <TextView
-                        android:textColor="@color/black"
-                        android:id="@+id/sodudauki"
-                        android:textAlignment="center"
-                        android:text="+100.000"
-                        android:textSize="16dp"
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
-                    <TextView
-                        android:textColor="@color/black"
-
-                        android:textAlignment="center"
-                        android:textSize="16dp"
-                        android:text="Số dư hiện tại"
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
-                    <TextView
-                        android:textColor="@color/black"
-                        android:id="@+id/soduhientai"
-                        android:textAlignment="center"
-                        android:textSize="16dp"
-                        android:text="100.000"
-                        android:layout_weight="1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        />
-                </LinearLayout>
 
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/rec_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+<FrameLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-                    />
+    <TextView
+        android:layout_marginTop="@dimen/_20sdp"
+        android:textColor="@color/black"
+        android:id="@+id/khongcodulieu"
+        android:textAlignment="center"
+        android:textSize="16dp"
+android:text="Không Có Dữ Liệu!"
+android:textStyle="bold"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        />
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rec_list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        />
+
+</FrameLayout>
 
 
             </LinearLayout>

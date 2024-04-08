@@ -50,10 +50,7 @@ public class SearchActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recList.setLayoutManager(linearLayoutManager2);
         getListTransaction();
-//        adapter = new Adapter_list(this);
-//        LinearLayoutManager linearLayoutManager2 = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-//        recList.setLayoutManager(linearLayoutManager2);
-//        recList.setAdapter(adapter);
+       recList.setVisibility(View.INVISIBLE);
 
         textsearch.addTextChangedListener(new TextWatcher() {
             @Override
@@ -102,6 +99,7 @@ public class SearchActivity extends AppCompatActivity {
         for (Transaction transaction : arrayList) {
             if (transaction.getCategory().getName().toLowerCase().contains(text.toLowerCase())) {
                 filteredList.add(transaction);
+                recList.setVisibility(View.VISIBLE);
             }
         }
         adapter.setData((ArrayList<Transaction>) filteredList);

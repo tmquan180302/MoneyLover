@@ -1,26 +1,41 @@
 package com.poly.moneylover.adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.google.gson.Gson;
 import com.poly.moneylover.R;
 import com.poly.moneylover.models.Dto_item;
+import com.poly.moneylover.models.Transaction;
+import com.poly.moneylover.network.TransactionApi;
 import com.poly.moneylover.ui.CalendarFragment;
+import com.poly.moneylover.ui.transaction.SumPriceAndDate;
+import com.poly.moneylover.utils.Convert;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+
+import retrofit2.HttpException;
+import retrofit2.Response;
 
 public class CalendarAdapter extends ArrayAdapter<Date>  {
     private LayoutInflater inflater;
@@ -51,6 +66,13 @@ public class CalendarAdapter extends ArrayAdapter<Date>  {
     }
 
 
+    private Map<String, Long> sumPriceType1ByDate;
+
+    public CalendarAdapter(Context context, ArrayList<Date> days, Calendar currentDate, Map<String, Long> sumPriceType1ByDate) {
+        super(context, R.layout.calendar_day, days);
+        this.currentDate = currentDate;
+        this.sumPriceType1ByDate = sumPriceType1ByDate;
+    }
     // Phương thức để cập nhật dữ liệu sumPriceType1
     public void updateSumPriceType1Map(HashMap<String, Long> map) {
         sumPriceType1Map.clear();
@@ -63,6 +85,12 @@ public class CalendarAdapter extends ArrayAdapter<Date>  {
         sumPriceType0Map.clear();
         sumPriceType0Map.putAll(map);
         notifyDataSetChanged();
+    }
+    private int selectedPosition = -1; // Thêm biến để lưu vị trí của ngày được chọn
+
+    public void setSelectedPosition(int position) {
+        selectedPosition = position; // Phương thức để cập nhật vị trí của ngày được chọn
+        notifyDataSetChanged(); // Thông báo cho adapter biết dữ liệu đã thay đổi
     }
 
     @Override
@@ -80,6 +108,10 @@ public class CalendarAdapter extends ArrayAdapter<Date>  {
         TextView khoanthu = view.findViewById(R.id.khoanthu);
         khoanchi = view.findViewById(R.id.khoanchi);
 
+
+
+
+
         // Set the text of the day
         SimpleDateFormat sdf = new SimpleDateFormat("d");
         dayTextView.setText(sdf.format(date));
@@ -88,9 +120,11 @@ public class CalendarAdapter extends ArrayAdapter<Date>  {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
 
+
         if (calendar.get(Calendar.MONTH) == currentDate.get(Calendar.MONTH)) {
             // Current month
             if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY) {
+
                 // Saturday - set text color to blue
                 dayTextView.setTextColor(Color.BLUE);
             } else if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
@@ -104,30 +138,70 @@ public class CalendarAdapter extends ArrayAdapter<Date>  {
             // Other months - set text color to gray
             dayTextView.setTextColor(Color.GRAY);
         }
-
-        // Lấy ngày tương ứng
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
-        String dateString = dateFormat.format(date);
-
-        // Hiển thị giá trị sumPriceType1 và sumPriceType0 tương ứng
-        if (sumPriceType1Map.containsKey(dateString)) {
-            khoanthu.setText(String.valueOf(sumPriceType1Map.get(dateString)));
-        } else {
-            khoanthu.setText("");
-        }
-
-        if (sumPriceType0Map.containsKey(dateString)) {
-            khoanchi.setText(String.valueOf(sumPriceType0Map.get(dateString)));
-        } else {
-            khoanchi.setText("");
-        }
+//// Lấy đối tượng SharedPreferences
+//        SharedPreferences sharedPreferences = getContext().getSharedPreferences("my_shared_preferences", Context.MODE_PRIVATE);
+//
+//// Khởi tạo Gson để chuyển đổi từ JSON sang đối tượng
+//        Gson gson = new Gson();
+//
+//// Lấy số lượng cặp đã lưu trong SharedPreferences
+//        int pairCount = sharedPreferences.getAll().size();
+//
+//// Tạo danh sách để lưu trữ các cặp được nạp từ SharedPreferences
+//        List<SumPriceAndDate> loadedSumPriceAndDateList = new ArrayList<>();
+//
+//// Duyệt qua tất cả các cặp được lưu trong SharedPreferences
+//        for (int i = 0; i < pairCount; i++) {
+//            // Lấy chuỗi JSON tương ứng với cặp thứ i
+//            String json = sharedPreferences.getString("pair_" + i, null);
+//
+//            // Nếu chuỗi JSON không rỗng
+//            if (json != null) {
+//                // Chuyển đổi chuỗi JSON thành đối tượng SumPriceAndDate
+//                SumPriceAndDate pair = gson.fromJson(json, SumPriceAndDate.class);
+//
+//                // Thêm cặp vào danh sách
+//                loadedSumPriceAndDateList.add(pair);
+//            }
+//        }
+//
+//// Bây giờ bạn có thể sử dụng danh sách `loadedSumPriceAndDateList` để sử dụng dữ liệu đã nạp từ SharedPreferences
+//// Ví dụ: duyệt qua danh sách và hiển thị các cặp đã nạp
+//        for (SumPriceAndDate pair : loadedSumPriceAndDateList) {
+//            System.out.println("Date Key: " + pair.dateKey + ", SumPriceType0: " + pair.sumPriceType0);
+//        }
+//
+//        boolean foundSpecificDate = false; // Biến đánh dấu xem có ngày cụ thể nào trong danh sách không
+//        String specificDate = "04/04/2024"; // Ngày cụ thể bạn muốn kiểm tra
+//
+//        for (SumPriceAndDate pair : loadedSumPriceAndDateList) {
+//            System.out.println("Date Key: " + pair.dateKey + ", SumPriceType0: " + pair.sumPriceType0);
+//
+//            // Kiểm tra nếu ngày trong cặp hiện tại bằng với ngày cụ thể bạn muốn kiểm tra
+//            if (pair.dateKey.equals(specificDate)) {
+//                foundSpecificDate = true; // Đánh dấu rằng đã tìm thấy ngày cụ thể
+//                break; // Thoát khỏi vòng lặp vì đã tìm thấy ngày cụ thể
+//            }
+//        }
+//
+//// Kiểm tra kết quả sau khi duyệt qua toàn bộ danh sách
+//        if (foundSpecificDate) {
+//            // Nếu có ngày cụ thể trong danh sách
+//            khoanchi.setText("1");
+//        } else {
+//            // Nếu không có ngày cụ thể trong danh sách
+//            // Ở đây bạn có thể làm gì đó nếu không tìm thấy ngày cụ thể, ví dụ: khoanchi.setText("0");
+//        }
 
         return view;
     }
 
+    public void loadData() {
 
-    public interface DataChangeListener {
-        void onDataChange(String data);
-    }
+
+
+   }
+
 
 }
+

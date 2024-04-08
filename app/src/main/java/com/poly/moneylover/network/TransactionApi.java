@@ -1,5 +1,6 @@
 package com.poly.moneylover.network;
 
+import com.google.gson.JsonObject;
 import com.poly.moneylover.models.Category;
 import com.poly.moneylover.models.Transaction;
 
@@ -27,4 +28,7 @@ public interface TransactionApi {
 
     @POST("transaction/{transactionId}/update")
     Call<String> update(@Path("transactionId") String transactionId, @Body Transaction transaction);
+
+    @GET("transaction/sumbydate")
+    Call<JsonObject> getSumbyday();
 }
