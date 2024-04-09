@@ -1,6 +1,7 @@
 package com.poly.moneylover.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,12 +26,12 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     private int positionSelected = 0;
 
     private final ItemOnclick onclick;
+    private Context context;
 
-    public ItemAdapter(ItemOnclick onclick) {
+    public ItemAdapter(ItemOnclick onclick, Context context) {
         this.onclick = onclick;
-        list.add(new Category("Chỉnh sửa"));
+        this.context = context;
     }
-
     public void changePositionSelected(String id) {
         for (int i = 0; i < list.size(); i++) {
             if (Objects.equals(list.get(i).getId(), id)) {

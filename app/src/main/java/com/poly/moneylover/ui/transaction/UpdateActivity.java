@@ -66,7 +66,7 @@ public class UpdateActivity extends AppCompatActivity implements ItemOnclick {
         idCate = getIntent().getStringExtra("idCate");
         TYPE = getIntent().getIntExtra("type", 0);
 
-        itemAdapter = new ItemAdapter(this);
+        itemAdapter = new ItemAdapter(this, getApplicationContext());
         binding.rcvItem.setAdapter(itemAdapter);
 
         Log.e("TAG", "onCreate: " + expenseItem );
