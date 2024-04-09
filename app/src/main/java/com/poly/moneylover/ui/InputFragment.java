@@ -327,7 +327,7 @@ public class InputFragment extends Fragment implements ItemOnclick {
     }
 
     private void initRecycleView() {
-        itemAdapter = new ItemAdapter(this, requireContext());
+        itemAdapter = new ItemAdapter(this, getContext());
         recyclerView.setAdapter(itemAdapter);
     }
 
