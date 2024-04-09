@@ -8,9 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-
 import com.poly.moneylover.R;
 import com.poly.moneylover.models.Dto_item;
 
@@ -18,7 +15,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 public class CalendarAdapter extends ArrayAdapter<Date> {
     private final LayoutInflater inflater;

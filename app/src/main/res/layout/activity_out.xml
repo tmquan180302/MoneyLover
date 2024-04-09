@@ -23,6 +23,7 @@
             android:id="@+id/icon_back"/>
 
         <TextView
+            android:id="@id/title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_toEndOf="@id/icon_back"
@@ -49,7 +50,6 @@
         <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="10dp"
             android:id="@+id/rcv_items"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
     </LinearLayout>

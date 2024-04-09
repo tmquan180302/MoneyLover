@@ -1,18 +1,13 @@
 package com.poly.moneylover.ui;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.core.content.ContextCompat;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -23,17 +18,24 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+
+import com.poly.moneylover.R;
+import com.poly.moneylover.adapters.ItemAdapter;
+import com.poly.moneylover.interfaces.ItemOnclick;
 import com.poly.moneylover.models.Category;
 import com.poly.moneylover.models.Transaction;
 import com.poly.moneylover.network.CategoryApi;
 import com.poly.moneylover.network.TransactionApi;
 import com.poly.moneylover.ui.category.EditActivity;
-import com.poly.moneylover.R;
-import com.poly.moneylover.adapters.ItemAdapter;
-import com.poly.moneylover.interfaces.ItemOnclick;
 import com.poly.moneylover.utils.Convert;
 import com.poly.moneylover.utils.Device;
 import com.poly.moneylover.utils.EditTextUtils;
@@ -46,6 +48,20 @@ import retrofit2.HttpException;
 import retrofit2.Response;
 
 public class InputFragment extends Fragment implements ItemOnclick {
+    public InputFragment() {
+    }
+
+    public static InputFragment newInstance(String note, String price, String idCategory, int type, long time) {
+        Bundle args = new Bundle();
+        args.putString("NOTE", note);
+        args.putString("PRICE", price);
+        args.putString("IDCATE", idCategory);
+        args.putInt("TYPE", type);
+        args.putLong("TIME", time);
+        InputFragment fragment = new InputFragment();
+        fragment.setArguments(args);
+        return fragment;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -85,6 +101,10 @@ public class InputFragment extends Fragment implements ItemOnclick {
                 if (data.isSuccessful()) {
                     if (data.body() != null) requireActivity().runOnUiThread(() -> {
                         itemAdapter.setList(data.body());
+                        if (getArguments() != null) {
+                            itemAdapter.changePositionSelected(getArguments().getString("IDCATE", ""));
+                            return;
+                        }
                         if (!data.body().isEmpty()) itemAdapter.setPositionSelected(0);
                     });
                 }
@@ -106,6 +126,10 @@ public class InputFragment extends Fragment implements ItemOnclick {
                 if (data.isSuccessful()) {
                     if (data.body() != null) requireActivity().runOnUiThread(() -> {
                         itemAdapter.setList(data.body());
+                        if (getArguments() != null) {
+                            itemAdapter.changePositionSelected(getArguments().getString("IDCATE", ""));
+                            return;
+                        }
                         if (!data.body().isEmpty()) itemAdapter.setPositionSelected(0);
                     });
                 }
@@ -143,7 +167,18 @@ public class InputFragment extends Fragment implements ItemOnclick {
                 createTransaction(transaction);
             }
         } catch (NumberFormatException e) {
-            e.printStackTrace();
+            String money = edtMoney.getText().toString().trim().replaceAll("\\.", "");
+            if (money.equals("")) money = "0";
+            Long price = Long.parseLong(money);
+            Long time = calendar.getTimeInMillis();
+            String note = edtNote.getText().toString().trim();
+            Transaction transaction = new Transaction(category, time, note, price);
+            Log.e("saveRecord: ", transaction.toString());
+            if (money.equals("0")) {
+                showAlertDialog(transaction);
+            } else {
+                createTransaction(transaction);
+            }
         }
     }
 
@@ -151,8 +186,13 @@ public class InputFragment extends Fragment implements ItemOnclick {
         Thread thread = new Thread(() -> {
             try {
                 Response<Void> call = TransactionApi.api.create(transaction).execute();
-                Log.e("call",call.toString());
+                Log.e("call", call.toString());
                 if (call.isSuccessful() && call.code() == 200) {
+                    if (getArguments() != null) {
+                        Intent resultIntent = new Intent();
+                        requireActivity().setResult(RESULT_OK, resultIntent);
+                        requireActivity().finish();
+                    }
                     showMessage("Thêm thành công");
                 } else {
                     showMessage("Thêm thất bại");
@@ -295,7 +335,6 @@ public class InputFragment extends Fragment implements ItemOnclick {
     private void initView(View view) {
         btnTab1 = view.findViewById(R.id.btn_tab1);
         btnTab2 = view.findViewById(R.id.btn_tab2);
-        btnTab1.setSelected(true);
         btnTab1.setOnClickListener(v -> {
             btnTab1.setSelected(true);
             btnTab2.setSelected(false);
@@ -312,6 +351,19 @@ public class InputFragment extends Fragment implements ItemOnclick {
             TYPE = 1;
             btnInput.setText("Nhập khoản Tiền thu");
         });
+
+        if (getArguments() != null) {
+            if (getArguments().getInt("TYPE") == 0) {
+                btnTab1.setSelected(true);
+            } else {
+                btnTab2.setSelected(true);
+            }
+
+            TYPE = getArguments().getInt("TYPE");
+        } else {
+            btnTab1.setSelected(true);
+        }
+
         imbPen = view.findViewById(R.id.imb_pen);
         btnInput = view.findViewById(R.id.btn_input);
         recyclerView = view.findViewById(R.id.rcv_item);
@@ -324,6 +376,31 @@ public class InputFragment extends Fragment implements ItemOnclick {
         EditTextUtils.ListenUnfocus(edtNote);
         calendar = Calendar.getInstance();
         tvSelectedDate.setText(getDate(0));
+        if (getArguments() != null) {
+            calendar.setTimeInMillis(getArguments().getLong("TIME", 0));
+            tvSelectedDate.setText(getDate(0));
+
+            String note = getArguments().getString("NOTE", "");
+            String price = getArguments().getString("PRICE", "0");
+            edtNote.setText(note);
+            try {
+                String money;
+                money = price.replaceAll(",", "");
+                if (Integer.parseInt(money) == 0){
+                    money = price.replaceAll("\\.", "");
+                }
+
+                long result = Long.parseLong(money);
+                String formattedString = Convert.FormatNumber(result);
+                edtMoney.setText(formattedString);
+                edtMoney.setSelection(formattedString.length());
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+            }
+            ImageView imbBack = view.findViewById(R.id.imv_back);
+            imbBack.setVisibility(View.VISIBLE);
+            imbBack.setOnClickListener(v -> requireActivity().finish());
+        }
     }
 
 

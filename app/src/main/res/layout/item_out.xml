@@ -1,49 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:padding="10dp"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:id="@+id/img_view"/>
-
-    <LinearLayout
+    <TextView
+        android:id="@+id/tv_date_group"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/img_view"
-        android:layout_marginHorizontal="10dp"
-        android:orientation="vertical">
+        android:background="@color/border"
+        android:textColor="@color/white"
+        android:text="@string/app_name"
+        android:paddingStart="@dimen/_10sdp"
+        android:visibility="gone"
+        tools:ignore="RtlSymmetry" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ăn uống"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:id="@+id/tv_title"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Ăn uống"
-            android:layout_marginTop="5dp"
-            android:textSize="16sp"
-            android:textColor="@color/black"
-            android:id="@+id/tv_date"/>
-    </LinearLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:padding="10dp"
+        android:id="@+id/rl_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Ăn uống"
-        android:textSize="18sp"
-        android:layout_alignParentEnd="true"
-        android:layout_centerVertical="true"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:id="@+id/tv_price"/>
+        android:layout_below="@id/tv_date_group">
+        <ImageView
+            android:id="@+id/img_view"
+            android:layout_width="32dp"
+            android:layout_height="32dp" />
+
+        <LinearLayout
+            android:id="@+id/ll_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:layout_toEndOf="@id/img_view"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ăn uống"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Ăn uống"
+                android:textColor="@color/black"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/tv_price"
+            android:textSize="14sp"
+            android:gravity="center"
+            android:layout_toEndOf="@+id/ll_title" />
+
+        <EditText
+            android:id="@+id/tv_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="Ăn uống"
+            android:inputType="number"
+            android:digits="0123456789"
+            android:background="@android:color/transparent"
+            android:enabled="false"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </RelativeLayout>
 
 </RelativeLayout>

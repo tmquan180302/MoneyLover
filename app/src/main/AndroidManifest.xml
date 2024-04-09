@@ -58,6 +58,17 @@
         <activity
             android:name=".utils.DetailitemlichActivity"
             android:exported="false" />
+
+        <activity
+            android:name=".ui.transaction.InActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.transaction.OutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.transaction.UpdateActivity"
+            android:exported="false" />
+
         <activity
             android:name=".ui.user.WelcomeActivity"
             android:exported="true">

@@ -13,10 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.poly.moneylover.R;
 import com.poly.moneylover.interfaces.DeleteCategory;
 import com.poly.moneylover.models.Category;
 import com.poly.moneylover.ui.category.NewItemActivity;
-import com.poly.moneylover.R;
 
 import java.util.List;
 

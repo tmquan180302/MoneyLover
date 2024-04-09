@@ -2,19 +2,10 @@ package com.poly.moneylover.adapters;
 
 
 import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.text.Spannable;
-import android.text.SpannableString;
-import android.text.TextUtils;
-import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,13 +13,9 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.poly.moneylover.R;
-import com.poly.moneylover.models.Category;
-import com.poly.moneylover.models.Dto_item;
 import com.poly.moneylover.models.Transaction;
 import com.poly.moneylover.utils.Convert;
-import com.poly.moneylover.utils.DetailitemlichActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Adapter_list extends RecyclerView.Adapter<Adapter_list.TransactionViewHolder> {

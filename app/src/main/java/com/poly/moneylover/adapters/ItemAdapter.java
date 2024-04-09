@@ -17,6 +17,7 @@ import com.poly.moneylover.models.Category;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder> {
 
@@ -30,6 +31,15 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
         list.add(new Category("Chỉnh sửa"));
     }
 
+    public void changePositionSelected(String id) {
+        for (int i = 0; i < list.size(); i++) {
+            if (Objects.equals(list.get(i).getId(), id)) {
+                positionSelected = i;
+            }
+        }
+
+        setPositionSelected(positionSelected);
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     public void setPositionSelected(int index) {
@@ -61,9 +71,14 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
     public void onBindViewHolder(@NonNull ItemViewHolder itemViewHolder, int i) {
         Category item = list.get(i);
         if (item.getIcon() != 0) {
-            itemViewHolder.imvIcon.setVisibility(View.VISIBLE);
-            itemViewHolder.imvIcon.setImageResource(item.getIcon());
-            itemViewHolder.imvIcon.setColorFilter(ContextCompat.getColor(itemViewHolder.imvIcon.getContext(), item.getColor()));
+            try {
+                itemViewHolder.imvIcon.setVisibility(View.VISIBLE);
+                itemViewHolder.imvIcon.setImageResource(item.getIcon());
+                itemViewHolder.imvIcon.setColorFilter(ContextCompat.getColor(itemViewHolder.imvIcon.getContext(), item.getColor()));
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
         } else {
             itemViewHolder.imvIcon.setVisibility(View.GONE);
         }
@@ -83,7 +98,7 @@ public class ItemAdapter extends RecyclerView.Adapter<ItemAdapter.ItemViewHolder
 
     @Override
     public int getItemCount() {
-        return list != null ? list.size() : 1;
+        return list != null ? list.size() : 0;
     }
 
     public static class ItemViewHolder extends RecyclerView.ViewHolder {

@@ -3,7 +3,6 @@ package com.poly.moneylover.adapters;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -13,7 +12,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.poly.moneylover.R;
 import com.poly.moneylover.models.OtherItem;
-import com.poly.moneylover.ui.OtherFragment;
 
 import java.util.List;
 
