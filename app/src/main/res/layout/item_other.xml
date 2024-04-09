@@ -27,6 +27,8 @@
             android:layout_height="wrap_content"
             android:textSize="16dp"
             android:text="@string/app_name"/>
+
+
     </LinearLayout>
 
 </LinearLayout>

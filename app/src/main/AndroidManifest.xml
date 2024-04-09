@@ -3,6 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <queries>
+        <package android:name="vn.com.vng.zalopay" />
+        <package android:name="vn.com.vng.zalopay.sbmc" />
+    </queries>
 
     <application
         android:allowBackup="true"
@@ -16,6 +24,42 @@
         android:theme="@style/Theme.MoneyLover"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".ui.service.ExportDataPdfActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.service.RestoreCategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.service.RestoreTransactionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.service.ExportDataCsvActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.service.ServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.bill.BillConfirmActivity"
+            android:exported="true"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="app"
+                    android:scheme="demozpdk" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.bill.BillCompleteActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ui.ListInYear.DetailReportActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.OtherCategories.Add_Or_Edit_Activity"
             android:exported="false" />

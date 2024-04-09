@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.poly.moneylover.R;
@@ -14,13 +15,16 @@ import com.poly.moneylover.ui.ListFullTerm.ThuFragment;
 
 
 public class ListFullTermActivity extends AppCompatActivity {
-    private View leftBar, rightBar;  Fragment selectedFragment = null;
+    private View leftBar, rightBar;
+    Fragment selectedFragment = null;
+    private ImageView imgBack;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_full_term);
         leftBar = findViewById(R.id.leftBar);
         rightBar = findViewById(R.id.rightBar);
+        imgBack = findViewById(R.id.imgBack);
         TextView chi = findViewById(R.id.chitieu);
         TextView thu = findViewById(R.id.thunhap);
 
@@ -29,6 +33,10 @@ public class ListFullTermActivity extends AppCompatActivity {
         thu.setTextColor(Color.BLACK);
         leftBar.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
         rightBar.setBackgroundColor(getResources().getColor(android.R.color.black));
+
+        imgBack.setOnClickListener(v ->{
+            finish();
+        });
         chi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

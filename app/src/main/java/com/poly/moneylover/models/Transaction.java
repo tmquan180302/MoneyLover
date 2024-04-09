@@ -2,7 +2,9 @@ package com.poly.moneylover.models;
 
 import com.google.gson.annotations.SerializedName;
 
-public class Transaction {
+import java.io.Serializable;
+
+public class Transaction implements Serializable {
 
     @SerializedName("_id")
     private String transactionId;

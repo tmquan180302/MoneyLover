@@ -10,10 +10,10 @@ public class Balance {
     private String userId;
 
     @SerializedName("price")
-    private double price;
+    private int price;
 
 
-    public Balance(String id, String userId, double price) {
+    public Balance(String id, String userId, int price) {
         this.id = id;
         this.userId = userId;
         this.price = price;
@@ -38,11 +38,11 @@ public class Balance {
         this.userId = userId;
     }
 
-    public double getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

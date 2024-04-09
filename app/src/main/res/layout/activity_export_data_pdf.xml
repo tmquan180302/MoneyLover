@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.service.ExportDataPdfActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/grey"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp"
+        android:paddingVertical="6dp">
+
+        <ImageButton
+            android:id="@+id/imb_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/icon_back" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_weight="1"
+            android:text="Xuất dữ liệu"
+            android:textColor="@color/color_text_1"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/imb_delete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:src="@drawable/icon_bin_1"
+            android:visibility="gone"
+            app:tint="@color/orange" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/grey"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="Xuất dữ liệu đã ghi"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="Có thể xuất dữ liệu đã ghi dưới dạng file PDF. Từ bây giờ khi thay đổi loại máy, hãy gửi thư vào địa chỉ email của mình và lưu dưới dạng sao lưu của mình "
+            android:lineSpacingExtra="5dp"
+            android:textSize="15sp"
+            android:textStyle="normal" />
+        <Button
+            android:id="@+id/btn_export"
+            android:layout_width="200dp"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/orange2"
+            android:text="Xuất dữ liệu dạng PDF"
+            android:textSize="15sp"
+            android:layout_marginStart="90dp"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:background="@color/grey"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="Bạn có muốn sử dụng dữ liệu có sẵn để khôi phục ?"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="Nếu bạn có tếp PDF đã sap lưu, bạn có thể tải và khôi phục PDF, Sau khi thay đổi loại máy, bạn có thể đọc dữ liệu đã sao lưu và khôi phục lại bằng cách thực hiện quy trình sau."
+            android:lineSpacingExtra="5dp"
+            android:textSize="15sp"
+            android:textStyle="normal" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="20dp"
+            android:text="Quy trình khôi phục ............"
+            android:lineSpacingExtra="5dp"
+            android:textSize="15sp"
+            android:textStyle="normal"/>
+    </LinearLayout>
+</LinearLayout>

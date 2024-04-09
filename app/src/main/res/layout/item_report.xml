@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    >
+
+
+    <LinearLayout
+        android:background="@drawable/item_background"
+        android:id="@+id/ln_foreground"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:padding="8dp">
+
+
+        <ImageView
+            android:id="@+id/imgIcon"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/plate_and_utensils"
+            android:tint="@color/orange"
+            tools:ignore="UseAppTint" />
+
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/tvName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="16dp"
+            android:layout_weight="1"
+            android:ellipsize="marquee"
+            android:lines="1"
+            android:text="Ăn uống"
+            android:textColor="@color/color_text_1"
+            />
+
+        <TextView
+            android:textStyle="bold"
+            android:id="@+id/tvTotal"
+            android:layout_width="0dp"
+            android:layout_weight="0.8"
+            android:gravity="end"
+            android:layout_marginRight="@dimen/_5sdp"
+            android:text="100%"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/back_report"
+            tools:ignore="UseAppTint" />
+
+        <TextView
+            android:id="@+id/tvPercent"
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:gravity="end"
+            android:layout_marginRight="@dimen/_10sdp"
+            android:layout_gravity="center"
+            android:text="100%"
+            android:textSize="@dimen/_9sdp"
+            android:layout_height="wrap_content"
+            android:contentDescription="@string/todo"
+            android:src="@drawable/back_report"
+            tools:ignore="UseAppTint" />
+    </LinearLayout>
+
+    <View
+        android:layout_marginTop="@dimen/_1ssp"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/color_text_2"
+        />
+
+</LinearLayout>
