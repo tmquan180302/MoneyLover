@@ -1,9 +1,8 @@
 package com.poly.moneylover.network;
 
 import com.poly.moneylover.models.Budget;
-import com.poly.moneylover.models.Category;
 import com.poly.moneylover.models.Request.BudgetCreateRequest;
-import com.poly.moneylover.models.Response.Report;
+import com.poly.moneylover.models.Response.Export;
 
 import java.util.List;
 
@@ -17,6 +16,11 @@ import retrofit2.http.Path;
 public interface BudgetApi {
     BudgetApi api = RetrofitClient.getInstance().create(BudgetApi.class);
 
+
+    @GET("budget/exportPdf")
+    Call<Export> getLinkPdf();
+    @GET("budget/export")
+    Call<Export> getLinkCsv();
     @GET("budget")
     Call<List<Budget>> getList();
     @POST("budget/create")

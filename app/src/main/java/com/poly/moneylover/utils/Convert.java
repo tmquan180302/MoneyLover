@@ -10,6 +10,11 @@ public class Convert {
         return str.replace(".",",");
     }
 
+    public static String formatNumberCurrent(String number){
+        DecimalFormat formatter = new DecimalFormat("###,###");
+        return formatter.format(Double.parseDouble(number));
+    }
+
     public static String ConvertDayOfWeekString(int year,int month,int day){
         Calendar selectedCalendar = Calendar.getInstance();
         selectedCalendar.set(Calendar.YEAR, year);
