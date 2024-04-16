@@ -9,6 +9,8 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.graphics.Typeface;
 import android.graphics.drawable.Drawable;
+import android.text.Layout;
+import android.text.StaticLayout;
 import android.text.TextPaint;
 import android.text.TextUtils;
 import android.util.TypedValue;
@@ -273,11 +275,11 @@ public final class CustomPieChartRenderer extends PieChartRenderer {
                                 canvas.drawLine(f24, f25, f12, f25, this.mValueLinePaint);
                             }
                             if (z4 && z5 && !z8) {
-                                drawValue(canvas, formattedValue, f28, f25, iPieDataSet.getValueTextColor(i4));
+                                drawValue(canvas, formattedValue, f28, f25 - 20, iPieDataSet.getValueTextColor(i4));
                                 if (i4 < pieData.getEntryCount()) {
                                     canvas3 = canvas;
                                     valuePosition2 = valuePosition4;
-                                    drawEntryLabel(canvas3, entryLabel, f28, f25 + calcTextHeight);
+                                    drawEntryLabel(canvas3, entryLabel, f28, f25 - 20);
                                 } else {
                                     canvas3 = canvas;
                                     valuePosition2 = valuePosition4;
@@ -399,12 +401,52 @@ public final class CustomPieChartRenderer extends PieChartRenderer {
     }
 
     @Override
-    protected void drawEntryLabel(Canvas canvas, String str, float f, float f2) {
-        CharSequence ellipsize = TextUtils.ellipsize(str, this.textPaint, f < ((float) (this.mChart.getWidth() / 2)) ? f : this.mChart.getWidth() - f, TextUtils.TruncateAt.END);
-        if (canvas != null) {
-            canvas.drawText(ellipsize.toString(), f, f2, this.textPaint);
+    protected void drawEntryLabel(Canvas canvas, String str, float x, float y) {
+        StringBuilder stringBuilder = new StringBuilder();
+        TextPaint textPaint = this.textPaint;
+
+        float maxWidth = 110;
+        float lineHeight = textPaint.getTextSize();
+
+        String[] words = str.split("\\s+");
+
+        for (String word : words) {
+            float wordWidth = textPaint.measureText(word + " ");
+
+            if (stringBuilder.length() > 0 && x + wordWidth > maxWidth) {
+                // Vẽ dòng hiện tại
+                StaticLayout staticLayout = new StaticLayout(stringBuilder.toString().trim(), textPaint,
+                        (int) Math.ceil(maxWidth), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+
+                canvas.save();
+                canvas.translate(x, y);
+
+                staticLayout.draw(canvas);
+
+                canvas.restore();
+
+                y += lineHeight;
+                stringBuilder = new StringBuilder();
+                stringBuilder.append(word).append(" ");
+            } else {
+                stringBuilder.append(word).append(" ");
+            }
+        }
+
+        if (stringBuilder.length() > 0) {
+            StaticLayout staticLayout = new StaticLayout(stringBuilder.toString().trim(), textPaint,
+                    (int) Math.ceil(maxWidth), Layout.Alignment.ALIGN_NORMAL, 1.0f, 0.0f, false);
+
+            canvas.save();
+            canvas.translate(x, y);
+
+            staticLayout.draw(canvas);
+
+            canvas.restore();
         }
     }
+
+
 
     @Override
     public void drawValue(Canvas canvas, String str, float f, float f2, int i) {
@@ -415,7 +457,6 @@ public final class CustomPieChartRenderer extends PieChartRenderer {
         float f2;
         float f3;
         float convertDpToPixel = com.github.mikephil.charting.utils.Utils.convertDpToPixel(5.0f);
-        this.textPaint.getTextSize();
         float textSize = (pointF.y - this.mValueLinePaint.getTextSize()) - convertDpToPixel;
         if (z) {
             f2 = pointF.x;
