@@ -1,9 +1,5 @@
 package com.poly.moneylover.ui.bill;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,17 +10,17 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.poly.moneylover.R;
-import com.poly.moneylover.adapters.OtherAdapter;
 import com.poly.moneylover.adapters.ServiceAdapter;
 import com.poly.moneylover.interfaces.ItemOnclickService;
 import com.poly.moneylover.models.Bill;
 import com.poly.moneylover.models.CreateOrderZalo;
-import com.poly.moneylover.models.OtherItem;
-import com.poly.moneylover.models.Response.Export;
 import com.poly.moneylover.models.Service;
 import com.poly.moneylover.network.BillApi;
-import com.poly.moneylover.network.BudgetApi;
 import com.poly.moneylover.network.ServiceApi;
 import com.poly.moneylover.ui.service.ServiceActivity;
 import com.poly.moneylover.utils.Convert;
@@ -38,7 +34,6 @@ import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Callback;
-import retrofit2.HttpException;
 import retrofit2.Response;
 import vn.zalopay.sdk.Environment;
 import vn.zalopay.sdk.ZaloPayError;

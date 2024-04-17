@@ -3,6 +3,7 @@ package com.poly.moneylover.adapters;
 import static java.lang.Math.round;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.poly.moneylover.R;
@@ -52,6 +54,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         ExpenseItem expenseItem = expenseItemList.get(position);
+        Resources resources = context.getResources();
 
         Long totalValue = 1L;
 
@@ -63,6 +66,13 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
 
         try {
             holder.imageView.setImageResource(expenseItem.getImageResourceId());
+            int colorId = expenseItem.getColor();
+            if (isValidColorResource(resources, colorId)) {
+                int color = ContextCompat.getColor(context, colorId);
+                holder.imageView.setColorFilter(color);
+            } else {
+                holder.imageView.setColorFilter(expenseItem.getColor());
+            }
 
             Log.e("TAG", "onBindViewHolder: " + expenseItem.getImageResourceId() );
         }catch (Exception e){
@@ -96,6 +106,14 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             titleTextView = itemView.findViewById(R.id.tv_title);
             priceTextView = itemView.findViewById(R.id.tv_price);
             tvPercent = itemView.findViewById(R.id.tv_percent);
+        }
+    }
+    private boolean isValidColorResource(Resources resources, int colorId) {
+        try {
+            resources.getColor(colorId);
+            return true;
+        } catch (Resources.NotFoundException e) {
+            return false;
         }
     }
 }

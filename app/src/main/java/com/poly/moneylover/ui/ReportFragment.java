@@ -157,6 +157,11 @@ public class ReportFragment extends Fragment {
         calendarEnd.set(Calendar.MONTH, month);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        getNewData(0, Constants.START_DAY_REPORT, Constants.END_DAY_REPORT);
+    }
     private void configViewpager() {
         TabPagerAdapter adapterStatic = new TabPagerAdapter(requireActivity());
 
