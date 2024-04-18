@@ -1,12 +1,15 @@
 package com.poly.moneylover.ui.transaction;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -24,12 +27,15 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.ExpenseAdapter2;
 import com.poly.moneylover.databinding.ActivityInBinding;
+import com.poly.moneylover.models.Budget;
 import com.poly.moneylover.models.ChartApi;
 import com.poly.moneylover.models.DataDetailsReportModelApi;
 import com.poly.moneylover.models.ExpenseItem;
 import com.poly.moneylover.models.ExpenseItem2;
 import com.poly.moneylover.models.Transaction;
 import com.poly.moneylover.network.ApiService;
+import com.poly.moneylover.network.BudgetApi;
+import com.poly.moneylover.ui.ThuChiCoDinh.ThemSuaActivity;
 import com.poly.moneylover.utils.Convert;
 
 import java.text.DecimalFormat;
@@ -92,8 +98,9 @@ public class InActivity extends AppCompatActivity {
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
+
+
                 if (result.getResultCode() == Activity.RESULT_OK) {
-                    // Here, no request code
                     setupChart();
                     setupAdapter();
                     refreshLayout = true;
@@ -266,11 +273,8 @@ public class InActivity extends AppCompatActivity {
                 // Create and set adapter
                 expenseAdapter = new ExpenseAdapter2(expenseItemList, InActivity.this);
                 expenseAdapter.setOnItemClickListener(expenseItem -> {
-                    Intent intent = new Intent(InActivity.this, UpdateActivity.class);
-                    intent.putExtra("data", expenseItem);
-                    intent.putExtra("type", 1);
-                    intent.putExtra("idCate", id);
-                    activityResultLauncher.launch(intent);
+                    // fix onclick
+                   checkItem(expenseItem);
                 });
 
                 // Set adapter to RecyclerView
@@ -283,5 +287,40 @@ public class InActivity extends AppCompatActivity {
                 Log.e("TAG", "onFailure: " + t.getMessage());
             }
         });
+    }
+
+    private void checkItem(ExpenseItem2 expenseItem) {
+        BudgetApi.api.findBudget(expenseItem.getExpenseItem().getId()).enqueue(new Callback<Budget>() {
+            @Override
+            public void onResponse(Call<Budget> call, Response<Budget> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    showAlertDialog(response.body());
+                }else {
+                    Intent intent = new Intent(InActivity.this, UpdateActivity.class);
+                    intent.putExtra("data", expenseItem);
+                    intent.putExtra("type", 1);
+                    intent.putExtra("idCate", id);
+                    activityResultLauncher.launch(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Budget> call, Throwable t) {
+            }
+        });
+    }
+    private void showAlertDialog(Budget budget) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Xác nhận sửa");
+        builder.setMessage("Đây là chi phí cố định, bạn có muốn chỉnh sửa không?");
+        builder.setPositiveButton("OK", (dialog, which) -> nav(budget));
+        builder.setNegativeButton("BỎ QUA", null);
+        Dialog dialog = builder.create();
+        dialog.show();
+    }
+    private void nav(Budget budget) {
+        Intent intent = new Intent(InActivity.this, ThemSuaActivity.class);
+        intent.putExtra(ThemSuaActivity.DATA_BUDGET, budget);
+        activityResultLauncher.launch(intent);
     }
 }

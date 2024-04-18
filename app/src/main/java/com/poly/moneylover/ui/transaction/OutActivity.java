@@ -1,12 +1,15 @@
 package com.poly.moneylover.ui.transaction;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -25,12 +28,15 @@ import com.github.mikephil.charting.utils.ViewPortHandler;
 import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.ExpenseAdapter2;
 import com.poly.moneylover.databinding.ActivityOutBinding;
+import com.poly.moneylover.models.Budget;
 import com.poly.moneylover.models.ChartApi;
 import com.poly.moneylover.models.DataDetailsReportModelApi;
 import com.poly.moneylover.models.ExpenseItem;
 import com.poly.moneylover.models.ExpenseItem2;
 import com.poly.moneylover.models.Transaction;
 import com.poly.moneylover.network.ApiService;
+import com.poly.moneylover.network.BudgetApi;
+import com.poly.moneylover.ui.ThuChiCoDinh.ThemSuaActivity;
 import com.poly.moneylover.utils.Convert;
 
 import java.text.DecimalFormat;
@@ -47,7 +53,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class OutActivity extends AppCompatActivity{
+public class OutActivity extends AppCompatActivity {
 
     private ActivityOutBinding binding;
 
@@ -68,6 +74,7 @@ public class OutActivity extends AppCompatActivity{
     private Boolean refreshLayout = false;
     private DecimalFormat decimalFormat = new DecimalFormat("#,##0");
 
+    public static final String DATA_BUDGET = "DATA_BUDGET";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,11 +83,10 @@ public class OutActivity extends AppCompatActivity{
         setContentView(binding.getRoot());
 
         id = getIntent().getStringExtra("id");
-        idColor = getIntent().getIntExtra("idColor",R.color.black);
+        idColor = getIntent().getIntExtra("idColor", R.color.black);
         startDay = getIntent().getStringExtra("startDay");
         endDay = getIntent().getStringExtra("endDay");
         name = getIntent().getStringExtra("name");
-
         calendar = Calendar.getInstance();
         calendar.setTimeInMillis(Long.parseLong(startDay));
 
@@ -98,6 +104,7 @@ public class OutActivity extends AppCompatActivity{
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
+                Log.d("TAG", ": "+ result.getData().getStringExtra("clone"));
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     // Here, no request code
                     refreshLayout = true;
@@ -144,6 +151,7 @@ public class OutActivity extends AppCompatActivity{
                             return formatValueWithSuffix(value);
                         }
                     }
+
                     private String formatValueWithSuffix(float value) {
                         if (value >= 1000000) {
                             float valueInMillions = value / 1000000f;
@@ -195,7 +203,8 @@ public class OutActivity extends AppCompatActivity{
             }
         });
     }
-    private void setupAdapter(){
+
+    private void setupAdapter() {
         expenseItemList = new ArrayList<>();
         listDate = new ArrayList<>();
         listTotal = new ArrayList<>();
@@ -203,9 +212,9 @@ public class OutActivity extends AppCompatActivity{
         SharedPreferences sharedPreferences = this.getSharedPreferences("myPreferences", MODE_PRIVATE);
 
 
-        Log.e("TAG", "setupAdapter: " + startDay + "____" + endDay + "___" + id );
+        Log.e("TAG", "setupAdapter: " + startDay + "____" + endDay + "___" + id);
 
-        ApiService.apiService.getDataReportDetails("Bearer " + sharedPreferences.getString("token", ""),startDay, endDay, id).enqueue(new Callback<DataDetailsReportModelApi>() {
+        ApiService.apiService.getDataReportDetails("Bearer " + sharedPreferences.getString("token", ""), startDay, endDay, id).enqueue(new Callback<DataDetailsReportModelApi>() {
 
             @Override
             public void onResponse(Call<DataDetailsReportModelApi> call, Response<DataDetailsReportModelApi> response) {
@@ -272,11 +281,7 @@ public class OutActivity extends AppCompatActivity{
                 // Create and set adapter
                 expenseAdapter = new ExpenseAdapter2(expenseItemList, OutActivity.this);
                 expenseAdapter.setOnItemClickListener(expenseItem -> {
-                    Intent intent = new Intent(OutActivity.this, UpdateActivity.class);
-                    intent.putExtra("data", expenseItem);
-                    intent.putExtra("type", 0);
-                    intent.putExtra("idCate", id);
-                    activityResultLauncher.launch(intent);
+                    checkItem(expenseItem);
                 });
 
                 // Set adapter to RecyclerView
@@ -290,5 +295,43 @@ public class OutActivity extends AppCompatActivity{
 
             }
         });
+    }
+
+    private void checkItem(ExpenseItem2 expenseItem) {
+        BudgetApi.api.findBudget(expenseItem.getExpenseItem().getId()).enqueue(new Callback<Budget>() {
+            @Override
+            public void onResponse(Call<Budget> call, Response<Budget> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    showAlertDialog(response.body());
+                } else {
+                    Intent intent = new Intent(OutActivity.this, UpdateActivity.class);
+                    intent.putExtra("data", expenseItem);
+                    intent.putExtra("type", 0);
+                    intent.putExtra("idCate", id);
+                    intent.putExtra("location", true);
+                    activityResultLauncher.launch(intent);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Budget> call, Throwable t) {
+            }
+        });
+    }
+
+    private void showAlertDialog(Budget budget) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Xác nhận sửa");
+        builder.setMessage("Đây là chi phí cố định, bạn có muốn chỉnh sửa không?");
+        builder.setPositiveButton("OK", (dialog, which) -> nav(budget));
+        builder.setNegativeButton("BỎ QUA", null);
+        Dialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void nav(Budget budget) {
+        Intent intent = new Intent(OutActivity.this, ThemSuaActivity.class);
+        intent.putExtra(ThemSuaActivity.DATA_BUDGET, budget);
+        activityResultLauncher.launch(intent);
     }
 }

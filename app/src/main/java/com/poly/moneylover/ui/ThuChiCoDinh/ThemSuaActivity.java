@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -20,6 +21,10 @@ import com.poly.moneylover.models.Category;
 import com.poly.moneylover.models.Request.BudgetCreateRequest;
 import com.poly.moneylover.network.BudgetApi;
 import com.poly.moneylover.network.CategoryApi;
+import com.poly.moneylover.ui.ReportFragment;
+import com.poly.moneylover.ui.service.ServiceActivity;
+import com.poly.moneylover.ui.transaction.fragment.IncomeFragment;
+import com.poly.moneylover.ui.transaction.fragment.OutcomeFragment;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -42,6 +47,7 @@ public class ThemSuaActivity extends AppCompatActivity {
     private List<Category> list = new ArrayList<>();
     private Budget budget = new Budget();
     private boolean isTypeChi = true;
+    private boolean isFromReport = false;
     private Calendar startDayCalendar = Calendar.getInstance();
     private Calendar endDayCalendar = Calendar.getInstance();
     public static final String DATA_BUDGET = "DATA_BUDGET";
@@ -89,20 +95,21 @@ public class ThemSuaActivity extends AppCompatActivity {
         initData();
     }
 
-    public void initData(){
+    public void initData() {
         String mesage = "Nếu Ngày kết thúc là 'Không', xin lưu ý rằng chi phí cố định sẽ không được hiển thị trên lịch ngay lập tức, trừ khi đó là ngày tương ứng. Ngược lại, nếu bạn đặt Ngày kết thúc, nó sẽ được hiển thị luôn trên lịch và báo cáo màn hình.";
         binding.tvMessage.setText(mesage);
         budget = (Budget) getIntent().getSerializableExtra(DATA_BUDGET);
+//        isFromReport = getIntent().getBooleanExtra("location", false);
 
         frequencySpinnerAdapter = new FrequencySpinnerAdapter(this, listFrequency, listServerValues);
         binding.spnFrequency.setAdapter(frequencySpinnerAdapter);
         binding.spnFrequency.setSelection(6);
         frequencySpinnerAdapter.notifyDataSetChanged();
-        if(budget == null){
+        if (budget == null) {
             getListExpense();
         }
 
-        if(list != null){
+        if (list != null) {
             adapter = new CategorySpinnerAdapter(this, list);
             binding.spnCategory.setAdapter(adapter);
             adapter.notifyDataSetChanged();
@@ -112,17 +119,17 @@ public class ThemSuaActivity extends AppCompatActivity {
         Date currentDate = new Date();
         String formattedDate = dateFormat.format(currentDate);
 
-        if(budget == null){
+        if (budget == null) {
             binding.tvStartDay.setText(formattedDate);
-        }else{
+        } else {
             validateFrequency();
             int type = budget.getCategory().getType();
-            if(type == 0){
+            if (type == 0) {
                 isTypeChi = true;
                 getListExpense();
                 binding.btnChi.setSelected(true);
                 binding.btnThu.setSelected(false);
-            }else{
+            } else {
                 isTypeChi = false;
                 getListRevenue();
                 binding.btnChi.setSelected(false);
@@ -136,6 +143,7 @@ public class ThemSuaActivity extends AppCompatActivity {
 
         }
     }
+
     public String convertToDateString(long milliseconds) {
         SimpleDateFormat convertFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
         SimpleDateFormat outputFormat = new SimpleDateFormat("dd/MM/yyyy");
@@ -151,7 +159,7 @@ public class ThemSuaActivity extends AppCompatActivity {
         return dateString;
     }
 
-    public void setDataCreate(){
+    public void setDataCreate() {
         String note = binding.edtNote.getText().toString();
         String priceStr = binding.edtPrice.getText().toString();
         Category category = (Category) binding.spnCategory.getSelectedItem();
@@ -163,7 +171,7 @@ public class ThemSuaActivity extends AppCompatActivity {
         long endDay = 0;
         int price = Integer.valueOf(priceStr);
 
-        if(!endDayStr.equals("Không")){
+        if (!endDayStr.equals("Không")) {
             endDay = convertToMilisecond(endDayStr);
         }
 
@@ -171,17 +179,17 @@ public class ThemSuaActivity extends AppCompatActivity {
             binding.edtNote.setError("Nhập tiêu đề");
             binding.edtNote.setText("");
             binding.edtNote.requestFocus();
-        }else if (TextUtils.isEmpty(priceStr)) {
+        } else if (TextUtils.isEmpty(priceStr)) {
             binding.edtPrice.setError("Nhập số tiền");
             binding.edtPrice.setText("");
             binding.edtPrice.requestFocus();
-        }else {
-            createOrUpdate(category, startDay, endDay,note,price,frequency);
+        } else {
+            createOrUpdate(category, startDay, endDay, note, price, frequency);
         }
 
     }
 
-    public long convertToMilisecond(String date){
+    public long convertToMilisecond(String date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         SimpleDateFormat outputFormat = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss z");
 
@@ -196,8 +204,9 @@ public class ThemSuaActivity extends AppCompatActivity {
         }
         return timeMilisecound;
     }
-    public void onClickAction(){
-        binding.imgBack.setOnClickListener(v ->{
+
+    public void onClickAction() {
+        binding.imgBack.setOnClickListener(v -> {
             finish();
         });
         binding.btnChi.setSelected(true);
@@ -215,13 +224,13 @@ public class ThemSuaActivity extends AppCompatActivity {
             getListRevenue();
             binding.spnCategory.setSelection(0);
         });
-        binding.lnStartDay.setOnClickListener(v->{
+        binding.lnStartDay.setOnClickListener(v -> {
             openDialog(true);
         });
-        binding.lnEndDay.setOnClickListener(v->{
+        binding.lnEndDay.setOnClickListener(v -> {
             showOptionEndDay();
         });
-        binding.imgPen.setOnClickListener(v->{
+        binding.imgPen.setOnClickListener(v -> {
             setDataCreate();
         });
 
@@ -230,13 +239,16 @@ public class ThemSuaActivity extends AppCompatActivity {
     private void createOrUpdate(Category category, long dayStart, long dayEnd, String note, int price, String frequency) {
         Thread thread = new Thread(() -> {
             try {
-                BudgetCreateRequest request = new BudgetCreateRequest(category, dayStart, dayEnd,note,price,frequency);
+                BudgetCreateRequest request = new BudgetCreateRequest(category, dayStart, dayEnd, note, price, frequency);
                 if (budget != null) {
                     Response<Void> call = BudgetApi.api.update(budget.get_id(), request).execute();
                     if (call.isSuccessful() && call.code() == 200) {
-                        showMessage("Thanh cong", true);
+                        Intent resultIntent = new Intent();
+                        setResult(RESULT_OK, resultIntent);
+                        showMessage("Cập nhật thành công", true);
                     } else {
                         showMessage("Cập nhật thất bại", false);
+
                     }
                 } else {
                     Response<Void> call = BudgetApi.api.create(request).execute();
@@ -246,6 +258,7 @@ public class ThemSuaActivity extends AppCompatActivity {
                         showMessage("Thêm thất bại", false);
                     }
                 }
+
             } catch (HttpException e) {
                 e.printStackTrace();
                 showMessage("Đã xảy ra lỗi", false);
@@ -257,7 +270,7 @@ public class ThemSuaActivity extends AppCompatActivity {
         thread.start();
     }
 
-    private void showOptionEndDay(){
+    private void showOptionEndDay() {
         LayoutInflater inflater = LayoutInflater.from(this);
         View dialogView = inflater.inflate(R.layout.menu_end_day, null);
 
@@ -317,8 +330,8 @@ public class ThemSuaActivity extends AppCompatActivity {
         calendar.set(Calendar.DAY_OF_MONTH, day);
     }
 
-    private void validateNewOrEdit(List<Category> list){
-        if(budget != null){
+    private void validateNewOrEdit(List<Category> list) {
+        if (budget != null) {
             for (int i = 0; i < list.size(); i++) {
                 Category category = list.get(i);
                 if (category.getId().equals(budget.getCategory().getId())) {
@@ -328,6 +341,7 @@ public class ThemSuaActivity extends AppCompatActivity {
             }
         }
     }
+
     private void validateFrequency() {
         if (budget != null) {
             String serverFrequency = budget.getFrequency();
@@ -337,6 +351,7 @@ public class ThemSuaActivity extends AppCompatActivity {
             }
         }
     }
+
     private void getListExpense() {
         Thread thread = new Thread(() -> {
             try {
@@ -361,6 +376,7 @@ public class ThemSuaActivity extends AppCompatActivity {
         });
         thread.start();
     }
+
     private void getListRevenue() {
         Thread thread = new Thread(() -> {
             try {
@@ -385,10 +401,12 @@ public class ThemSuaActivity extends AppCompatActivity {
         });
         thread.start();
     }
+
     private void showMessage(String msg, Boolean isFinish) {
         runOnUiThread(() -> {
             Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
             if (isFinish) finish();
         });
     }
+
 }

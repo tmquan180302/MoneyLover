@@ -30,4 +30,6 @@ public interface BudgetApi {
     @DELETE("budget/{id}")
     Call<String> delete(@Path("id") String id);
 
+    @GET("budget/{id}")
+    Call<Budget> findBudget(@Path("id") String id);
 }
