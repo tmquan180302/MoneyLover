@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.identity.SignInClient;
 import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.OtherAdapter;
 import com.poly.moneylover.models.OtherItem;
@@ -27,7 +28,9 @@ import com.poly.moneylover.ui.bill.BillConfirmActivity;
 import com.poly.moneylover.ui.service.ExportDataCsvActivity;
 import com.poly.moneylover.ui.service.RestoreTransactionActivity;
 import com.poly.moneylover.ui.service.ServiceActivity;
+import com.poly.moneylover.ui.transaction.SearchTransactionActivity;
 import com.poly.moneylover.ui.user.LoginActivity;
+import com.poly.moneylover.ui.user.WelcomeActivity;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -97,7 +100,7 @@ public class OtherFragment extends Fragment implements OtherAdapter.OnItemClickL
         otherItems.add(new OtherItem(R.drawable.icon_premium, "Dịch vụ premium"));//5
         otherItems.add(new OtherItem(R.drawable.icon_export, "Xuất dữ liệu (Premium)"));//6
         otherItems.add(new OtherItem(R.drawable.icon_restore, "Khôi phục dữ liệu (Premium)"));//7
-        otherItems.add(new OtherItem(R.drawable.icon_infomation, "Thông tin ứng dụng"));//8
+        otherItems.add(new OtherItem(R.drawable.icon_search, "Tìm kiếm giao dịch"));//8
         otherItems.add(new OtherItem(R.drawable.icon_logout, "Thoát ứng dụng"));//9
 
         return otherItems;
@@ -131,11 +134,10 @@ public class OtherFragment extends Fragment implements OtherAdapter.OnItemClickL
             Intent intent = new Intent(requireContext(), RestoreTransactionActivity.class);
             startActivity(intent);
         } else if (position == 8) {
-            Toast.makeText(requireContext(), "Not Done", Toast.LENGTH_SHORT).show();
-//            Intent intent = new Intent(requireContext(), BillConfirmActivity.class);
-//            startActivity(intent);
+            Intent intent = new Intent(requireContext(), SearchTransactionActivity.class);
+            startActivity(intent);
         } else if (position == 9) {
-            Intent intent = new Intent(requireContext(), LoginActivity.class);
+            Intent intent = new Intent(requireContext(), WelcomeActivity.class);
             startActivity(intent);
         } else {
             Intent intent = new Intent(requireContext(), BillConfirmActivity.class);

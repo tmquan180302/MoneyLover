@@ -25,6 +25,12 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.transaction.SearchTransactionActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.transaction.UpdateTransactionActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.service.OptionRestoreTransactionActivity"
             android:exported="false" />
         <activity

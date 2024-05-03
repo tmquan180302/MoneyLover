@@ -2,6 +2,8 @@ package com.poly.moneylover.ui;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
@@ -25,12 +27,15 @@ import com.poly.moneylover.databinding.FragmentReportBinding;
 import com.poly.moneylover.models.DataReportModelApi;
 import com.poly.moneylover.models.EventbusModel;
 import com.poly.moneylover.network.ApiService;
+import com.poly.moneylover.network.BudgetApi;
 import com.poly.moneylover.ui.dialog.MonthYearPickerDialog;
+import com.poly.moneylover.ui.transaction.SearchTransactionActivity;
 import com.poly.moneylover.utils.Convert;
 
 import org.greenrobot.eventbus.EventBus;
 
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -55,9 +60,12 @@ public class ReportFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC+7"));
-        calendarStart = Calendar.getInstance(TimeZone.getTimeZone("UTC+7"));
-        calendarEnd = Calendar.getInstance(TimeZone.getTimeZone("UTC+7"));
+
+        ZoneId zoneId = ZoneId.of("Asia/Ho_Chi_Minh");
+
+        calendar = Calendar.getInstance(TimeZone.getTimeZone(zoneId));
+        calendarStart = Calendar.getInstance(TimeZone.getTimeZone(zoneId));
+        calendarEnd = Calendar.getInstance(TimeZone.getTimeZone(zoneId));
 
         calendarStart.set(Calendar.DAY_OF_MONTH, 1);
         calendarStart.set(Calendar.HOUR_OF_DAY, 0);
@@ -67,9 +75,10 @@ public class ReportFragment extends Fragment {
 
         calendarEnd.set(Calendar.DAY_OF_MONTH, calendarEnd.getActualMaximum(Calendar.DAY_OF_MONTH));
         calendarEnd.set(Calendar.HOUR_OF_DAY, 23);
-        calendarEnd.set(Calendar.MINUTE, 59);
-        calendarEnd.set(Calendar.SECOND, 59);
-        calendarEnd.set(Calendar.MILLISECOND, 999);
+        calendarEnd.set(Calendar.MINUTE, 0);
+        calendarEnd.set(Calendar.SECOND, 0);
+        calendarEnd.set(Calendar.MILLISECOND, 0);
+
 
         binding.tvDateFull.setText(getDayMonth(0));
         SimpleDateFormat numberFormat = new SimpleDateFormat("MM/yyyy");
@@ -108,7 +117,8 @@ public class ReportFragment extends Fragment {
         });
 
         binding.search.setOnClickListener(v -> {
-
+            Intent intent = new Intent(getActivity(), SearchTransactionActivity.class);
+            startActivity(intent);
         });
 
         binding.tvDateFull.addTextChangedListener(new TextWatcher() {
@@ -119,15 +129,28 @@ public class ReportFragment extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                calendarStart.set(Calendar.DAY_OF_MONTH, 1);
-                calendarEnd.set(Calendar.DAY_OF_MONTH, calendarEnd.getActualMaximum(Calendar.DAY_OF_MONTH));
 
-                EventBus.getDefault().post(new EventbusModel(String.valueOf(calendarStart.getTimeInMillis()), String.valueOf(calendarEnd.getTimeInMillis())));
+                calendarStart.set(Calendar.DAY_OF_MONTH, 1);
+                calendarStart.set(Calendar.HOUR_OF_DAY, 0);
+                calendarStart.set(Calendar.MINUTE, 0);
+                calendarStart.set(Calendar.SECOND, 0);
+                calendarStart.set(Calendar.MILLISECOND, 0);
+
+                calendarEnd.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
+                calendarEnd.set(Calendar.HOUR_OF_DAY, 23);
+                calendarEnd.set(Calendar.MINUTE, 0);
+                calendarEnd.set(Calendar.SECOND, 0);
+                calendarEnd.set(Calendar.MILLISECOND, 0);
+
+
+                EventBus.getDefault().post(new EventbusModel(String.valueOf(calendarStart.getTimeInMillis()), String.valueOf(calendarEnd.getTimeInMillis() - 300000)));
 
                 getNewData(0, String.valueOf(calendarStart.getTimeInMillis()), String.valueOf(calendarEnd.getTimeInMillis()));
 
                 Constants.START_DAY_REPORT = String.valueOf(calendarStart.getTimeInMillis());
                 Constants.END_DAY_REPORT = String.valueOf(calendarEnd.getTimeInMillis());
+
+
             }
 
             @Override
@@ -151,10 +174,23 @@ public class ReportFragment extends Fragment {
         calendar.set(Calendar.YEAR, year);
         calendar.set(Calendar.MONTH, month);
         calendar.set(Calendar.DAY_OF_MONTH, day);
+
         calendarStart.set(Calendar.YEAR, year);
         calendarEnd.set(Calendar.YEAR, year);
+
         calendarStart.set(Calendar.MONTH, month);
         calendarEnd.set(Calendar.MONTH, month);
+
+
+        calendarStart.set(Calendar.HOUR_OF_DAY, 0);
+        calendarStart.set(Calendar.MINUTE, 0);
+        calendarStart.set(Calendar.SECOND, 0);
+        calendarStart.set(Calendar.MILLISECOND, 0);
+
+        calendarEnd.set(Calendar.HOUR_OF_DAY, 23);
+        calendarEnd.set(Calendar.MINUTE, 0);
+        calendarEnd.set(Calendar.SECOND, 0);
+        calendarEnd.set(Calendar.MILLISECOND, 0);
     }
 
     @Override
@@ -162,6 +198,7 @@ public class ReportFragment extends Fragment {
         super.onResume();
         getNewData(0, Constants.START_DAY_REPORT, Constants.END_DAY_REPORT);
     }
+
     private void configViewpager() {
         TabPagerAdapter adapterStatic = new TabPagerAdapter(requireActivity());
 
@@ -182,38 +219,41 @@ public class ReportFragment extends Fragment {
     }
 
     private void getNewData(int type, String timeStampStart, String timeStampEnd) {
-        Log.d("TAG", "getNewData: "+timeStampStart);
-        Log.d("TAG", "getNewData: "+timeStampEnd);
+        Thread thread = new Thread(() -> {
+            try {
+                BudgetApi.api.getDataReport(timeStampStart, timeStampEnd, type).enqueue(new Callback<DataReportModelApi>() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onResponse(Call<DataReportModelApi> call, Response<DataReportModelApi> response) {
+                        if (response.body() == null || response.body().category == null) {
+                            return;
+                        }
 
-        final SharedPreferences[] sharedPreferences = {requireActivity().getSharedPreferences("myPreferences", MODE_PRIVATE)};
-
-        ApiService.apiService.getDataReport("Bearer " + sharedPreferences[0].getString("token", ""), timeStampStart, timeStampEnd, type).enqueue(new Callback<DataReportModelApi>() {
-
-            @Override
-            public void onResponse(Call<DataReportModelApi> call, Response<DataReportModelApi> response) {
-                if (response.body() == null || response.body().category == null) {
-                    return;
-                }
-
-                binding.tvChi.setText("-" + Convert.convertNumber(response.body().expense) + "₫");
-                binding.tvThu.setText("+" + Convert.convertNumber(response.body().revenue) + "₫");
+                        binding.tvChi.setText("-" + Convert.convertNumber(response.body().expense) + "₫");
+                        binding.tvThu.setText("+" + Convert.convertNumber(response.body().revenue) + "₫");
 
 
-                if (response.body().total > 0){
-                    binding.tvThuChi.setText("+"+Convert.convertNumber(response.body().total) + "₫");
-                }else {
-                    binding.tvThuChi.setText(Convert.convertNumber(response.body().total) + "₫");
-                }
+                        if (response.body().total > 0) {
+                            binding.tvThuChi.setText("+" + Convert.convertNumber(response.body().total) + "₫");
+                        } else {
+                            binding.tvThuChi.setText(Convert.convertNumber(response.body().total) + "₫");
+                        }
 
-                Constants.TOTAL_OUT = response.body().expense;
-                Constants.TOTAL_IN = response.body().revenue;
-            }
+                        Constants.TOTAL_OUT = response.body().expense;
+                        Constants.TOTAL_IN = response.body().revenue;
+                    }
 
-            @Override
-            public void onFailure(Call<DataReportModelApi> call, Throwable t) {
+                    @Override
+                    public void onFailure(Call<DataReportModelApi> call, Throwable t) {
 
+                    }
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         });
+        thread.start();
+
     }
 
 }

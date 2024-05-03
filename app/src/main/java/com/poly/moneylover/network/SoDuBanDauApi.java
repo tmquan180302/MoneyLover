@@ -18,8 +18,8 @@ public interface SoDuBanDauApi {
 
     SoDuBanDauApi api = RetrofitClient.getInstance().create(SoDuBanDauApi.class);
 
-    @POST("/balance")
+    @POST("balance")
     Call<List<Balance>> getSoDuBanDau();
-    @POST("/balance/create")
+    @POST("balance/create")
     Call<String> createSoDuBanDau(@Body BalanceRequestBody body);
 }

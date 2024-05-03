@@ -86,7 +86,6 @@ public class ServiceActivity extends AppCompatActivity implements OtherAdapter.O
         otherItems.add(new OtherItem(R.drawable.icon_export, "Xuất dữ liệu dạng CSV"));
         otherItems.add(new OtherItem(R.drawable.icon_pdf, "Xuất dữ liệu dạng PDF"));
         otherItems.add(new OtherItem(R.drawable.icon_restore, "Khôi phục giao dịch"));
-        otherItems.add(new OtherItem(R.drawable.icon_restore, "Khôi phục danh mục"));
         return otherItems;
     }
 
@@ -104,14 +103,16 @@ public class ServiceActivity extends AppCompatActivity implements OtherAdapter.O
         } else if (position == 2 && checkPremium) {
             Intent intent = new Intent(ServiceActivity.this, RestoreTransactionActivity.class);
             startActivity(intent);
-        } else if (position == 3 && checkPremium) {
-            Intent intent = new Intent(ServiceActivity.this, RestoreCategoryActivity.class);
-            startActivity(intent);
-        } else {
+        }  else {
             Intent intent = new Intent(ServiceActivity.this, BillConfirmActivity.class);
             startActivity(intent);
         }
 
     }
+
+//    else if (position == 3 && checkPremium) {
+//        Intent intent = new Intent(ServiceActivity.this, RestoreCategoryActivity.class);
+//        startActivity(intent);
+//    }
 
 }

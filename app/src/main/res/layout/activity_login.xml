@@ -57,7 +57,7 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edtEmail"
-            android:text="kuanche"
+            android:text="tmquan183@gmail.com"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/lato_regular"

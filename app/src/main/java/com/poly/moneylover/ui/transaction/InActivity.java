@@ -98,8 +98,6 @@ public class InActivity extends AppCompatActivity {
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-
-
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     setupChart();
                     setupAdapter();
@@ -115,8 +113,7 @@ public class InActivity extends AppCompatActivity {
             entries.add(new BarEntry(i, 0));
         }
 
-        SharedPreferences sharedPreferences = this.getSharedPreferences("myPreferences", MODE_PRIVATE);
-        ApiService.apiService.getDataReportDetails("Bearer " + sharedPreferences.getString("token", ""), "1", "1", id).enqueue(new Callback<DataDetailsReportModelApi>() {
+        BudgetApi.api.getDataReportDetails( "1", "1", id).enqueue(new Callback<DataDetailsReportModelApi>() {
 
             @Override
             public void onResponse(Call<DataDetailsReportModelApi> call, Response<DataDetailsReportModelApi> response) {
@@ -203,8 +200,7 @@ public class InActivity extends AppCompatActivity {
         listDate = new ArrayList<>();
         listTotal = new ArrayList<>();
 
-        SharedPreferences sharedPreferences = this.getSharedPreferences("myPreferences", MODE_PRIVATE);
-        ApiService.apiService.getDataReportDetails("Bearer " + sharedPreferences.getString("token", ""), startDay, endDay, id).enqueue(new Callback<DataDetailsReportModelApi>() {
+        BudgetApi.api.getDataReportDetails( startDay, endDay, id).enqueue(new Callback<DataDetailsReportModelApi>() {
 
             @Override
             public void onResponse(Call<DataDetailsReportModelApi> call, Response<DataDetailsReportModelApi> response) {
@@ -296,7 +292,7 @@ public class InActivity extends AppCompatActivity {
                 if (response.isSuccessful() && response.body() != null) {
                     showAlertDialog(response.body());
                 }else {
-                    Intent intent = new Intent(InActivity.this, UpdateActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), UpdateActivity.class);
                     intent.putExtra("data", expenseItem);
                     intent.putExtra("type", 1);
                     intent.putExtra("idCate", id);
@@ -319,7 +315,7 @@ public class InActivity extends AppCompatActivity {
         dialog.show();
     }
     private void nav(Budget budget) {
-        Intent intent = new Intent(InActivity.this, ThemSuaActivity.class);
+        Intent intent = new Intent(getApplicationContext(), ThemSuaActivity.class);
         intent.putExtra(ThemSuaActivity.DATA_BUDGET, budget);
         activityResultLauncher.launch(intent);
     }

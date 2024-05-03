@@ -14,16 +14,16 @@ import retrofit2.http.Path;
 
 public interface ReportApi {
     ReportApi api = RetrofitClient.getInstance().create(ReportApi.class);
-    @GET("/budget/allTimeReport")
+    @GET("budget/allTimeReport")
     Call<Report> getAllTimeReport();
-    @GET("/budget/{type}")
+    @GET("budget/{type}")
     Call<List<ReportCategoryDTO>> getAllReport(@Path("type") int type);
-    @GET("/budget/{startDay}/{endDay}/{id}/report")
+    @GET("budget/{startDay}/{endDay}/{id}/report")
     Call<DetailReportDTO> getReportDetailCategory(@Path("startDay") long startDay, @Path("endDay") long endDay,@Path("id") String id);
 
-    @GET("/budget/{startDay}/{endDay}/{type}/year")
+    @GET("budget/{startDay}/{endDay}/{type}/year")
     Call<ReportInYearDTO> getYearReport(@Path("startDay") long startDay, @Path("endDay") long endDay, @Path("type") int type);
 
-    @GET("/budget/{startDay}/{endDay}/{type}")
+    @GET("budget/{startDay}/{endDay}/{type}")
     Call<ReportCategoryInYearDTO> getReport(@Path("startDay") long startDay, @Path("endDay") long endDay, @Path("type") int type);
 }

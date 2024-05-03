@@ -81,12 +81,50 @@
         android:layout_height="wrap_content"
         android:fontFamily="@font/lato_regular"
         android:imeOptions="actionDone"
+        android:inputType="text"
+        android:textSize="@dimen/_10ssp" />
+  </com.google.android.material.textfield.TextInputLayout>
+
+  <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/edt_FullName_Layout_Register"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/_10sdp"
+      android:hint="Tên đầy đủ"
+      app:startIconDrawable="@drawable/icon_person"
+      app:endIconMode="clear_text">
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edtFullName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_regular"
+        android:imeOptions="actionDone"
         android:inputType="textPassword"
         android:textSize="@dimen/_10ssp" />
   </com.google.android.material.textfield.TextInputLayout>
 
 
+  <com.google.android.material.textfield.TextInputLayout
+      android:id="@+id/edt_PhoneNumber_Layout_Register"
+      style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_marginTop="@dimen/_10sdp"
+      android:hint="Số điện thoại"
+      app:startIconDrawable="@drawable/icon_phone"
+      app:endIconMode="clear_text">
 
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/edtPhoneNumber"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/lato_regular"
+        android:imeOptions="actionDone"
+        android:inputType="phone"
+        android:textSize="@dimen/_10ssp" />
+  </com.google.android.material.textfield.TextInputLayout>
   <Button
       android:id="@+id/btn_RegisterActivity"
       android:layout_width="match_parent"

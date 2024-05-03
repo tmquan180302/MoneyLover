@@ -1,40 +1,49 @@
 package com.poly.moneylover.models.Response;
 
 public class Report {
-    private double revenue;
-    private double expense;
-    private double total;
-    private double balance;
-    private double cumulation;
+    private long revenue;
+    private long expense;
+    private long total;
+    private long balance;
+    private long cumulation;
 
-    public Report(double revenue, double expense, double total, int balance, double cumulation) {
-        this.revenue = revenue;
-        this.expense = expense;
-        this.total = total;
-        this.balance = balance;
-        this.cumulation = cumulation;
-    }
-
-    public Report() {
-    }
-
-    public double getRevenue() {
+    public long getRevenue() {
         return revenue;
     }
 
-    public double getExpense() {
+    public void setRevenue(long revenue) {
+        this.revenue = revenue;
+    }
+
+    public long getExpense() {
         return expense;
     }
 
-    public double getTotal() {
+    public void setExpense(long expense) {
+        this.expense = expense;
+    }
+
+    public long getTotal() {
         return total;
     }
 
-    public double getBalance() {
+    public void setTotal(long total) {
+        this.total = total;
+    }
+
+    public long getBalance() {
         return balance;
     }
 
-    public double getCumulation() {
+    public void setBalance(long balance) {
+        this.balance = balance;
+    }
+
+    public long getCumulation() {
         return cumulation;
+    }
+
+    public void setCumulation(long cumulation) {
+        this.cumulation = cumulation;
     }
 }

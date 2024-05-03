@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.poly.moneylover.R;
 import com.poly.moneylover.network.TransactionApi;
+import com.poly.moneylover.ui.OtherFragment;
 import com.poly.moneylover.utils.Convert;
 
 import retrofit2.Call;
@@ -68,6 +69,7 @@ public class OptionRestoreTransactionActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {
                 if (response.isSuccessful() && response.code() == 200) {
+
                     Toast.makeText(OptionRestoreTransactionActivity.this, "Xóa thành công", Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(OptionRestoreTransactionActivity.this, RestoreTransactionActivity.class);
                     startActivity(intent);

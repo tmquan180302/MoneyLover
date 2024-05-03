@@ -70,6 +70,12 @@ public class Convert {
         calendar.setTimeInMillis(time);
         return formatter.format(calendar.getTime());
     }
+    public static String getDayConvertCheck(Long time) {
+        DateFormat formatter = new SimpleDateFormat("YYYY-MM-dd");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        return formatter.format(calendar.getTime());
+    }
 
     @SuppressLint("NewApi")
     public static Long getTimeStamp(String dateString) {

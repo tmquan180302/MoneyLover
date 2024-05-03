@@ -19,6 +19,7 @@ import com.poly.moneylover.interfaces.ItemOnClickReport;
 import com.poly.moneylover.interfaces.ItemOnclick;
 import com.poly.moneylover.models.Category;
 import com.poly.moneylover.models.ReportModels.ReportCategoryDTO;
+import com.poly.moneylover.utils.Convert;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,7 @@ public class ItemReportAdapter extends RecyclerView.Adapter<ItemReportAdapter.It
         return new ItemReportViewHolder(view);
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ItemReportViewHolder itemViewHolder, int i) {
         ReportCategoryDTO item = list.get(i);
@@ -82,7 +84,7 @@ public class ItemReportAdapter extends RecyclerView.Adapter<ItemReportAdapter.It
             itemViewHolder.imgIcon.setVisibility(View.GONE);
         }
         itemViewHolder.tvName.setText(item.getName());
-        itemViewHolder.tvTotal.setText(String.valueOf(item.getTotal()) + "đ");
+        itemViewHolder.tvTotal.setText(Convert.formatNumberCurrent(String.valueOf(item.getTotal())) + "đ");
         float percent = item.getPercent();
         String percentText = String.format("%.0f", percent);
         itemViewHolder.tvPercent.setText((percent < 1) ? "<" + percentText + "%" : percentText + "%");

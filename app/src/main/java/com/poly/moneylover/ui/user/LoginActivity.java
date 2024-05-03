@@ -81,7 +81,7 @@ public class LoginActivity extends AppCompatActivity {
         serverReqLogin.setEmail(email);
         serverReqLogin.setPassWord(passWord);
 
-        ApiService.apiService.login(serverReqLogin).enqueue(new Callback<ServerResToken>() {
+        ApiService.api.login(serverReqLogin).enqueue(new Callback<ServerResToken>() {
             @Override
             public void onResponse(Call<ServerResToken> call, Response<ServerResToken> response) {
                 if (response.isSuccessful() && response.body() != null) {
@@ -107,7 +107,8 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-    private void saveUserToSharedPreferences( String userId, String email, String password) {
+
+    private void saveUserToSharedPreferences(String userId, String email, String password) {
         // Tạo đối tượng User từ thông tin nhận được
         User user = new User();
         user.setUserId(userId);
@@ -117,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
         // Lưu đối tượng User vào SharedPreferences
         SharedPrefsManager.saveUser(this, user);
     }
+
     private void loginByGoogle() {
         try {
             Intent intent = mGoogleSignInClient.getSignInIntent();
@@ -131,50 +133,33 @@ public class LoginActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 1000) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                String email = account.getEmail();
-                String passWord = StringUtils.generateRandomPassword();
+            if (data != null) {
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                try {
+                    GoogleSignInAccount account = task.getResult(ApiException.class);
+                    String email = account.getEmail();
+                    String passWord = StringUtils.generateRandomPassword();
 
-                register(email, passWord);
 
-                mGoogleSignInClient.signOut();
+                    mGoogleSignInClient.signOut();
 
-            } catch (ApiException e) {
-                throw new RuntimeException(e);
+                } catch (ApiException e) {
+                    throw new RuntimeException(e);
+                }
             }
         }
 
 
     }
 
-    private void register(String email, String passWord) {
 
-        ServerReqLogin serverReqSignup = new ServerReqLogin();
-        serverReqSignup.setEmail(email);
-        serverReqSignup.setPassWord(passWord);
-
-
-        ApiService.apiService.register(serverReqSignup).enqueue(new Callback<ServerResToken>() {
-            @Override
-            public void onResponse(Call<ServerResToken> call, Response<ServerResToken> response) {
-                loginByEmail(email);
-            }
-
-            @Override
-            public void onFailure(Call<ServerResToken> call, Throwable t) {
-
-            }
-        });
-    }
 
     private void loginByEmail(String email) {
 
         ServerReqLoginGoogle serverReqLoginGoogle = new ServerReqLoginGoogle();
         serverReqLoginGoogle.setEmail(email);
 
-        ApiService.apiService.loginByEmail(serverReqLoginGoogle).enqueue(new Callback<ServerResToken>() {
+        ApiService.api.loginByEmail(serverReqLoginGoogle).enqueue(new Callback<ServerResToken>() {
             @Override
             public void onResponse(Call<ServerResToken> call, Response<ServerResToken> response) {
                 if (response.isSuccessful()) {

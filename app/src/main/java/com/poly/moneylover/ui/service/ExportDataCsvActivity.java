@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.Settings;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -106,7 +107,7 @@ public class ExportDataCsvActivity extends AppCompatActivity {
     }
 
     private void startDownload() {
-        String url = Constants.API_BASE_URL + link;
+        String url = Constants.API_DOWNLOAD_URL + link;
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setTitle(link);
         request.setDescription("Downloading");

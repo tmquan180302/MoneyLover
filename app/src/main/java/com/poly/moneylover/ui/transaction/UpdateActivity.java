@@ -1,6 +1,7 @@
 package com.poly.moneylover.ui.transaction;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
@@ -48,6 +49,8 @@ public class UpdateActivity extends AppCompatActivity implements ItemOnclick {
     private String idCate;
     private Category category;
     private int TYPE = 0;
+    private Boolean refreshLayout = false;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +72,9 @@ public class UpdateActivity extends AppCompatActivity implements ItemOnclick {
         itemAdapter = new ItemAdapter(this, getApplicationContext());
         binding.rcvItem.setAdapter(itemAdapter);
 
-        Log.e("TAG", "onCreate: " + expenseItem );
+        Log.e("TAG", "onCreate: " + expenseItem);
 
-        if (expenseItem.getExpenseItem() == null){
+        if (expenseItem.getExpenseItem() == null) {
             return;
         }
 
@@ -121,7 +124,7 @@ public class UpdateActivity extends AppCompatActivity implements ItemOnclick {
             }
         });
 
-        if (!Objects.equals(expenseItem.getExpenseItem().getNote(), "")){
+        if (!Objects.equals(expenseItem.getExpenseItem().getNote(), "")) {
             binding.edtNote.setText(expenseItem.getExpenseItem().getNote());
         }
 
@@ -143,10 +146,16 @@ public class UpdateActivity extends AppCompatActivity implements ItemOnclick {
         binding.btnCopy.setOnClickListener(v -> getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragment_container_view,
-                        InputFragment.newInstance(binding.edtNote.getText().toString(), binding.edtMoney.getText().toString(), category.getId(), TYPE, calendar.getTimeInMillis()))
+                        InputFragment.newInstance(binding.edtNote.getText().toString(),
+                                binding.edtMoney.getText().toString(), category.getId(), TYPE, calendar.getTimeInMillis()))
                 .commit());
 
-        binding.imvBack.setOnClickListener(v -> finish());
+        binding.imvBack.setOnClickListener(v -> {
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra("RESULT", refreshLayout); // Thêm dữ liệu nếu cần
+            setResult(Activity.RESULT_OK, resultIntent);
+            finish();
+        });
 
         binding.tvSelectedDate.setOnClickListener(v -> openDialog());
 

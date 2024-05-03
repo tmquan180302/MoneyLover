@@ -30,6 +30,7 @@ import com.poly.moneylover.models.DataReportModelApi;
 import com.poly.moneylover.models.EventbusModel;
 import com.poly.moneylover.models.ExpenseItem;
 import com.poly.moneylover.network.ApiService;
+import com.poly.moneylover.network.BudgetApi;
 import com.poly.moneylover.ui.transaction.InActivity;
 
 import org.greenrobot.eventbus.EventBus;
@@ -107,9 +108,7 @@ public class IncomeFragment extends Fragment {
     }
 
     private void getData() {
-        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences("myPreferences", MODE_PRIVATE);
-
-        ApiService.apiService.getDataReport("Bearer " + sharedPreferences.getString("token", ""), startTime, endTime, 1).enqueue(new Callback<DataReportModelApi>() {
+        BudgetApi.api.getDataReport( startTime, endTime, 1).enqueue(new Callback<DataReportModelApi>() {
 
             @Override
             public void onResponse(Call<DataReportModelApi> call, Response<DataReportModelApi> response) {

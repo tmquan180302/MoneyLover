@@ -16,6 +16,7 @@
     import com.poly.moneylover.R;
     import com.poly.moneylover.interfaces.ItemOnClickBudget;
     import com.poly.moneylover.models.Budget;
+    import com.poly.moneylover.utils.Convert;
 
     import java.util.ArrayList;
     import java.util.List;
@@ -69,6 +70,7 @@
             return new ItemBudgetViewHolder(view);
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         public void onBindViewHolder(@NonNull ItemBudgetViewHolder itemViewHolder, int i) {
             Budget item = list.get(i);
@@ -90,7 +92,7 @@
             }
             itemViewHolder.tvTitle.setText(item.getNote());
             itemViewHolder.tvDate.setText(item.getCategory().getName() + "/" + getDisplayText(item.getFrequency()));
-            itemViewHolder.tvPrice.setText(String.valueOf(item.getPrice()) + "đ");
+            itemViewHolder.tvPrice.setText(Convert.formatNumberCurrent(String.valueOf(item.getPrice())) + "đ");
 
             itemViewHolder.itemView.setSelected(positionSelected == i);
             itemViewHolder.itemView.setOnClickListener(v -> {

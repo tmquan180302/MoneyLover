@@ -33,6 +33,7 @@ import com.poly.moneylover.models.ReportModels.ReportCategoryInYearDTO;
 import com.poly.moneylover.models.ReportModels.ReportInYearDTO;
 import com.poly.moneylover.network.ReportApi;
 import com.poly.moneylover.ui.category.EditActivity;
+import com.poly.moneylover.utils.Convert;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -140,12 +141,12 @@ public class ChiFragment extends Fragment implements YearListener, ItemOnClickRe
         int type = 0;
 
 
-        @SuppressLint("NotifyDataSetChanged") Thread thread = new Thread(() -> {
+        @SuppressLint({"NotifyDataSetChanged", "SetTextI18n"}) Thread thread = new Thread(() -> {
             try {
                 Response<ReportCategoryInYearDTO> data = ReportApi.api.getReport(startTime, endTime, type).execute();
                 if (data.isSuccessful()) {
                     if (data.body() != null) requireActivity().runOnUiThread(() -> {
-                        tvSum.setText(String.valueOf(data.body().getExpense()) + "đ");
+                        tvSum.setText(Convert.formatNumberCurrent(String.valueOf(data.body().getExpense())) + "đ");
                         if (data.body().getCategory() != null) {
                             setDataChart(data.body().getCategory());
                             adapter.setList(data.body().getCategory());

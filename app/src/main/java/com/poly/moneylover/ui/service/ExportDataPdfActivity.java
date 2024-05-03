@@ -107,7 +107,7 @@ public class ExportDataPdfActivity extends AppCompatActivity {
     }
 
     private void startDownload() {
-        String url = Constants.API_BASE_URL + link;
+        String url = Constants.API_DOWNLOAD_URL + link;
         DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
         request.setTitle(link);
         request.setDescription("Downloading");

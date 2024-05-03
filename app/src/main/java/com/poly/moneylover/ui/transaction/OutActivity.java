@@ -1,5 +1,6 @@
 package com.poly.moneylover.ui.transaction;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -104,7 +105,6 @@ public class OutActivity extends AppCompatActivity {
     private final ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
             new ActivityResultContracts.StartActivityForResult(),
             result -> {
-                Log.d("TAG", ": "+ result.getData().getStringExtra("clone"));
                 if (result.getResultCode() == Activity.RESULT_OK) {
                     // Here, no request code
                     refreshLayout = true;
@@ -119,9 +119,7 @@ public class OutActivity extends AppCompatActivity {
         for (int i = 1; i <= 12; i++) {
             entries.add(new BarEntry(i, 0));
         }
-
-        SharedPreferences sharedPreferences = this.getSharedPreferences("myPreferences", MODE_PRIVATE);
-        ApiService.apiService.getDataReportDetails("Bearer " + sharedPreferences.getString("token", ""), "1", "1", id).enqueue(new Callback<DataDetailsReportModelApi>() {
+        BudgetApi.api.getDataReportDetails( "1", "1", id).enqueue(new Callback<DataDetailsReportModelApi>() {
 
             @Override
             public void onResponse(Call<DataDetailsReportModelApi> call, Response<DataDetailsReportModelApi> response) {
@@ -209,13 +207,9 @@ public class OutActivity extends AppCompatActivity {
         listDate = new ArrayList<>();
         listTotal = new ArrayList<>();
 
-        SharedPreferences sharedPreferences = this.getSharedPreferences("myPreferences", MODE_PRIVATE);
+        BudgetApi.api.getDataReportDetails( startDay, endDay, id).enqueue(new Callback<DataDetailsReportModelApi>() {
 
-
-        Log.e("TAG", "setupAdapter: " + startDay + "____" + endDay + "___" + id);
-
-        ApiService.apiService.getDataReportDetails("Bearer " + sharedPreferences.getString("token", ""), startDay, endDay, id).enqueue(new Callback<DataDetailsReportModelApi>() {
-
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(Call<DataDetailsReportModelApi> call, Response<DataDetailsReportModelApi> response) {
                 if (response.body() == null || response.body().transactions == null) {

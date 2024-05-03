@@ -6,6 +6,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
@@ -13,6 +14,9 @@ import com.poly.moneylover.ui.CalendarFragment;
 import com.poly.moneylover.ui.InputFragment;
 import com.poly.moneylover.ui.OtherFragment;
 import com.poly.moneylover.ui.ReportFragment;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements NavigationBarView.OnItemSelectedListener {
     private long Pressed;
@@ -27,7 +31,7 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
 
         BottomNavigationView bottomNav = findViewById(R.id.bottom_nav);
         bottomNav.setOnItemSelectedListener(this);
-        replaceFragment(new InputFragment(),1);
+        replaceFragment(new InputFragment(), "InputFragment");
     }
 
 
@@ -44,26 +48,34 @@ public class MainActivity extends AppCompatActivity implements NavigationBarView
     }
 
 
+    private static final Map<Integer, String> TAG_MAP = new HashMap<Integer, String>() {{
+        put(R.id.input, "InputFragment");
+        put(R.id.calendar, "CalendarFragment");
+        put(R.id.report, "ReportFragment");
+        put(R.id.other, "OtherFragment");
+    }};
+
+
     @Override
     public boolean onNavigationItemSelected(MenuItem item) {
         int id = item.getItemId();
+        String tag = TAG_MAP.get(id);
         if (id == R.id.input) {
-            replaceFragment(new InputFragment(), 1);
+            replaceFragment(new InputFragment(), tag);
         } else if (id == R.id.calendar) {
-            replaceFragment(new CalendarFragment(), 2);
+            replaceFragment(new CalendarFragment(), tag);
         } else if (id == R.id.report) {
-
-            replaceFragment(new ReportFragment(), 3);
+            replaceFragment(new ReportFragment(), tag);
         } else if (id == R.id.other) {
-            replaceFragment(new OtherFragment(), 4);
+            replaceFragment(new OtherFragment(), tag);
         }
         return true;
     }
 
-    private void replaceFragment(Fragment fragment, int newIndex) {
-        if (INDEX == newIndex) return;
-        getSupportFragmentManager().beginTransaction().replace(R.id.frame_container,
-                fragment).addToBackStack(null).commit();
-        INDEX = newIndex;
+    private void replaceFragment(Fragment fragment, String tag) {
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.frame_container, fragment, tag);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

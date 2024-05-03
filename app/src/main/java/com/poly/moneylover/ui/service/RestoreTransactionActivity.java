@@ -12,6 +12,7 @@ import android.widget.ImageButton;
 import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.ItemTransactionAdapter;
 import com.poly.moneylover.adapters.ServiceAdapter;
+import com.poly.moneylover.adapters.TransactionAdapter;
 import com.poly.moneylover.interfaces.ItemOnclickTransaction;
 import com.poly.moneylover.models.Transaction;
 import com.poly.moneylover.network.TransactionApi;
@@ -27,7 +28,7 @@ import retrofit2.Response;
 public class RestoreTransactionActivity extends AppCompatActivity implements ItemOnclickTransaction {
     private ImageButton imgBack;
     private RecyclerView rcvTransaction;
-    private ItemTransactionAdapter adapter;
+    private TransactionAdapter adapter;
     private List<Transaction> list;
 
     @Override
@@ -46,9 +47,11 @@ public class RestoreTransactionActivity extends AppCompatActivity implements Ite
                 @SuppressLint("NotifyDataSetChanged")
                 @Override
                 public void onResponse(Call<List<Transaction>> call, Response<List<Transaction>> response) {
-                    list.clear();
-                    list.addAll(response.body());
-                    adapter.notifyDataSetChanged();
+                    if (response.isSuccessful() && response.body() != null) {
+                        list.clear();
+                        list.addAll(response.body());
+                        adapter.notifyDataSetChanged();
+                    }
                 }
 
                 @Override
@@ -68,7 +71,7 @@ public class RestoreTransactionActivity extends AppCompatActivity implements Ite
     private void initRecyleView() {
         list = new ArrayList<>();
         rcvTransaction.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
-        adapter = new ItemTransactionAdapter(list, this);
+        adapter = new TransactionAdapter(list,getApplicationContext() ,this);
         rcvTransaction.setAdapter(adapter);
     }
 

@@ -2,6 +2,7 @@ package com.poly.moneylover.ui.Setting;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
@@ -13,56 +14,50 @@ import com.poly.moneylover.models.Response.InitialBalanceSingleton;
 import com.poly.moneylover.models.Response.Report;
 import com.poly.moneylover.network.ApiClient;
 import com.poly.moneylover.network.ReportApi;
+import com.poly.moneylover.utils.Convert;
 
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
 public class FullTermActivity extends AppCompatActivity {
+    TextView tvRevenue, tvExpense, tvTotal, tvBalance, tvCumulation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_full_term);
         ImageView imgBack = findViewById(R.id.imgBack);
+        initView();
         imgBack.setOnClickListener(v -> {
             finish();
         });
         getReportData();
     }
 
+    private void initView() {
+
+        tvRevenue = findViewById(R.id.revenue);
+        tvExpense = findViewById(R.id.expense);
+        tvTotal = findViewById(R.id.total);
+        tvBalance = findViewById(R.id.balance);
+        tvCumulation = findViewById(R.id.cumulation);
+    }
+
     private void getReportData() {
 
         Call<Report> call = ReportApi.api.getAllTimeReport();
         call.enqueue(new Callback<Report>() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onResponse(Call<Report> call, Response<Report> response) {
-                if (response.isSuccessful()) {
-                    Report report = response.body();
-                    // Xử lý dữ liệu report ở đây
-                    TextView txtrevenue = findViewById(R.id.revenue);
-                    TextView txtexpense = findViewById(R.id.expense);
-                    TextView txttotal = findViewById(R.id.total);
-                    TextView txtbalance = findViewById(R.id.balance);
-                    TextView txtcumulation = findViewById(R.id.cumulation);
+                if (response.isSuccessful() && response.body() != null) {
 
-                    double revenue = report.getRevenue();
-                    double expense = report.getExpense();
-                    double total = report.getTotal();
-                    double balance = (int) report.getBalance();
-                    double cumulation = report.getCumulation();
-
-                    Log.d("data","data " +report);
-                    double initialBalance = InitialBalanceSingleton.getInstance().getInitialBalance();
-                    txtbalance.setText(String.valueOf(initialBalance)); //so du ban dau
-
-                    txtrevenue.setText(formatMoney(revenue));
-                    txtexpense.setText(formatMoney(expense));
-                    txttotal.setText(formatMoney(total));
-                    txtbalance.setText(formatMoney(balance));
-
-                    double totalCumulation = total + balance;
-                    txtcumulation.setText(formatMoney(cumulation));
+                    tvRevenue.setText((Convert.convertNumber(response.body().getRevenue())) + "đ");
+                    tvExpense.setText((Convert.convertNumber(response.body().getExpense())) + " đ");
+                    tvTotal.setText((Convert.convertNumber(response.body().getTotal())) + " đ");
+                    tvBalance.setText((Convert.convertNumber(response.body().getBalance())) + " đ");
+                    tvCumulation.setText((Convert.convertNumber(response.body().getCumulation())) + " đ");
 
                 } else {
                     Toast.makeText(FullTermActivity.this, "Chưa có data", Toast.LENGTH_SHORT).show();

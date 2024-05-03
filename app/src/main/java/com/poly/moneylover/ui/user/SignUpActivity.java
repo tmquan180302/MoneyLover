@@ -1,22 +1,39 @@
 package com.poly.moneylover.ui.user;
 
+import static android.content.ContentValues.TAG;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RawRes;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.credentials.Credential;
+import androidx.credentials.CredentialManager;
+import androidx.credentials.CustomCredential;
+import androidx.credentials.GetCredentialRequest;
+import androidx.credentials.GetCredentialResponse;
+import androidx.credentials.PasswordCredential;
+import androidx.credentials.PublicKeyCredential;
 
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Message;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.identity.BeginSignInRequest;
+import com.google.android.gms.auth.api.identity.BeginSignInResult;
+import com.google.android.gms.auth.api.identity.Identity;
+import com.google.android.gms.auth.api.identity.SignInClient;
+import com.google.android.gms.auth.api.identity.SignInCredential;
+
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+
 import com.google.android.material.textfield.TextInputLayout;
 import com.poly.moneylover.MainActivity;
 import com.poly.moneylover.R;
@@ -24,7 +41,8 @@ import com.poly.moneylover.models.Request.ServerReqLogin;
 import com.poly.moneylover.models.Request.ServerReqLoginGoogle;
 import com.poly.moneylover.models.Response.ServerResToken;
 import com.poly.moneylover.network.ApiService;
-import com.poly.moneylover.utils.StringUtils;
+import com.poly.moneylover.network.RetrofitClient;
+
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -40,25 +58,35 @@ public class SignUpActivity extends AppCompatActivity {
 
     private TextView tvSignIn;
 
-    private GoogleSignInOptions sgo;
+    private SignInClient oneTapClient;
 
-    private GoogleSignInClient mGoogleSignInClient;
+    private BeginSignInRequest signInRequest;
+
+    private static final int REQ_ONE_TAP = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
         initView();
-        setUpFunction();
-    }
 
-    private void setUpFunction() {
+        oneTapClient = Identity.getSignInClient(this);
+        signInRequest = BeginSignInRequest.builder()
 
-        sgo = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
-        mGoogleSignInClient = GoogleSignIn.getClient(this, sgo);
+                .setPasswordRequestOptions(BeginSignInRequest.PasswordRequestOptions.builder()
+                        .setSupported(true)
+                        .build())
 
+                .setGoogleIdTokenRequestOptions(BeginSignInRequest.GoogleIdTokenRequestOptions.builder()
+                        .setSupported(true)
+                        .setServerClientId("423787012578-c9u88i965g9ebgidspqiph1vgpcmr7v5.apps.googleusercontent.com") // TODO
+                        .setFilterByAuthorizedAccounts(false)
+                        .build())
+                .setAutoSelectEnabled(true)
+                .build();
         onclick();
     }
+
 
     private void onclick() {
         imgBack.setOnClickListener(v -> {
@@ -67,104 +95,112 @@ public class SignUpActivity extends AppCompatActivity {
 
         btnGoogle.setOnClickListener(v -> loginByGoogle());
 
-        btnSignUp.setOnClickListener(v -> signUp());
     }
 
-    private void signUp() {
-        String email = txtEmail.getEditText().getText().toString().trim();
-        String passWord = txtPass.getEditText().getText().toString().trim();
-
-        ServerReqLogin serverReqSignUp = new ServerReqLogin();
-        serverReqSignUp.setEmail(email);
-        serverReqSignUp.setPassWord(passWord);
-
-        ApiService.apiService.register(serverReqSignUp).enqueue(new Callback<ServerResToken>() {
-            @Override
-            public void onResponse(Call<ServerResToken> call, Response<ServerResToken> response) {
-                if (response.isSuccessful()) {
-
-                    SharedPreferences sharedPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-
-                    editor.remove("token");
-                    editor.putString("token", response.body().getToken());
-                    editor.apply();
-                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
-                    startActivity(intent);
-                } else {
-                    txtEmail.setError("Tên đăng nhập hoặc mật khẩu không chính xác");
-                    txtPass.getEditText().setText("");
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ServerResToken> call, Throwable t) {
-                Log.d("TAG", "onFailure: " + t);
-            }
-        });
-    }
 
     private void loginByGoogle() {
-        try {
-            Intent intent = mGoogleSignInClient.getSignInIntent();
-            startActivityForResult(intent, 1000);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
+        oneTapClient.beginSignIn(signInRequest)
+                .addOnSuccessListener(this, new OnSuccessListener<BeginSignInResult>() {
+                    @Override
+
+                    public void onSuccess(BeginSignInResult result) {
+
+                        try {
+                            startIntentSenderForResult(
+                                    result.getPendingIntent().getIntentSender(), REQ_ONE_TAP,
+                                    null, 0, 0, 0);
+                        } catch (IntentSender.SendIntentException e) {
+                            throw new RuntimeException(e);
+                        }
+
+                    }
+
+                })
+
+                .addOnFailureListener(this, new OnFailureListener() {
+
+                    @Override
+
+                    public void onFailure(@NonNull Exception e) {
+
+                        // No saved credentials found. Launch the One Tap sign-up flow, or
+
+                        // do nothing and continue presenting the signed-out UI.
+
+                        Log.d(TAG, e.getLocalizedMessage());
+
+                    }
+
+                });
+
     }
+
+    @Override
+
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1000) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                String email = account.getEmail();
-                String passWord = StringUtils.generateRandomPassword();
 
-                register(email, passWord);
+        switch (requestCode) {
 
-                mGoogleSignInClient.signOut();
+            case REQ_ONE_TAP:
 
-            } catch (ApiException e) {
-                throw new RuntimeException(e);
-            }
+                try {
+
+                    SignInCredential credential = oneTapClient.getSignInCredentialFromIntent(data);
+
+                    String idToken = credential.getGoogleIdToken();
+
+                    String username = credential.getId();
+
+                    String password = credential.getPassword();
+
+                    tvSignIn.setText("Authentication done.\nUsername is " + username);
+
+                    loginByEmail(username);
+
+
+                    if (idToken != null) {
+
+                        // Got an ID token from Google. Use it to authenticate
+
+                        // with your backend.
+
+                        Log.d(TAG, "Got ID token.");
+
+                    } else if (password != null) {
+
+                        // Got a saved username and password. Use them to authenticate
+
+                        // with your backend.
+
+                        Log.d(TAG, "Got password.");
+
+                    }
+                    oneTapClient.signOut();
+
+                } catch (ApiException e) {
+                    tvSignIn.setText(e.toString());
+                }
+                break;
+
         }
-
     }
-    private void register(String email, String passWord) {
-
-        ServerReqLogin serverReqSignup = new ServerReqLogin();
-        serverReqSignup.setEmail(email);
-        serverReqSignup.setPassWord(passWord);
 
 
-        ApiService.apiService.register(serverReqSignup).enqueue(new Callback<ServerResToken>() {
-            @Override
-            public void onResponse(Call<ServerResToken> call, Response<ServerResToken> response) {
-                    loginByEmail(email);
-            }
 
-            @Override
-            public void onFailure(Call<ServerResToken> call, Throwable t) {
-
-            }
-        });
-    }
     private void loginByEmail(String email) {
 
         ServerReqLoginGoogle serverReqLoginGoogle = new ServerReqLoginGoogle();
         serverReqLoginGoogle.setEmail(email);
 
-        ApiService.apiService.loginByEmail(serverReqLoginGoogle).enqueue(new Callback<ServerResToken>() {
+        ApiService.api.loginByEmail(serverReqLoginGoogle).enqueue(new Callback<ServerResToken>() {
             @Override
             public void onResponse(Call<ServerResToken> call, Response<ServerResToken> response) {
                 if (response.isSuccessful()) {
-                    SharedPreferences sharedPreferences = getSharedPreferences("myPreferences", MODE_PRIVATE);
-                    SharedPreferences.Editor editor = sharedPreferences.edit();
-                    editor.clear();
-                    editor.putString("token", response.body().getToken());
-                    editor.apply();
-                    Intent intent = new Intent(SignUpActivity.this, MainActivity.class);
+                    RetrofitClient.setAuthToken(response.body().getToken());
+                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                     startActivity(intent);
                 } else {
 
