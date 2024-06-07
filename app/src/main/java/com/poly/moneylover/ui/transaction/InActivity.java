@@ -18,7 +18,10 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.BarData;
 import com.github.mikephil.charting.data.BarDataSet;
 import com.github.mikephil.charting.data.BarEntry;
+import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.poly.moneylover.R;
 import com.poly.moneylover.adapters.ExpenseAdapter2;
 import com.poly.moneylover.databinding.ActivityInBinding;
 import com.poly.moneylover.models.ChartApi;
@@ -29,6 +32,7 @@ import com.poly.moneylover.models.Transaction;
 import com.poly.moneylover.network.ApiService;
 import com.poly.moneylover.utils.Convert;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,6 +56,7 @@ public class InActivity extends AppCompatActivity {
     private List<Long> listTotal;
 
     private String id;
+    private int idColor;
     private SimpleDateFormat numberFormatFullDate = new SimpleDateFormat("dd/MM/yyyy");
     private SimpleDateFormat numberFormatMonth = new SimpleDateFormat("MM");
     private Boolean refreshLayout = false;
@@ -67,6 +72,7 @@ public class InActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         id = getIntent().getStringExtra("id");
+        idColor = getIntent().getIntExtra("idColor",R.color.black);
         name = getIntent().getStringExtra("name");
         startDay = getIntent().getStringExtra("startDay");
         endDay = getIntent().getStringExtra("endDay");
@@ -97,19 +103,10 @@ public class InActivity extends AppCompatActivity {
 
     private void setupChart() {
         // Initialize data
-        entries = new ArrayList<>();
-        entries.add(new BarEntry(1, 0));
-        entries.add(new BarEntry(2, 0));
-        entries.add(new BarEntry(3, 0));
-        entries.add(new BarEntry(4, 0));
-        entries.add(new BarEntry(5, 0));
-        entries.add(new BarEntry(6, 0));
-        entries.add(new BarEntry(7, 0));
-        entries.add(new BarEntry(8, 0));
-        entries.add(new BarEntry(9, 0));
-        entries.add(new BarEntry(10, 0));
-        entries.add(new BarEntry(11, 0));
-        entries.add(new BarEntry(12, 0));
+        ArrayList<BarEntry> entries = new ArrayList<>();
+        for (int i = 1; i <= 12; i++) {
+            entries.add(new BarEntry(i, 0));
+        }
 
         SharedPreferences sharedPreferences = this.getSharedPreferences("myPreferences", MODE_PRIVATE);
         ApiService.apiService.getDataReportDetails("Bearer " + sharedPreferences.getString("token", ""), "1", "1", id).enqueue(new Callback<DataDetailsReportModelApi>() {
@@ -121,29 +118,46 @@ public class InActivity extends AppCompatActivity {
                 }
 
                 String year = numberFormatFullDate.format(calendar.getTime()).split("/")[2];
-                for (int i = 0; i < response.body().chart.size(); i++) {
-                    ChartApi chartApi = response.body().chart.get(i);
-                    if(chartApi.getYear() == Integer.parseInt(year)) {
-                        entries.add(new BarEntry(chartApi.getMonth(), chartApi.getTotal()));
+                for (ChartApi chartApi : response.body().chart) {
+                    if (chartApi.getYear() == Integer.parseInt(year) && chartApi.getTotal() > 0) {
+                        int month = chartApi.getMonth();
+                        entries.set(month - 1, new BarEntry(month, chartApi.getTotal()));
                     }
                 }
 
                 BarDataSet dataSet = new BarDataSet(entries, "Doanh thu theo tháng");
-                dataSet.setColor(Color.rgb(255, 165, 0));
+                dataSet.setColor(getResources().getColor(idColor));
 
-                // Tạo BarData object và đặt giá trị
-                BarData barData = new BarData(dataSet);
                 ValueFormatter customValueFormatter = new ValueFormatter() {
+                    private DecimalFormat decimalFormat = new DecimalFormat("#,##0");
+
                     @Override
                     public String getFormattedValue(float value) {
-                        return value-0 > 0.1f ? String.valueOf(Convert.convertNumber((long)value)) : "";
+                        if (value == 0) {
+                            return "0";
+                        } else {
+                            return formatValueWithSuffix(value);
+                        }
+                    }
+                    private String formatValueWithSuffix(float value) {
+                        if (value >= 1000000) {
+                            float valueInMillions = value / 1000000f;
+                            return String.format("%.2fM", valueInMillions);
+                        } else if (value >= 10000) {
+                            float valueInThousands = value / 1000f;
+                            return String.format("%.1fK", valueInThousands);
+                        } else {
+                            return decimalFormat.format(value);
+                        }
                     }
                 };
-                barData.setValueFormatter(customValueFormatter);
 
+
+                BarData barData = new BarData(dataSet);
+                barData.setValueFormatter(customValueFormatter);
+                barData.setValueTextSize(7f);
                 barData.setBarWidth(0.9f);
 
-                // Cấu hình trục X
                 XAxis xAxis = binding.barChart.getXAxis();
                 xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
                 xAxis.setGranularity(1f);
@@ -152,34 +166,27 @@ public class InActivity extends AppCompatActivity {
                 xAxis.setValueFormatter(new ValueFormatter() {
                     @Override
                     public String getAxisLabel(float value, AxisBase axis) {
-                        // Chuyển đổi giá trị tháng thành chuỗi
                         int month = (int) value;
                         return "T" + month;
                     }
                 });
 
-                // Cấu hình trục Y
                 YAxis leftAxis = binding.barChart.getAxisLeft();
-                leftAxis.setAxisMinimum(0f); // Giá trị tối thiểu của trục Y
-                leftAxis.setGranularity(1000f); // Đặt độ chia giữa các số trên trục Y
+                leftAxis.setAxisMinimum(0f);
+                leftAxis.setGranularity(1000f);
                 leftAxis.setDrawGridLines(true);
 
-                // Hiển thị giá trị trục Y bên phải
                 binding.barChart.getAxisRight().setEnabled(false);
-
-                // Thiết lập dữ liệu vào biểu đồ
                 binding.barChart.setData(barData);
-                binding.barChart.getXAxis().setLabelCount(entries.size());
+                binding.barChart.getXAxis().setLabelCount(12);
                 binding.barChart.setTouchEnabled(false);
-
-                // Vô hiệu hóa hiệu ứng chuyển động nếu cần
-                binding.barChart.animateY(1000);
+                binding.barChart.animateY(100);
                 binding.barChart.getDescription().setEnabled(false);
             }
 
             @Override
             public void onFailure(Call<DataDetailsReportModelApi> call, Throwable t) {
-                Log.e("TAG", "onFailure: " + t.getMessage());
+
             }
         });
     }
@@ -242,7 +249,9 @@ public class InActivity extends AppCompatActivity {
                                     name,
                                     numberFormatFullDate.format(transaction.getDay()),
                                     String.valueOf(transaction.getPrice()),
-                                    transaction.getNote())));
+                                    transaction.getNote(),
+                                    transaction.getCategory().getColor()
+                                    )));
                         }
                     }
                 }

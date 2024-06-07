@@ -25,6 +25,9 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".ui.service.OptionRestoreTransactionActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.service.ExportDataPdfActivity"
             android:exported="false" />
         <activity
@@ -102,7 +105,6 @@
         <activity
             android:name=".utils.DetailitemlichActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.transaction.InActivity"
             android:exported="false" />
@@ -112,7 +114,6 @@
         <activity
             android:name=".ui.transaction.UpdateActivity"
             android:exported="false" />
-
         <activity
             android:name=".ui.user.WelcomeActivity"
             android:exported="true">

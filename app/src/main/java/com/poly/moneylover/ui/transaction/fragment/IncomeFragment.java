@@ -126,7 +126,7 @@ public class IncomeFragment extends Fragment {
                 for (int i = 0; i < response.body().category.size(); i++) {
                     CategoryModelApi categoryModelApi = response.body().category.get(i);
                     entries.add(new PieEntry(categoryModelApi.total, categoryModelApi.name));
-                    expenseItemList.add(new ExpenseItem(categoryModelApi._id, categoryModelApi.icon, categoryModelApi.name, "", String.valueOf(categoryModelApi.total)));
+                    expenseItemList.add(new ExpenseItem(categoryModelApi._id, categoryModelApi.icon, categoryModelApi.name, "", String.valueOf(categoryModelApi.total), categoryModelApi.color));
                     try {
                         listColors.add(ContextCompat.getColor(requireContext(), categoryModelApi.color));
                     } catch (Exception e1) {
@@ -159,6 +159,7 @@ public class IncomeFragment extends Fragment {
                     Intent intent = new Intent(getContext(), InActivity.class);
                     intent.putExtra("name", expenseItem.getTitle());
                     intent.putExtra("id", expenseItem.getId());
+                    intent.putExtra("idColor", expenseItem.getColor());
                     intent.putExtra("startDay", startTime);
                     intent.putExtra("endDay", endTime);
                     activityResultLauncher.launch(intent);

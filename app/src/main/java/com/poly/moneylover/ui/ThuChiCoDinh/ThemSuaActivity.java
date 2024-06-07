@@ -232,16 +232,16 @@ public class ThemSuaActivity extends AppCompatActivity {
             try {
                 BudgetCreateRequest request = new BudgetCreateRequest(category, dayStart, dayEnd,note,price,frequency);
                 if (budget != null) {
-                    Response<String> call = BudgetApi.api.update(budget.get_id(), request).execute();
+                    Response<Void> call = BudgetApi.api.update(budget.get_id(), request).execute();
                     if (call.isSuccessful() && call.code() == 200) {
-                        showMessage(call.body(), true);
+                        showMessage("Thanh cong", true);
                     } else {
                         showMessage("Cập nhật thất bại", false);
                     }
                 } else {
-                    Response<String> call = BudgetApi.api.create(request).execute();
+                    Response<Void> call = BudgetApi.api.create(request).execute();
                     if (call.isSuccessful() && call.code() == 201) {
-                        showMessage(call.body(), true);
+                        showMessage("Thanh cong", true);
                     } else {
                         showMessage("Thêm thất bại", false);
                     }

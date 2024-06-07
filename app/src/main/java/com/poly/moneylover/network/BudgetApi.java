@@ -21,12 +21,12 @@ public interface BudgetApi {
     Call<Export> getLinkPdf();
     @GET("budget/export")
     Call<Export> getLinkCsv();
-    @GET("budget")
+    @GET("budget/")
     Call<List<Budget>> getList();
     @POST("budget/create")
-    Call<String> create(@Body BudgetCreateRequest request);
+    Call<Void> create(@Body BudgetCreateRequest request);
     @POST("budget/{id}/update")
-    Call<String> update(@Path("id") String id, @Body BudgetCreateRequest request);
+    Call<Void> update(@Path("id") String id, @Body BudgetCreateRequest request);
     @DELETE("budget/{id}")
     Call<String> delete(@Path("id") String id);
 

@@ -64,6 +64,13 @@ public class Convert {
         return formatter.format(calendar.getTime());
     }
 
+    public static String getDayConvert(Long time) {
+        DateFormat formatter = new SimpleDateFormat("dd/MM/YYYY");
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time);
+        return formatter.format(calendar.getTime());
+    }
+
     @SuppressLint("NewApi")
     public static Long getTimeStamp(String dateString) {
         LocalDate date = LocalDate.parse(dateString, DateTimeFormatter.ofPattern("dd/MM/yyyy"));
